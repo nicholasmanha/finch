@@ -6,7 +6,7 @@ export default function About() {
     return (
         <div className="text-amber-50">
             <p className="text-sky-600">About</p>
-            <Button text="sample page" cb={()=> {navigate('/samplepage1')}}/>
+            <Button  text="sample page" cb={()=> {navigate('/samplepage1')}}/>
         </div>
     )
 }

@@ -1,5 +1,13 @@
-export default function Main() {
+type MainProps = {
+    children?: JSX.Element
+};
+
+export default function Main({
+    children
+}: MainProps) {
     return (
-        <div>Main</div>
+        <main className="flex-grow bg-slate-500 overflow-auto z-0">
+            {children}
+        </main>
     )
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Define the type for the Button's props
-interface ButtonProps {
+type ButtonProps = {
   cb?: () => void; // Callback function, optional
   text?: string; // Button text, optional
   color?: string; // Button background color class, optional
