@@ -2,23 +2,38 @@ import { useState } from "react";
 import React from "react";
 
 type WidgetProps = {
+    /** Content to be displayed below the header */
     children?: React.ReactNode;
+    /** The title of the widget */
     title?: string;
+    /** An icon that can be any valid jsx (SVG, PNG, etc) */
     icon?: JSX.Element;
+    /** Tailwind ClassName only applied when expand icon is not active*/
     defaultHeight?: string;
+    /** Tailwind ClassName */
+    minHeight?: string;
+    /** Tailwind ClassName */
     maxHeight?: string;
+    /** Tailwind ClassName */
+    minWidth?: string;
+    /** Tailwind ClassName */
     width?: string;
+    /** Tailwind ClassName */
     maxWidth?: string;
+    /** Tailwind ClassName applied only when user clicks expand icon */
     expandedWidth?: string;
+    /** Additional Tailwind ClassName styles applied only to the content */
     contentStyles?: string;
 }
 
 export default function Widget({
     children,
     title='',
-    icon=<></>,
-    defaultHeight='h-1/4',
+    icon,
+    defaultHeight='h-64',
+    minHeight='min-h-64',
     maxHeight='max-h-3/4',
+    minWidth='min-w-64',
     width='w-1/4',
     maxWidth='max-w-full',
     expandedWidth='w-full',
@@ -39,19 +54,19 @@ export default function Widget({
 
 
     return (
-        <div className={`p-2 rounded-md ${defaultHeight} ${maxHeight} ${isExpanded ? expandedWidth : `${width} ${maxWidth}`}`}>
+        <div className={`p-2 rounded-md ${defaultHeight} ${minHeight} ${maxHeight} ${minWidth} ${isExpanded ? expandedWidth : `${width} ${maxWidth}`}`}>
             <div className="w-full h-full shadow-sm bg-white rounded-md">
                 {/* Title */}
                 <header className="bg-sky-950 h-10 flex items-center rounded-t-md justify-between">
-                    <div>
-                        <div className="max-h-10">{icon}</div>
-                        <h3 className="text-white text-lg font-semibold pl-4">{title}</h3>
+                    <div className="flex justify-center items-center truncate">
+                        { icon ? <div className="h-6 ml-2 aspect-square text-white">{icon}</div> : ''}
+                        <h3 className="text-white text-lg font-semibold pl-4 truncate">{title}</h3>
                     </div>
                     <div className="text-white pr-2 hover:cursor-pointer hover:text-slate-300" onClick={()=>setIsExpanded(!isExpanded)}>{isExpanded ? arrowsPointingIn : arrowsPointingOut}</div>
                 </header>
 
                 {/* Main Body */}
-                <div className={`h-[calc(100%-2.5rem)] rounded-b-md flex w-full overflow-auto ${contentStyles}`}>
+                <div className={`h-[calc(100%-2.5rem)] rounded-b-md flex w-full overflow-auto p-2 ${contentStyles}`}>
                     {children}
                 </div>
             </div>
