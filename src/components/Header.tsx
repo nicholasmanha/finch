@@ -1,14 +1,21 @@
-const als_logo = "/images/als_logo_wheel.png";
+//const als_logo = "/images/als_logo_wheel.png";
 type HeaderProps = {
+    /** The title */
     title?: string;
+    /** Tailwind ClassName */
+    textColor?: string;
+    /** A valid URL path of the image (png, jpeg, etc). The image should be in public/images folder. Do not include "public" in url path */
+    logoUrl?: string;
 }
 export default function Header({
-    title
+    title='My App',
+    textColor='text-sky-700',
+    logoUrl='/images/als_logo_wheel.png'
 }: HeaderProps) {
     return (
         <header className="w-full border-b-slate-300 border-b flex items-center h-8 py-8 justify-center space-x-4">
-            <img src={als_logo} className="h-8 w-auto"/>
-            <h1 className="text-4xl text-sky-700">{title}</h1>
+            <img src={logoUrl} className="h-8 w-auto"/>
+            <h1 className={`text-4xl ${textColor}`}>{title}</h1>
         </header>
     )
 }
