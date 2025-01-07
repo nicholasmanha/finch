@@ -14,7 +14,6 @@ const meta = {
     tags: ['autodocs'],
     // More on argTypes: https://storybook.js.org/docs/api/argtypes
     argTypes: {
-      color: { control: 'color' },
     },
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
     args: { cb: fn() },
@@ -33,18 +32,20 @@ export const Primary: Story = {
 export const Secondary: Story = {
   args: {
     text: 'secondary',
+    isSecondary: true
   },
 };
 
 export const Large: Story = {
   args: {
     text: 'large',
-    textColor: 'text-black',
+    size: 'large'
   },
 };
 
 export const Small: Story = {
   args: {
     text: 'small',
+    size: 'small'
   },
 };
