@@ -3,10 +3,11 @@ type MainProps = {
 };
 
 export default function Main({
-    children
+    children,
+    ...props
 }: MainProps) {
     return (
-        <main className="flex-grow bg-slate-500 overflow-auto z-0">
+        <main className="flex-grow bg-slate-500 overflow-auto z-0" {...props}>
             {children}
         </main>
     )

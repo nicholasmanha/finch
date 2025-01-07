@@ -37,7 +37,8 @@ export default function Widget({
     width='w-1/4',
     maxWidth='max-w-full',
     expandedWidth='w-full',
-    contentStyles=''
+    contentStyles='',
+    ...props
 }: WidgetProps) {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -54,7 +55,7 @@ export default function Widget({
 
 
     return (
-        <div className={`p-2 rounded-md ${defaultHeight} ${minHeight} ${maxHeight} ${minWidth} ${isExpanded ? expandedWidth : `${width} ${maxWidth}`}`}>
+        <div className={`p-2 rounded-md ${defaultHeight} ${minHeight} ${maxHeight} ${minWidth} ${isExpanded ? expandedWidth : `${width} ${maxWidth}`}`} {...props}>
             <div className="w-full h-full shadow-sm bg-white rounded-md">
                 {/* Title */}
                 <header className="bg-sky-950 h-10 flex items-center rounded-t-md justify-between">

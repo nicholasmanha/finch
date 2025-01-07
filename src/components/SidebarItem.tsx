@@ -13,9 +13,10 @@ export default function SidebarItem({
     icon=<></>,
     iconHeight='h-8',
     titleColor='text-sky-900',
+    ...props
 }: SidebarItemProps) {
     return (
-        <div>
+        <div {...props}>
             <h2 className={`${titleColor} font-medium text-2xl flex justify-between`}>
                 <div className={`${iconHeight} aspect-square`}>{icon}</div>
                 {title}

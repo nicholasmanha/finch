@@ -10,10 +10,11 @@ type HeaderProps = {
 export default function Header({
     title='My App',
     textColor='text-sky-700',
-    logoUrl='/images/als_logo_wheel.png'
+    logoUrl='/images/als_logo_wheel.png',
+    ...props
 }: HeaderProps) {
     return (
-        <header className="w-full border-b-slate-300 border-b flex items-center h-8 py-8 justify-center space-x-4">
+        <header className="w-full border-b-slate-300 border-b flex items-center h-8 py-8 justify-center space-x-4" {...props}>
             <img src={logoUrl} className="h-8 w-auto"/>
             <h1 className={`text-4xl ${textColor}`}>{title}</h1>
         </header>
