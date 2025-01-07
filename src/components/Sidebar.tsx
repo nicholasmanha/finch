@@ -24,6 +24,8 @@ type SidebarProps = {
     collapsible?: boolean
     /** App Title */
     title?: string
+    /** Tailwind ClassName for the transparent header only used when a title or collapse icon is visible */
+    headingBgColor?: `bg-${string}`
     /** Tailwind ClassNames */
     styles?: string
 }
@@ -36,6 +38,7 @@ export default function Sidebar({
     collapsible=false,
     title,
     styles,
+    headingBgColor='bg-slate-200/10',
     ...props
 }: SidebarProps) {
     const widthSizes = {
@@ -62,16 +65,16 @@ export default function Sidebar({
             `} 
             {...props}
         >
-            <div className="flex justify-start items-center">
+            <div className={`${headingBgColor} backdrop-blur-sm flex justify-start items-center sticky top-0`}>
                 {collapsible && (
                     <div className="w-6 aspect-square hover:cursor-pointer hover:text-sky-800 mx-2 my-2" onClick={handleIconClick}>
                         {isCollapsed ? openHamburgerIcon : closedHamburgerIcon}
                     </div>
                 )}
-                {(title && !isCollapsed) && <h1 className="text-sky-900 font-semibold text-lg flex-grow text-center">{title}</h1>}
+                {(title && !isCollapsed) && <h1 className="text-sky-900 text-2xl flex-grow text-center">{title}</h1>}
                 {(collapsible && !isCollapsed) && <div className="w-10 aspect-square"></div>}
             </div>
-            <div className="px-2 py-1">
+            <div className="px-2 py-1 flex-col space-y-4 overflow-auto">
                 {isCollapsed ? '' : children}
             </div>
         </aside>

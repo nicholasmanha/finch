@@ -13,7 +13,39 @@ export default function SamplePage1 () {
         <div className="w-full h-screen">
             <Header title="Sample App With Widgets"/>
             <div className="flex ">
-                <Sidebar color="bg-slate-300"> 
+                <Sidebar color="bg-slate-300" title="Sample Sidebar" collapsible={true}> 
+                    <SidebarItem title="With Icon" icon={icons.cubeTransparent} > 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="No Icon"> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="With Icon" icon={icons.cubeTransparent}> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="No Icon"> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="With Icon" icon={icons.cubeTransparent}> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="No Icon"> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="With Icon" icon={icons.cubeTransparent}> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
+                    <SidebarItem title="No Icon"> 
+                        <p>stuff</p>
+                        <p className="text-black">not default color</p>
+                    </SidebarItem>
                     <SidebarItem title="With Icon" icon={icons.cubeTransparent}> 
                         <p>stuff</p>
                         <p className="text-black">not default color</p>

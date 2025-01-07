@@ -35,8 +35,8 @@ export default function SidebarItem({
 }: SidebarItemProps) {
     return (
         <div className={containerStyles} {...props}>
-            <h2 className={`${titleColor} ${titleStyles} font-medium text-2xl flex justify-start items-end`}>
-                {icon && <div className={`${iconHeight} ${iconStyles} aspect-square mx-2`}>{icon}</div>}
+            <h2 className={`${titleColor} ${titleStyles} font-medium text-xl flex justify-start items-end`}>
+                {icon && <div className={`${titleColor} ${iconHeight} ${iconStyles} aspect-square mr-2`}>{icon}</div>}
                 {title}
             </h2>
             <div className={`${childrenStyles} text-slate-900 px-2`}>
