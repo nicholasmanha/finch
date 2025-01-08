@@ -74,7 +74,7 @@ export default function Sidebar({
                 {(title && !isCollapsed) && <h1 className="text-sky-900 text-2xl flex-grow text-center">{title}</h1>}
                 {(collapsible && !isCollapsed) && <div className="w-10 aspect-square"></div>}
             </div>
-            <div className="px-2 py-1 flex-col space-y-4 overflow-auto">
+            <div className="px-2 py-4 flex-col space-y-4 overflow-auto">
                 {isCollapsed ? '' : children}
             </div>
         </aside>
