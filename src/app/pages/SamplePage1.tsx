@@ -40,10 +40,10 @@ export default function SamplePage1 () {
                     <>
                         <p>{age}</p>
                         <Widget title="My Widget">
-                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 75, 100]} label="Age"/>
+                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 80, 90, 100]} label="Age"/>
                         </Widget>
                         <Widget title="My Widget">
-                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 45, 100]} label="Age"/>
+                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 1, 2, 3, 4, 5]} label="Age"/>
                         </Widget>
                     </>
                 </Main>

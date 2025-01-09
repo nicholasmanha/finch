@@ -32,6 +32,8 @@ export default function InputSlider({
 }: InputSliderProps) {
   const [currentValue, setCurrentValue] = useState(value);
 
+    const thumbWidth = 16; //pixels
+
   const handleInputChange = (newValue: number) => {
     if (newValue < min) newValue = min;
     if (newValue > max) newValue = max;
@@ -49,6 +51,14 @@ export default function InputSlider({
     handleInputChange(newValue);
 };
 
+if (marks) {
+    for ( let i = 0; i < marks?.length; i++) {
+        let val = marks[i];
+        let cssStyle = `calc(${((val - min) / (max - min)) * 100}% + ${(-((val - min) / (max - min))*8) + thumbWidth/2}px)`
+        console.log(cssStyle);
+    }
+}
+
   return (
     <div className={`flex items-center w-full ${styles}`} {...props}>
       {label && <label className="font-medium text-gray-700 w-1/5">{label}</label>}
@@ -58,18 +68,18 @@ export default function InputSlider({
           type="range"
           min={min}
           max={max}
-          value={currentValue}
+          value={value}
           onChange={handleDrag}
           className="w-full absolute z-10 appearance-none hover:cursor-pointer bg-gray-200/50 h-2 rounded-lg focus:outline-none "
         />
         {/** Popup Current Number */}
-        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `${((value-min) / (max - min)) * 100}%`}}>
+        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `calc(${((value - min) / (max - min)) * 100}% + ${(-((value - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`}}>
             <div className="relative ">
                 <div className="absolute w-[1px] h-4 top-2 bg-gray-400"></div>
                 <div className="absolute right-4 -top-2">
                     <input 
                         type="number" 
-                        value={currentValue}
+                        value={value}
                         className="w-12 text-center"
                         onChange={handleChange}
                     />
@@ -78,12 +88,12 @@ export default function InputSlider({
         </div>
         {/** TickMarks */}
         {marks && (
-          <div className="absolute z-0 w-full flex justify-between">
+          <div className="absolute z-0 w-full">
             {marks.map((mark, index) => (
               <div
                 key={index}
-                className="w-[1px] h-4 bg-gray-400"
-                style={{ left: `${((mark - min) / (max - min)) * 100}%` }}
+                className="absolute -top-3 w-[1px] h-6 bg-gray-400"
+                style={{ left: `calc(${((mark - min) / (max - min)) * 100}% + ${(-((mark - min) / (max - min))*thumbWidth) + thumbWidth/2}px)` }}
               ></div>
             ))}
           </div>
@@ -95,3 +105,6 @@ export default function InputSlider({
     </div>
   );
 }
+
+
+//style={{ left: `calc${((mark - min) / (max - min)) * 100}%-${(((mark - min) / (max - min)) * 100)/8 + thumbWidth/2}px` }}
