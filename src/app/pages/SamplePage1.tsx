@@ -27,7 +27,10 @@ export default function SamplePage1 () {
             <div className="flex ">
                 <Sidebar color="bg-slate-300" title="Sample Sidebar" collapsible={true}> 
                     <SidebarItem title="With Icon" icon={icons.adjustmentsVertical} > 
-                        <p>stuff</p>
+                        <>
+                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 80, 90, 100]} label="Age" units="years" shorthandUnits="yr" showFill={true}/>
+                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 80, 90, 100]} units="years" showSideInput={false} shorthandUnits="yr"/>
+                        </>
                     </SidebarItem>
                     <SidebarItem title="With Icon" icon={icons.chartBar}> 
                         <p>stuff</p>
@@ -40,7 +43,10 @@ export default function SamplePage1 () {
                     <>
                         <p>{age}</p>
                         <Widget title="My Widget">
-                            <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 80, 90, 100]} label="Age"/>
+                            <div className="flex-col w-full">
+                                <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 80, 90, 100]} label="Age" units="years" shorthandUnits="yr" showFill={true}/>
+                                <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 25, 50, 80, 90, 100]} units="years" showSideInput={false} shorthandUnits="yr"/>
+                            </div>
                         </Widget>
                         <Widget title="My Widget">
                             <InputSlider min={0} max={100} value={age} onChange={setAge} marks={[0, 1, 2, 3, 4, 5]} label="Age"/>
