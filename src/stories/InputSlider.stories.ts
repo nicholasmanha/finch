@@ -23,7 +23,7 @@ export const Default: Story = {
         max: 100,
         value: 4,
         onChange: fn,
-        styles: 'w-96',
+        width: 'w-96',
         label: 'Age',
         units: 'years'
     }
@@ -35,7 +35,7 @@ export const WithFillBar: Story = {
         max: 100,
         value: 4,
         onChange: fn,
-        styles: 'w-96',
+        width: 'w-96',
         label: 'Age',
         showFill: true,
     }
@@ -47,7 +47,7 @@ export const WithCustomTicks: Story = {
         max: 100,
         value: 4,
         onChange: fn,
-        styles: 'w-96',
+        width: 'w-96',
         marks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     }
 }
@@ -58,7 +58,7 @@ export const WithTickLabels: Story = {
         max: 100,
         value: 4,
         onChange: fn,
-        styles: 'w-96',
+        width: 'w-96',
         marks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
         shorthandUnits: 'yr'
     }
@@ -70,7 +70,7 @@ export const WithoutLabel: Story = {
         max: 100,
         value: 4,
         onChange: fn,
-        styles: 'w-96',
+        width: 'w-[350px]',
     }
 }
 
@@ -80,7 +80,7 @@ export const WithoutLabelOrInput: Story = {
         max: 100,
         value: 4,
         onChange: fn,
-        styles: 'w-96',
+        width: 'w-[400px]',
         showSideInput: false
     }
 }
