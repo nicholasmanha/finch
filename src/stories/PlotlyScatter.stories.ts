@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import PlotlyScatter from '../components/PlotlyScatter';
+import { PlotParams } from 'react-plotly.js';
 
 const meta = {
     title: 'Example/PlotlyScatter',
