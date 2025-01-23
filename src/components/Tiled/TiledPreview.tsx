@@ -17,7 +17,7 @@ export default function TiledPreview({
     ...props
 }: TiledPreviewProps) {
     return (
-        <div className="min-w-96 h-full bg-red-100 border border-red-800 flex flex-col" {...props}>
+        <div className="min-w-96 flex-shrink-0 h-full bg-red-100 border border-red-800 flex flex-col" {...props}>
             <div className="flex justify-between px-2 pt-2">
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowsPointingOut}</div>
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
