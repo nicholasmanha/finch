@@ -12,7 +12,12 @@ export default function Tiled({
     ...props
 }: TiledProps) {
 
-    const { columns, previewVisibility } = useTiled(); 
+    const { 
+        columns, 
+        previewVisibility, 
+        ancestors,
+        handleColumnItemClick 
+    } = useTiled(); 
 
 
     return (
@@ -20,7 +25,7 @@ export default function Tiled({
             <div className="flex flex-col min-w-[800px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border border-green-600">
                 <TiledHeader />
                 <div className="w-full flex min-h-0 flex-grow border border-red-300">
-                    <TiledColumns columns={columns}/>
+                    <TiledColumns columns={columns} ancestors={ancestors} onItemClick={handleColumnItemClick}/>
                     <TiledPreview />
                 </div>
                 <TiledFooter />

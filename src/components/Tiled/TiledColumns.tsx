@@ -5,10 +5,14 @@ import { sampleTiledSearchData } from "./sampleData";
 import {TiledSearchResult, TiledSearchItem } from './types';
 
 type TiledColumnsProps = {
-    columns:TiledSearchResult[]
+    columns:TiledSearchResult[];
+    ancestors: string[];
+    onItemClick: Function
 }
 export default function TiledColumns({
     columns,
+    ancestors,
+    onItemClick=()=>{},
     ...props
 }: TiledColumnsProps) {
     console.log({columns})
@@ -211,6 +215,9 @@ export default function TiledColumns({
         data: TiledSearchItem[],
         index: number,
     };
+
+
+
     const Column = ({data, index}: ColumnProps) => {
         console.log({data})
         return (
@@ -218,7 +225,11 @@ export default function TiledColumns({
                 <ul>
                     {data.map((item:any) => {
                         return (
-                            <li className={`${paths[index] === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} key={item.id+index}>
+                            <li 
+                                className={`${paths[index] === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} 
+                                key={item.id+index}
+                                onClick={()=>onItemClick(item, ancestors)}
+                            >
                                 {renderIcon(item.attributes.structure_family)}
                                 <p>{item.id}</p>
                                 {item.attributes.structure_family === 'container' ? <p className="absolute right-1 text-slate-500">&gt;</p> : ''}

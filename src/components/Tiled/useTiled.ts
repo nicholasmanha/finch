@@ -7,8 +7,9 @@ export const useTiled = () => {
 
     const [ columns, setColumns ] = useState<TiledSearchResult[]>([]);
     const [ previewVisibility, setPreviewVisibility ] = useState<boolean>(false);
+    const [ ancestors, setAncestors ] = useState<string[]>(['']);
 
-    const handleColumnsUpdate = (newColumn:any, currentColumns:[], ancestors:string[]) => {
+    const handleColumnsUpdate = (newColumn:TiledSearchResult, currentColumns:TiledSearchResult[], ancestors:string[]) => {
         //update column state for the most recent search result
         //requires most recent column and ancestor state, must call function from inside component with that state available
         //function assumes that user can not arbitrarily pass in a search result that is not based off the current available column data
@@ -26,6 +27,17 @@ export const useTiled = () => {
         setColumns(columnsCopy);
     };
 
+    const handleAncestorUpdate = (searchResult:TiledSearchResult, ancestors:string[]) => {
+        //is search empty?
+        //TODO - check if there is a condition where data can return an empty object, which has array length > 0
+        if (searchResult.data.length === 0) {
+            setAncestors(['']);
+        } else {
+            var firstItem = searchResult.data[0];
+            setAncestors(firstItem.attributes.ancestors);
+        }
+    };
+
     const handlePreviewUpdate = (item:any, format:'array' | 'table') => {
         //renders either an array component or table component
 
@@ -36,15 +48,17 @@ export const useTiled = () => {
         //remove the preview component from display
     }
 
-    const handleColumnItemClick = (item:any) => {
+    const handleColumnItemClick = (item:TiledSearchItem, ancestors:string[]) => {
+        console.log({item});
+        console.log({ancestors});
         //need three functions
-        if (item.structure_family === 'array') {
+        if (item.attributes.structure_family === 'array') {
             handleArrayClick(item);
         } else {
-            if (item.structure_family === 'table') {
+            if (item.attributes.structure_family === 'table') {
                 handleTableClick(item);
             } else {
-                if (item.structure_family === 'container') {
+                if (item.attributes.structure_family === 'container') {
                     handleContainerClick(item);
                 }
             }
@@ -59,8 +73,9 @@ export const useTiled = () => {
         //search table, put results into table preview and render preview
     };
 
-    const handleContainerClick = (item:any) => {
+    const handleContainerClick = (item:TiledSearchItem) => {
         //search container, put results into column, disable preview
+        console.log('handle container click')
     }
 
     const logResponse = (response:any) => {
@@ -73,7 +88,9 @@ export const useTiled = () => {
 
     return {
         columns,
-        previewVisibility
+        previewVisibility,
+        ancestors,
+        handleColumnItemClick
     };
 
 }
