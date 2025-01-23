@@ -2,13 +2,16 @@
 import { useRef, useEffect } from 'react';
 import './Tiled.css'
 import { sampleTiledSearchData } from "./sampleData";
+import {TiledSearchResult, TiledSearchItem } from './types';
 
 type TiledColumnsProps = {
-
+    columns:TiledSearchResult[]
 }
 export default function TiledColumns({
+    columns,
     ...props
 }: TiledColumnsProps) {
+    console.log({columns})
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const sampleData = [
@@ -199,23 +202,23 @@ export default function TiledColumns({
     };
 
     const columnData = [
-        [...sampleTiledSearchData.data, ...sampleTiledSearchData.data],
+        sampleTiledSearchData.data,
         sampleTiledSearchData.data,
         sampleTiledSearchData.data
     ];
 
     type ColumnProps = {
-        data: any,
+        data: TiledSearchItem[],
         index: number,
     };
     const Column = ({data, index}: ColumnProps) => {
-        console.log(index)
+        console.log({data})
         return (
             <div className="border-l border-l-slate-400 min-w-[250px] w-fit px-4 h-full scrollbar-always-visible overflow-y-auto">
                 <ul>
                     {data.map((item:any) => {
                         return (
-                            <li className={`${paths[index] === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} key={item.id}>
+                            <li className={`${paths[index] === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} key={item.id+index}>
                                 {renderIcon(item.attributes.structure_family)}
                                 <p>{item.id}</p>
                                 {item.attributes.structure_family === 'container' ? <p className="absolute right-1 text-slate-500">&gt;</p> : ''}
@@ -236,7 +239,7 @@ export default function TiledColumns({
     return (
         <div className="flex-grow min-w-96 h-full" {...props}>
             <div className="flex w-full h-full overflow-x-auto scrollbar-always-visible " ref={scrollContainerRef}>
-                {columnData.map((column, index) => <Column data={column} key={index} index={index}/>)}
+                {columns.map((column, index) => <Column data={column.data} key={index} index={index}/>)}
             </div>
         </div>
     )
