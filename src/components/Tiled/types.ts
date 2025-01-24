@@ -3,6 +3,14 @@ export type PathItem = {
     structure: string;
 };
 
+export type Breadcrumb = {
+    label: string;
+    labelStyle?: string;
+    icon?: JSX.Element;
+    iconStyle?: string;
+}
+
+
 export type Paths = PathItem[];
 
 // Example of a predefined paths array

@@ -2,17 +2,17 @@
 import { useRef, useEffect } from 'react';
 import './Tiled.css'
 import { sampleTiledSearchData } from "./sampleData";
-import {TiledSearchResult, TiledSearchItem } from './types';
+import {TiledSearchResult, TiledSearchItem, Breadcrumb } from './types';
 
 type TiledColumnsProps = {
     columns:TiledSearchResult[];
-    ancestors: string[];
-    onItemClick: Function
+    onItemClick: Function;
+    breadcrumbs: Breadcrumb[];
 }
 export default function TiledColumns({
     columns,
-    ancestors,
     onItemClick=()=>{},
+    breadcrumbs,
     ...props
 }: TiledColumnsProps) {
     console.log({columns})
@@ -226,9 +226,9 @@ export default function TiledColumns({
                     {data.map((item:any) => {
                         return (
                             <li 
-                                className={`${paths[index] === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} 
+                                className={`${ (breadcrumbs.length > index) && breadcrumbs[index].label === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} 
                                 key={item.id+index}
-                                onClick={()=>onItemClick(item, ancestors)}
+                                onClick={()=>onItemClick(item)}
                             >
                                 {renderIcon(item.attributes.structure_family)}
                                 <p>{item.id}</p>

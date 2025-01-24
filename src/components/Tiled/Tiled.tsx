@@ -15,7 +15,7 @@ export default function Tiled({
     const { 
         columns, 
         previewVisibility, 
-        ancestors,
+        breadcrumbs,
         handleColumnItemClick 
     } = useTiled(); 
 
@@ -23,12 +23,12 @@ export default function Tiled({
     return (
         <div className="w-screen border h-screen flex justify-center items-center" {...props}>
             <div className="flex flex-col min-w-[800px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border border-green-600">
-                <TiledHeader />
+                <TiledHeader breadcrumbs={breadcrumbs} />
                 <div className="w-full flex min-h-0 flex-grow border border-red-300">
-                    <TiledColumns columns={columns} ancestors={ancestors} onItemClick={handleColumnItemClick}/>
+                    <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>
                     <TiledPreview />
                 </div>
-                <TiledFooter />
+                <TiledFooter breadcrumbs={breadcrumbs}/>
             </div>
         </div>
     )
