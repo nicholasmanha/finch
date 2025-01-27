@@ -16,6 +16,7 @@ export default function Tiled({
         columns, 
         previewVisibility, 
         breadcrumbs,
+        imageUrl,
         handleColumnItemClick 
     } = useTiled(); 
 
@@ -26,7 +27,7 @@ export default function Tiled({
                 <TiledHeader breadcrumbs={breadcrumbs} />
                 <div className="w-full flex min-h-0 flex-grow border border-red-300">
                     <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>
-                    <TiledPreview />
+                    <TiledPreview imageUrl={imageUrl}/>
                 </div>
                 <TiledFooter breadcrumbs={breadcrumbs}/>
             </div>

@@ -30,4 +30,18 @@ const getSearchResults = async (searchPath?:string, cb:Function =()=>{}, mock:bo
     }
 };
 
-export { getSearchResults }
+const sampleImgUrl = 'http://127.0.0.1:8000/api/v1/array/full/small_image?format=image/png&slice=';
+
+const getFullImagePng = (searchPath?:string, step?:number) => {
+/*     try {
+        const response = await axios.get(tiledUrl + '/array/full/' + searchPath + '?format=image/png&slice=');
+        cb(response); //send in the full response so the cb can turn it into a blob
+    } catch (error) {
+        console.error('Error obtaining full png image: ', error);
+    } */
+
+    return (tiledUrl + '/array/full/' + searchPath + '?format=image/png&slice=' + ',::' + step + ',::' + step);
+};
+
+
+export { getSearchResults, getFullImagePng }

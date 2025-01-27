@@ -20,7 +20,7 @@ export const pathsSample: Paths = [
 ];
 
 export interface TiledSearchResult {
-    data: TiledSearchItem[]; // An array of search items
+    data: TiledSearchItem<TiledStructures>[]; // An array of search items
     error: string | null; // Error message, if any
     links: {
         self: string;
@@ -35,7 +35,30 @@ export interface TiledSearchResult {
 }
 
 // Definition for a single search item
-export interface TiledSearchItem {
+export interface TiledSearchItem<StructureType> {
+    id: string; // Identifier for the item
+    attributes: {
+        ancestors: string[]; // Array of ancestor IDs
+        structure_family: "array" | "table" | "container" | "awkward" | "sparse"; // Enum for structure families
+        specs: Spec[]; // Optional specs
+        metadata: Record<string, unknown>; // Metadata as a dictionary
+        structure: StructureType;
+        sorting: Sorting[] | null; // Sorting details, if applicable
+        data_sources: string | null; // Data source, if any
+    };
+    links: {
+        self: string;
+        full?: string;
+        block?: string;
+        buffers?: string;
+        partition?: string;
+        search?: string;
+    };
+    meta: unknown | null; // Optional metadata
+}
+
+/* // Definition for a single search item
+export interface TiledSearchItem<StructureType> {
     id: string; // Identifier for the item
     attributes: {
         ancestors: string[]; // Array of ancestor IDs
@@ -55,7 +78,9 @@ export interface TiledSearchItem {
         search?: string;
     };
     meta: unknown | null; // Optional metadata
-}
+} */
+export type TiledStructures = ArrayStructure | TableStructure | ContainerStructure | AwkwardStructure | SparseStructure
+//export type GeneralTiledStructure extends TiledStructures
 
 // Specs type
 export interface Spec {
@@ -82,6 +107,7 @@ export interface ArrayStructure {
     dims: string[] | null;
     resizable: boolean;
 }
+
 
 export interface TableStructure {
     arrow_schema: string;

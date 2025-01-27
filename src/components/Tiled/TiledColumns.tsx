@@ -2,7 +2,7 @@
 import { useRef, useEffect } from 'react';
 import './Tiled.css'
 import { sampleTiledSearchData } from "./sampleData";
-import {TiledSearchResult, TiledSearchItem, Breadcrumb } from './types';
+import {TiledSearchResult, TiledSearchItem, Breadcrumb, TiledStructures } from './types';
 
 type TiledColumnsProps = {
     columns:TiledSearchResult[];
@@ -212,7 +212,7 @@ export default function TiledColumns({
     ];
 
     type ColumnProps = {
-        data: TiledSearchItem[],
+        data: TiledSearchItem<TiledStructures>[],
         index: number,
     };
 
@@ -246,7 +246,7 @@ export default function TiledColumns({
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
         }
-    }, []);
+    }, [columns]);
     return (
         <div className="flex-grow min-w-96 h-full" {...props}>
             <div className="flex w-full h-full overflow-x-auto scrollbar-always-visible " ref={scrollContainerRef}>

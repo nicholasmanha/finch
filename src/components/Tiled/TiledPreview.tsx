@@ -11,9 +11,10 @@ const arrowTopRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBo
 </svg>;
 
 type TiledPreviewProps = {
-
+    imageUrl?:string;
 }
 export default function TiledPreview({
+    imageUrl='',
     ...props
 }: TiledPreviewProps) {
     return (
@@ -26,6 +27,7 @@ export default function TiledPreview({
                 <h3 className="text-center text-lg">Image ID</h3>
                 <div className="relative bg-slate-300 min-h-56 w-56 m-auto">
                     <div className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>
+                    <img src={imageUrl}/>
                 </div>
                 <Button text="Select" size="medium" />
             </div>
