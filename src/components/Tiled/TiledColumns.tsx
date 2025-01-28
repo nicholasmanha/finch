@@ -221,7 +221,7 @@ export default function TiledColumns({
     const Column = ({data, index}: ColumnProps) => {
         console.log({data})
         return (
-            <div className="border-l border-l-slate-400 min-w-[250px] w-fit px-4 h-full scrollbar-always-visible overflow-y-auto">
+            <div className="border-r border-r-slate-400 min-w-[250px] w-fit px-4 h-full scrollbar-always-visible overflow-y-auto">
                 <ul>
                     {data.map((item:any) => {
                         return (

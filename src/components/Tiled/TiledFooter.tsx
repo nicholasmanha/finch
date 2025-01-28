@@ -8,7 +8,7 @@ export default function TiledFooter({
     ...props
 }: TiledFooterProps) {
     return (
-        <div className="w-full h-8 border border-sky-600" {...props}>
+        <div className="w-full h-8 " {...props}>
             <div className="flex space-x-2">
                 {breadcrumbs && 
                     breadcrumbs.map((item, index) => {

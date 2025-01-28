@@ -28,7 +28,7 @@ export default function TiledHeader({
     ...props
 }: TiledHeaderProps) {
     return (
-        <div className="flex border border-sky-500 w-full min-h-14 pb-2 pt-2 relative " {...props}>
+        <div className="flex  w-full min-h-14 pb-2 pt-2 relative " {...props}>
             <div className="flex items-end w-1/4">
                 <div className="w-6 aspect-square hover:text-slate-400 hover:cursor-pointer" onClick={()=>onLeftArrowClick()}>{chevronLeft}</div>
                 <div className="w-6 aspect-square hover:text-slate-400 hover:cursor-pointer" onClick={()=>onRightArrowClick()}>{chevronRight}</div>

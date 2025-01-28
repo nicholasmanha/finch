@@ -1,7 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 
 import { getSearchResults, getFullImagePng } from "./apiClient";
-import { TiledSearchResult, TiledSearchItem, Breadcrumb, ArrayStructure, ContainerStructure, TableStructure, TiledStructures } from "./types";
+import { 
+    TiledSearchResult, 
+    TiledSearchItem, 
+    Breadcrumb, 
+    ArrayStructure, 
+    ContainerStructure, 
+    TableStructure, 
+    TiledStructures,
+    PreviewSize, 
+ } from "./types";
 import { tiledStructureIcons } from "./icons";
 
 export const useTiled = () => {
@@ -10,7 +19,10 @@ export const useTiled = () => {
     const [ previewVisibility, setPreviewVisibility ] = useState<boolean>(false);
     const [ ancestors, setAncestors ] = useState<string[]>(['']);
     const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>([]);
-    const [ imageUrl, setImageUrl ] = useState<string>('');
+    const [ imageUrl, setImageUrl ] = useState<string | undefined>();
+    const [ popoutUrl, setPopoutUrl ] = useState<string | undefined>();
+    const [ previewSize, setPreviewSize ] = useState<PreviewSize>('hidden');
+    const defaultPreviewSize = 'medium';
 
     const updateColumns = (clickedItem:TiledSearchItem<TiledStructures>, newColumn?:TiledSearchResult ) => {
         setColumns((prevState) => {
@@ -30,17 +42,6 @@ export const useTiled = () => {
             return stateCopy;
         });
     };
-
-/*     const handleAncestorUpdate = (searchResult:TiledSearchResult, ancestors:string[]) => {
-        //is search empty?
-        //TODO - check if there is a condition where data can return an empty object, which has array length > 0
-        if (searchResult.data.length === 0) {
-            setAncestors(['']);
-        } else {
-            var firstItem = searchResult.data[0];
-            setAncestors(firstItem.attributes.ancestors);
-        }
-    }; */
 
 
     const getTiledStructureIcon = (structureFamily:string) => {
@@ -82,7 +83,10 @@ export const useTiled = () => {
     };
 
     const closePreview = () => {
-        //remove the preview component from display
+        //remove the preview component from 
+        setImageUrl(undefined);
+        setPopoutUrl(undefined);
+        setPreviewSize('hidden');
     }
 
         // Type guard for ArrayStructure
@@ -163,27 +167,27 @@ export const useTiled = () => {
             console.error('Current UI only supports displaying 2D arrays');
             return;
         }
-
-        var step = 1;
-
+        var step = 1; //the step to call for both X and Y axis when retrieving array data, 1 is all, 2 is every other, etc..
         if (item.attributes.structure.data_type && item.attributes.structure.data_type.kind) {
           const letter = item.attributes.structure.data_type.kind[0] as keyof typeof numpyTypeSizesBytes;
           const bytesPerElement = numpyTypeSizesBytes[letter];
       
           if (bytesPerElement) {
-            console.log(`Bytes per element: ${bytesPerElement}`);
+            //console.log(`Bytes per element: ${bytesPerElement}`);
             const totalImageSizeBytes = item.attributes.structure.shape[0] * item.attributes.structure.shape[1] * bytesPerElement;
-            const maxBytesAllowed = 1000000
+            const maxBytesAllowed = 1000000;
             if (totalImageSizeBytes > maxBytesAllowed) {
                 const ratio = totalImageSizeBytes / maxBytesAllowed;
                 step = Math.ceil(Math.sqrt(ratio)); //make a step in both X and Y, so step should be square root of the ratio
             }
-    
             const searchPath = createSearchPath(item);
-            const imagePath = getFullImagePng(searchPath, step);
-            console.log({imagePath});
-            setImageUrl(imagePath);
-            console
+            const reducedImagePath = getFullImagePng(searchPath, step);
+            setImageUrl(reducedImagePath); //renders in the preview
+            const fullSizeImagePath = getFullImagePng(searchPath, 1);
+            setPopoutUrl(fullSizeImagePath); //attaches to a click handler for when users want to see full image in new tab
+            updateBreadcrumbs(item);
+            setPreviewSize(defaultPreviewSize);
+            updateColumns(item);
           } else {
             console.error(`Unknown data type kind: ${letter}`);
           }
@@ -196,14 +200,9 @@ export const useTiled = () => {
 
     const handleContainerClick = (item:TiledSearchItem<ContainerStructure>) => {
         //search container, put results into column, disable preview
-        //console.log('handle container click');
-        //const ancestors = item.attributes.ancestors;
-        //var searchPath:string = ancestors.length > 0 ? item.attributes.ancestors.join('/') + '/' : '';
-        //searchPath+=item.id;
         const searchPath = createSearchPath(item);
         getSearchResults(searchPath, (res:TiledSearchResult) => handleSearchResponse(item, res));
-        //getSearchResults(searchPath, (res:TiledSearchResult) => logResponse(res));
-
+        closePreview();
     };
 
     const handleSearchResponse = (clickedItem:TiledSearchItem<TiledStructures>, res:TiledSearchResult) => {
@@ -232,7 +231,9 @@ export const useTiled = () => {
         handleColumnItemClick,
         breadcrumbs,
         updateColumns,
-        imageUrl
+        imageUrl,
+        popoutUrl,
+        previewSize
     };
 
 }

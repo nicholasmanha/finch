@@ -145,3 +145,5 @@ export interface SparseStructure {
     dims: string[] | null;
     resizable: boolean;
 }
+
+export type PreviewSize = 'hidden' | 'small' | 'medium' | 'large';

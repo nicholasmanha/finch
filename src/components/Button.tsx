@@ -1,6 +1,6 @@
 type ButtonProps = {
     /** callback function on click */
-    cb?: () => void;
+    cb?: Function;
     /** text inside button */ 
     text?: string;
     /** Tailwind ClassName */
