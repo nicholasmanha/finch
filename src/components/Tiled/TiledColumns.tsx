@@ -1,7 +1,7 @@
 //import { sampleTiledSearchData } from './sampleData';
 import { useRef, useEffect } from 'react';
 import './Tiled.css'
-import { sampleTiledSearchData } from "./sampleData";
+import { sampleTiledSearchData } from "./sampleData.ts";
 import {TiledSearchResult, TiledSearchItem, Breadcrumb, TiledStructures } from './types';
 
 type TiledColumnsProps = {
@@ -15,7 +15,6 @@ export default function TiledColumns({
     breadcrumbs,
     ...props
 }: TiledColumnsProps) {
-    console.log({columns})
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const sampleData = [
@@ -241,17 +240,24 @@ export default function TiledColumns({
         )
     }
 
-    useEffect(() => {
+ /*    useEffect(() => {
         //when columns load scroll to the right
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
-        }
+        } 
     }, [columns]);
+    */
     return (
-        <div className="flex-grow min-w-96 h-full" {...props}>
-            <div className="flex w-full h-full overflow-x-auto scrollbar-always-visible " ref={scrollContainerRef}>
-                {columns.map((column, index) => <Column data={column.data} key={index} index={index}/>)}
-            </div>
+        <div className="flex h-full" {...props}>
+            {columns.map((column, index) => <Column data={column.data} key={index} index={index}/>)}
         </div>
     )
 }
+
+/* return (
+    <div className="flex-grow min-w-96 h-full" {...props}>
+        <div className="flex w-full h-full overflow-x-auto scrollbar-always-visible " ref={scrollContainerRef}>
+            {columns.map((column, index) => <Column data={column.data} key={index} index={index}/>)}
+        </div>
+    </div>
+) */

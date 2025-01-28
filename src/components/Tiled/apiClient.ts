@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sampleTiledSearchData } from "./sampleData";
+import { sampleTiledSearchData } from "./sampleData.ts";
 
 // when you start tiled, need to pass in CORS
 //TILED_ALLOW_ORIGINS=http://localhost:5174 tiled serve demo

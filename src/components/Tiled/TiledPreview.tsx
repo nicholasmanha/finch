@@ -35,7 +35,7 @@ export default function TiledPreview({
         'large': 'min-w-[30rem]'
     }
     return (
-        <div className={`${previewSizeMap[previewSize]} flex-shrink-0 h-full bg-red-100 border border-red-800 flex flex-col`} {...props}>
+        <div className={`${previewSizeMap[previewSize]} flex-grow h-full bg-red-100 border border-red-800 flex flex-col`} {...props}>
             <div className="flex justify-between px-2 pt-2">
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowsPointingOut}</div>
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
@@ -57,3 +57,26 @@ export default function TiledPreview({
         </div>
     )
 }
+
+/* return (
+    <div className={`${previewSizeMap[previewSize]} flex-shrink-0 h-full bg-red-100 border border-red-800 flex flex-col`} {...props}>
+        <div className="flex justify-between px-2 pt-2">
+            <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowsPointingOut}</div>
+            <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
+        </div>
+        <div className="w-full flex flex-col items-center space-y-4">
+            <h3 className="text-center text-lg">Image ID</h3>
+            <div className="relative bg-slate-300 min-h-56 w-56 m-auto">
+                {popoutUrl && <div onClick={onPopoutClick} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
+                {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
+            </div>
+            <div>
+                <p className="text-sm text-slate-500">Acutal Dimensions: </p>
+            </div>
+            <Button text="Select" size="medium" cb={onSelect} />
+        </div>
+        <div>
+            Metadata
+        </div>
+    </div>
+) */
