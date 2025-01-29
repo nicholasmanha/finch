@@ -27,6 +27,7 @@ export default function TiledHeader({
     secondaryTitle="127.0.0.1:8000/api/v1",
     ...props
 }: TiledHeaderProps) {
+    console.log('render TiledHeader.tsx')
     return (
         <div className="flex  w-full min-h-14 pb-2 pt-2 relative " {...props}>
             <div className="flex items-end w-1/4">

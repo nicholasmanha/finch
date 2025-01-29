@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 
 import { getSearchResults, getFullImagePng } from "./apiClient";
 import { 
@@ -11,70 +11,65 @@ import {
     TiledStructures,
     PreviewSize, 
  } from "./types";
-import { tiledStructureIcons } from "./icons";
+import { getTiledStructureIcon } from "./utils";
 
 export const useTiled = () => {
+    console.log('run useTiled.ts')
 
     const [ columns, setColumns ] = useState<TiledSearchResult[]>([]);
-    const [ previewVisibility, setPreviewVisibility ] = useState<boolean>(false);
-    const [ ancestors, setAncestors ] = useState<string[]>(['']);
+    //const [ previewVisibility, setPreviewVisibility ] = useState<boolean>(false);
+    //const [ ancestors, setAncestors ] = useState<string[]>(['']);
     const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>([]);
     const [ imageUrl, setImageUrl ] = useState<string | undefined>();
     const [ popoutUrl, setPopoutUrl ] = useState<string | undefined>();
     const [ previewSize, setPreviewSize ] = useState<PreviewSize>('hidden');
+    const [ goBack, setGoBack ] = useState<Function | undefined>(undefined);
+    const [ goForward, setGoForward ] = useState<Function | undefined>(undefined);
+    const [ handleArrowClick, setHandleArrowClick ] = useState<Function | undefined>(undefined);
+
+    const onArrowClick = () => {
+        //this function will manage the forward/backward clicks for a set of callbacks that traverse the columns
+        //the data structure should be a stack where we track the index
+        //If a user clicks a previous column via the item in the column, or clicks the footer, the onArrowClick will pop off 
+        //any dangling containers.
+
+        //Only if the user clicks the back arrow will the forward options continue to work (which will also adjust the index pointer)
+    }
+
     const defaultPreviewSize = 'medium';
 
-    const updateColumns = (clickedItem:TiledSearchItem<TiledStructures>, newColumn?:TiledSearchResult ) => {
+    const updateColumns = useCallback((clickedItem:TiledSearchItem<TiledStructures>, newColumn?:TiledSearchResult ) => {
         setColumns((prevState) => {
-            var stateCopy = JSON.parse(JSON.stringify(prevState));
-            while (stateCopy.length - 1 > clickedItem.attributes.ancestors.length) {
-                console.log('pop')
-                stateCopy.pop();
-            }
-            //Only container items will add a new column
+            const newState = prevState.slice(0, clickedItem.attributes.ancestors.length + 1);
+    
             if (newColumn) {
-                if (stateCopy.length === 0) {
-                    return [newColumn];
-                } else {
-                    stateCopy.push(newColumn);
-                }
+                return [...newState, newColumn];
             }
-            return stateCopy;
+    
+            return newState;
         });
-    };
+    }, []);
 
 
-    const getTiledStructureIcon = (structureFamily:string) => {
-        var icon = tiledStructureIcons.question;
-        if (structureFamily === 'array' || structureFamily === 'awkward' || structureFamily === 'sparse') {
-            icon = tiledStructureIcons.brackestSqaure;
-        }
-        if (structureFamily === 'table') {
-            icon = tiledStructureIcons.table;
-        }
-        if (structureFamily === 'container') {
-            icon = tiledStructureIcons.folder;
-        }
 
-        return icon;
-    };
 
-    const updateBreadcrumbs = (clickedItem:TiledSearchItem<TiledStructures>) => {
-        //function assumes users may only click on items that exist in the current search 'stack'
+    const updateBreadcrumbs = useCallback((clickedItem:TiledSearchItem<TiledStructures>) => {
+        //function assumes users may only click on items that exist in the current search 'stack' and cannot jump to a different branch
         setBreadcrumbs((prevState) => {
-            var stateCopy = JSON.parse(JSON.stringify(prevState));
+            var stateCopy = [...prevState]; //must use shallow to copy to hold function references
             const ancestors:string[] = clickedItem.attributes.ancestors;
             while (stateCopy.length  > ancestors.length) {
                 stateCopy.pop();
             }
             var newBreadcrumb:Breadcrumb = {
                 label: clickedItem.id,
-                icon: getTiledStructureIcon(clickedItem.attributes.structure_family)
+                icon: getTiledStructureIcon(clickedItem.attributes.structure_family),
+                onClick: ()=>handleColumnItemClick(clickedItem)
             }
             stateCopy.push(newBreadcrumb);
             return stateCopy;
         })
-    }
+    }, []);
 
     const handlePreviewUpdate = (item:any, format:'array' | 'table') => {
         //renders either an array component or table component
@@ -104,7 +99,7 @@ export const useTiled = () => {
         return item.attributes.structure_family === 'container';
     };
 
-    const handleColumnItemClick = (item:TiledSearchItem<ArrayStructure | ContainerStructure>) => {
+    const handleColumnItemClick = useCallback((item:TiledSearchItem<TiledStructures>) => {
         if (isArrayStructure(item)) {
             handleArrayClick(item); 
           } else if (isTableStructure(item)) {
@@ -114,7 +109,7 @@ export const useTiled = () => {
           } else {
             console.error('Error: No matching structure family found for: ' + item.attributes.structure_family);
           }
-    };
+    }, []);
 
     const createSearchPath = (item: TiledSearchItem<TiledStructures>):string => {
         const ancestors = item.attributes.ancestors;
@@ -159,7 +154,7 @@ export const useTiled = () => {
         V: 1   // void (raw data, size depends on context)
       };
 
-    const handleArrayClick = (item:TiledSearchItem<ArrayStructure>) => {
+    const handleArrayClick = useCallback((item:TiledSearchItem<ArrayStructure>) => {
         //get path of array and set as image URL
         //we need to downsample certain images based on size
         const arrayLength = item.attributes.structure.shape.length;
@@ -192,7 +187,7 @@ export const useTiled = () => {
             console.error(`Unknown data type kind: ${letter}`);
           }
         }
-    };
+    }, []);
 
     const handleTableClick = (item:any) => {
         //search table, put results into table preview and render preview
@@ -205,10 +200,10 @@ export const useTiled = () => {
         closePreview();
     };
 
-    const handleSearchResponse = (clickedItem:TiledSearchItem<TiledStructures>, res:TiledSearchResult) => {
+    const handleSearchResponse = useCallback((clickedItem:TiledSearchItem<TiledStructures>, res:TiledSearchResult) => {
         updateColumns(clickedItem, res);
         updateBreadcrumbs(clickedItem);
-    };
+    }, []);
 
 
     const handleSearchResults = (res:TiledSearchResult) => {
@@ -220,20 +215,17 @@ export const useTiled = () => {
     };
 
     useEffect(() => {
-        //make the first api call to search Tiled at the root
+        //get first set of results from root
         getSearchResults('', (res:TiledSearchResult) => setColumns([res]));
     }, []);
 
-    return {
+    return useMemo(() => ({
         columns,
-        previewVisibility,
-        ancestors,
-        handleColumnItemClick,
         breadcrumbs,
-        updateColumns,
         imageUrl,
         popoutUrl,
-        previewSize
-    };
+        previewSize,
+        handleColumnItemClick,
+    }), [columns, breadcrumbs, imageUrl, popoutUrl, previewSize, handleColumnItemClick])
 
 }

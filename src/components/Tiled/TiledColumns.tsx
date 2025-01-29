@@ -15,6 +15,7 @@ export default function TiledColumns({
     breadcrumbs,
     ...props
 }: TiledColumnsProps) {
+    console.log('render TiledColumns.tsx')
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const sampleData = [

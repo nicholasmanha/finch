@@ -16,24 +16,16 @@ export default function Tiled({
     ...props
 }: TiledProps) {
 
+    console.log('Render Tiled.tsx')
     const { 
         columns, 
-        previewVisibility, 
         breadcrumbs,
         imageUrl,
         popoutUrl,
         previewSize,
         handleColumnItemClick 
     } = useTiled(); 
-/* 
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        //when columns load scroll to the right
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
-        } 
-    }, [columns, imageUrl ]); */
 
     return (
         <div className="w-screen border h-screen flex justify-center items-center" {...props}>
@@ -48,8 +40,3 @@ export default function Tiled({
         </div>
     )
 }
-/* 
-<div className="w-full flex min-h-0 flex-grow border overflow-x-auto scrollbar-always-visible " ref={scrollContainerRef}>
-<TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>
-<TiledPreview imageUrl={imageUrl} popoutUrl={popoutUrl} previewSize={previewSize}/>
-</div> */
