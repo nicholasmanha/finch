@@ -7,7 +7,7 @@ export default function TiledFooter({
     breadcrumbs,
     ...props
 }: TiledFooterProps) {
-    console.log('render TiledFooter.tsx')
+    //console.log('render TiledFooter.tsx')
     const handleClick = (cb:undefined | Function) => {
         console.log('click')
         console.log({cb})
@@ -16,7 +16,7 @@ export default function TiledFooter({
             cb();
         }
     };
-    console.log({breadcrumbs})
+    //console.log({breadcrumbs})
     return (
         <div className="w-full h-8 pl-2 overflow-x-auto" {...props}>
             <div className="flex space-x-2">
@@ -24,12 +24,12 @@ export default function TiledFooter({
                     breadcrumbs.map((item, index) => {
                         const isLast:boolean = breadcrumbs.length -1 === index;
                         return (
-                            <div className={`flex items-center space-x-1 ${!isLast && 'hover:cursor-pointer hover:text-slate-500'}`}> 
+                            <div className={`flex items-center space-x-1 ${!isLast && 'hover:cursor-pointer hover:text-slate-500'}`} key={index}> 
                                 {item.icon && <div className="w-5 aspect-square">{item.icon}</div>}
                                 <p 
                                     className=''
                                     onClick={!isLast ? () => handleClick(item.onClick) : ()=>{}} 
-                                    key={index}
+                                    
                                 >
                                     {item.label} {index < breadcrumbs.length - 1 && '/'}
                                 </p>

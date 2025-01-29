@@ -15,7 +15,7 @@ export default function TiledColumns({
     breadcrumbs,
     ...props
 }: TiledColumnsProps) {
-    console.log('render TiledColumns.tsx')
+    //console.log('render TiledColumns.tsx')
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const sampleData = [
@@ -219,7 +219,7 @@ export default function TiledColumns({
 
 
     const Column = ({data, index}: ColumnProps) => {
-        console.log({data})
+        //console.log({data})
         return (
             <div className="border-r border-r-slate-400 min-w-[250px] w-fit px-4 h-full scrollbar-always-visible overflow-y-auto">
                 <ul>
