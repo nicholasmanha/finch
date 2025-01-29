@@ -26,6 +26,8 @@ export const useTiled = () => {
     const [ goBack, setGoBack ] = useState<Function | undefined>(undefined);
     const [ goForward, setGoForward ] = useState<Function | undefined>(undefined);
     const [ handleArrowClick, setHandleArrowClick ] = useState<Function | undefined>(undefined);
+    const ancestorStack = useRef<TiledSearchItem<TiledStructures>[]>([]);
+    const currentAncestorId = useRef<number>(0);
 
     const onArrowClick = () => {
         //this function will manage the forward/backward clicks for a set of callbacks that traverse the columns
@@ -35,6 +37,31 @@ export const useTiled = () => {
 
         //Only if the user clicks the back arrow will the forward options continue to work (which will also adjust the index pointer)
     }
+
+    const handleLeftArrowClick = () => {
+        //keep the stack the same, move index left
+        //act as if user clicked the stack item to the left (at the new index)
+        
+        //user must be at least one deep into ancestors
+        currentAncestorId.current = currentAncestorId.current - 1;
+        if (currentAncestorId.current === 0) {
+            //uesr has clicked back onto the root directory
+            getSearchResults('', (res:TiledSearchResult) => setColumns([res]));
+            setBreadcrumbs([]);
+        } else {
+            //user has clicked back onto a container.
+            const item = ancestorStack.current[currentAncestorId.current]; 
+            if (isArrayStructure(item)) {
+                handleArrayClick(item); 
+              } else if (isTableStructure(item)) {
+                handleTableClick(item); 
+              } else if (isContainerStructure(item)) {
+                handleContainerClick(item); 
+              } else {
+                console.error('Error: No matching structure family found for: ' + item.attributes.structure_family);
+              }
+        }
+    };
 
     const defaultPreviewSize = 'medium';
 
@@ -99,7 +126,14 @@ export const useTiled = () => {
         return item.attributes.structure_family === 'container';
     };
 
+    const updateAncestorRefs = (item:TiledSearchItem<TiledStructures>) => {
+        //this function is only called when the user navigates by directly clicking an item, not using the nav arrows
+        currentAncestorId.current = item.attributes.ancestors.length + 1;
+        ancestorStack.current = ancestorStack.current.slice(0, currentAncestorId.current);
+        ancestorStack.current = [...ancestorStack.current, item];
+    }
     const handleColumnItemClick = useCallback((item:TiledSearchItem<TiledStructures>) => {
+        updateAncestorRefs(item);
         if (isArrayStructure(item)) {
             handleArrayClick(item); 
           } else if (isTableStructure(item)) {
@@ -205,14 +239,13 @@ export const useTiled = () => {
         updateBreadcrumbs(clickedItem);
     }, []);
 
-
-    const handleSearchResults = (res:TiledSearchResult) => {
-
-    }
-
     const logResponse = (response:any) => {
         console.log({response});
     };
+
+    const initializeData = (result:TiledSearchResult) => {
+        setColumns([result]);
+    }
 
     useEffect(() => {
         //get first set of results from root
@@ -226,6 +259,7 @@ export const useTiled = () => {
         popoutUrl,
         previewSize,
         handleColumnItemClick,
+        handleLeftArrowClick,
     }), [columns, breadcrumbs, imageUrl, popoutUrl, previewSize, handleColumnItemClick])
 
 }

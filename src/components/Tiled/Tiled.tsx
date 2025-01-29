@@ -23,14 +23,15 @@ export default function Tiled({
         imageUrl,
         popoutUrl,
         previewSize,
-        handleColumnItemClick 
+        handleColumnItemClick,
+        handleLeftArrowClick, 
     } = useTiled(); 
 
 
     return (
         <div className="w-screen border h-screen flex justify-center items-center" {...props}>
             <div className="flex flex-col min-w-[400px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border ">
-                <TiledHeader breadcrumbs={breadcrumbs} />
+                <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick}/>
                 <TiledBody>
                     <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>
                     <TiledPreview imageUrl={imageUrl} popoutUrl={popoutUrl} previewSize={previewSize}/>
