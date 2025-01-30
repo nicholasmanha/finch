@@ -31,17 +31,12 @@ const getSearchResults = async (searchPath?:string, cb:Function =()=>{}, mock:bo
 };
 
 const sampleImgUrl = 'http://127.0.0.1:8000/api/v1/array/full/small_image?format=image/png&slice=';
+const sample3dCubeUrlat50thStack = 'http://127.0.0.1:8000/api/v1/array/full/tiny_cube?format=image/png&slice=49,::1,::1'
 
-const getFullImagePng = (searchPath?:string, step?:number) => {
-/*     try {
-        const response = await axios.get(tiledUrl + '/array/full/' + searchPath + '?format=image/png&slice=');
-        cb(response); //send in the full response so the cb can turn it into a blob
-    } catch (error) {
-        console.error('Error obtaining full png image: ', error);
-    } */
-
-    return (tiledUrl + '/array/full/' + searchPath + '?format=image/png&slice=' + ',::' + step + ',::' + step);
-};
+/* const getFullImagePng = (searchPath?:string, stepY?:number, stepX?:number, stack?:number[]) => {
+    const stackString = stack ? stack.join(',') : '';
+    return (tiledUrl + '/array/full/' + searchPath + '?format=image/png&slice=' + stackString + ',::' + stepY + ',::' + stepX);
+}; */
 
 
-export { getSearchResults, getFullImagePng }
+export { getSearchResults, getTiledUrl }

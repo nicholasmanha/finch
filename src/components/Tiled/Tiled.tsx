@@ -30,8 +30,8 @@ export default function Tiled({
 
 
     return (
-        <div className="w-screen border h-screen flex justify-center items-center" {...props}>
-            <div className="flex flex-col min-w-[400px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border ">
+        <div className="w-screen border  h-screen flex justify-center items-center" {...props}>
+            <div className="flex flex-col min-w-[400px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border border-slate-400 shadow-lg rounded-md ">
                 <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick} onRightArrowClick={handleRightArrowClick}/>
                 <TiledBody>
                     <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>

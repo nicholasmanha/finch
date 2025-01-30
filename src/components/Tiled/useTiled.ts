@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 
-import { getSearchResults, getFullImagePng } from "./apiClient";
+import { getSearchResults } from "./apiClient";
 import { 
     TiledSearchResult, 
     TiledSearchItem, 
@@ -11,7 +11,7 @@ import {
     TiledStructures,
     PreviewSize, 
  } from "./types";
-import { getTiledStructureIcon } from "./utils";
+import { getTiledStructureIcon, generateFullImagePngPath, generateSearchPath, numpyTypeSizesBytes } from "./utils";
 
 export const useTiled = () => {
     //console.log('run useTiled.ts')
@@ -32,7 +32,10 @@ export const useTiled = () => {
 
     var handleLeftArrowClick:Function;
     var handleRightArrowClick:Function;
-
+    //Update the arrow click functions so they always have the correct pathing.
+    //there may be a better way to do this without relying on state updates re-running 'useTiled.ts' and
+    //subsequently recreating these functions, but this does work and eleminates the <TiledHeader /> component
+    //from needing to know anything related to the business logic.
     if (currentAncestorId.current > -1) {
         handleLeftArrowClick = () => {
             console.log('current ID before subtracting is: ' + currentAncestorId.current)
@@ -149,48 +152,6 @@ export const useTiled = () => {
           }
     }
 
-    const createSearchPath = (item: TiledSearchItem<TiledStructures>):string => {
-        const ancestors = item.attributes.ancestors;
-        var searchPath:string = ancestors.length > 0 ? item.attributes.ancestors.join('/') + '/' : '';
-        searchPath+=item.id;
-        return searchPath;
-    };
-
-    const numpyTypeSizesBytes: Record<string, number> = {
-        // Numerical Data Types
-        b: 1,  // int8
-        B: 1,  // uint8
-        h: 2,  // int16
-        H: 2,  // uint16
-        i: 4,  // int32
-        I: 4,  // uint32
-        l: 8,  // int64
-        L: 8,  // uint64
-        q: 8,  // int64
-        Q: 8,  // uint64
-        f: 4,  // float32
-        d: 8,  // float64
-        g: 16, // float128 (platform-dependent)
-      
-        // Complex Number Data Types
-        F: 8,  // complex64 (2 * float32)
-        D: 16, // complex128 (2 * float64)
-        G: 32, // complex256 (2 * float128, platform-dependent)
-      
-        // Character and String Data Types
-        S: 1,  // string_ (1 byte per character, fixed length)
-        a: 1,  // alias for 'S'
-        U: 4,  // unicode_ (4 bytes per character, fixed length)
-      
-        // Boolean Data Type
-        '?': 1, // bool_ (True or False)
-      
-        // Other Data Types
-        O: 8,  // object_ (platform-dependent, typically pointer size)
-        M: 8,  // datetime64
-        m: 8,  // timedelta64
-        V: 1   // void (raw data, size depends on context)
-      };
 
     const handleArrayClick = useCallback((item:TiledSearchItem<ArrayStructure>) => {
         //get path of array and set as image URL
@@ -213,10 +174,10 @@ export const useTiled = () => {
                 const ratio = totalImageSizeBytes / maxBytesAllowed;
                 step = Math.ceil(Math.sqrt(ratio)); //make a step in both X and Y, so step should be square root of the ratio
             }
-            const searchPath = createSearchPath(item);
-            const reducedImagePath = getFullImagePng(searchPath, step);
+            const searchPath = generateSearchPath(item);
+            const reducedImagePath = generateFullImagePngPath(searchPath, step, step);
             setImageUrl(reducedImagePath); //renders in the preview
-            const fullSizeImagePath = getFullImagePng(searchPath, 1);
+            const fullSizeImagePath = generateFullImagePngPath(searchPath, 1);
             setPopoutUrl(fullSizeImagePath); //attaches to a click handler for when users want to see full image in new tab
             updateBreadcrumbs(item);
             setPreviewSize(defaultPreviewSize);
@@ -233,7 +194,7 @@ export const useTiled = () => {
 
     const handleContainerClick = (item:TiledSearchItem<ContainerStructure>) => {
         //search container, put results into column, disable preview
-        const searchPath = createSearchPath(item);
+        const searchPath = generateSearchPath(item);
         getSearchResults(searchPath, (res:TiledSearchResult) => handleSearchResponse(item, res));
         closePreview();
     };

@@ -97,7 +97,7 @@ export interface Sorting {
 
 // Structure definitions for the `structure` key
 export interface ArrayStructure {
-    data_type?: {
+    data_type: {
         endianness: string;
         kind: string;
         itemsize: number;
