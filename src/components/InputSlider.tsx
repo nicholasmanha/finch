@@ -101,13 +101,11 @@ export default function InputSlider({
 
     type TickMarkProps = {
         mark: number,
-        key: string,
         displayValue?: boolean
     }
-    const TickMark = ({mark, key, displayValue=true}: TickMarkProps) => {
+    const TickMark = ({mark, displayValue=true}: TickMarkProps) => {
         return (
             <div
-                key={key}
                 className="absolute -top-2 w-[1px] h-4 bg-gray-400"
                 style={{ left: generateLeftOffsetString(mark) }}
             >

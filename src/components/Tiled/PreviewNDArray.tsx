@@ -6,7 +6,7 @@ import {  } from "./apiClient";
 
 
 type PreviewNDArrayProps = {
-    arrayItem?: TiledSearchItem<ArrayStructure>
+    arrayItem: TiledSearchItem<ArrayStructure>;
 };
 
 type Slider = {
@@ -31,73 +31,86 @@ const onPopoutClick =(popoutUrl:string) => {
     window.open(popoutUrl, '_blank', 'noopener,noreferrer');
 };
 
+const createSliders = (sliderCount:number, shape:number[]) => {
+    var initialSliders:Slider[] = [];
+    //the first values from shape represent the number of stacks, the last two dims are the actual 'image' size
+    for ( let i = 0; i < sliderCount; i++) {
+        const newSlider = {
+            min: 0,
+            max: shape[i],
+            index: i,
+            value: Math.floor((shape[i]) / 2)
+        };
+        initialSliders.push(newSlider);
+    };
+    return initialSliders;
+}
 export default function PreviewNDArray({
     arrayItem
 }: PreviewNDArrayProps) {
-    if (arrayItem) {
-        const shape = arrayItem.attributes.structure.shape
-        const dims = shape.length;
-        const sliderCount = dims - 2; //2D array is an image, no slider needed, 3D array needs a single slider, etc.
-        var initialSliders:Slider[] = [];
-        //the first values from shape represent the number of stacks, the last two dims are the actual 'image' size
-        for ( let i = 0; i < sliderCount; i++) {
-            const newSlider = {
-                min: 0,
-                max: shape[i],
-                index: i,
-                value: Math.floor((shape[i]) / 2)
-            };
-            initialSliders.push(newSlider);
-        }
+    const [ sliders, setSliders ] = useState<Slider[]>([]);
+    const [ imageUrl, setImageUrl ] = useState('');
+    const [ popoutUrl, setPopoutUrl ] = useState('');
 
-        const handleSliderChange = (newValue:number, slider:Slider) => {
-            //make an API call to overwrite the current image
+    const maxBytesAllowed = 1000000;
+    const shape = arrayItem.attributes.structure.shape;
+    const dims = shape.length;
+    const sliderCount = dims - 2; //2D array is an image, no slider needed, 3D array needs a single slider, etc.
+    
 
-            //set state for the slider values
-        }
+    const handleSliderChange = (newValue:number, slider:Slider) => {
+        //make an API call to overwrite the current image
 
-        const [ sliders, setSliders ] = useState(initialSliders);
-        const [ imageUrl, setImageUrl ] = useState('');
-        const [ popoutUrl, setPopoutUrl ] = useState('');
-
-        const handleArrayClick = useCallback(() => {
-            //get path of array and set as image URL
-            //we need to downsample certain images based on size
-            if (dims < 2) {
-                console.error('Current UI only supports 2D+ arrays');
-                return;
-            }
-            var step = 1; //the step to call for both X and Y axis when retrieving array data, 1 is all, 2 is every other, etc..
-            const letter = arrayItem.attributes.structure.data_type.kind[0] as keyof typeof numpyTypeSizesBytes;
-            const bytesPerElement = numpyTypeSizesBytes[letter];
-            const totalImageSizeBytes = shape[shape.length-1] * shape[shape.length-2] * bytesPerElement; //last two index are the frame data
-            const maxBytesAllowed = 1000000;
-            if (totalImageSizeBytes > maxBytesAllowed) {
-                const ratio = totalImageSizeBytes / maxBytesAllowed;
-                step = Math.ceil(Math.sqrt(ratio)); //make a step in both X and Y, so step should be square root of the ratio
-            }
-            const searchPath = generateSearchPath(arrayItem); //TODO: modify this function call so that we include the slider values
-            const stack = sliders.map((slider) => slider.value);
-            const reducedImagePath = generateFullImagePngPath(searchPath, step, step, stack);
-            setImageUrl(reducedImagePath); //renders in the preview
-            const fullSizeImagePath = generateFullImagePngPath(searchPath, 1);
-            setPopoutUrl(fullSizeImagePath); //attaches to a click handler for when users want to see full image in new tab
-        }, []);
-
-
-        useEffect(() => {
-            //make an api call to fill the image
-        }, [])
-        return (
-            <div className="flex flex-col space-y-2">
-                <div className="relative bg-slate-300 min-h-56 w-56 m-auto">
-                    {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
-                    {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
-                </div>
-                <div>
-                    {sliders.map((slider) => <InputSlider key={slider.index} min={slider.min} max={slider.max} value={slider.value} onChange={(newValue)=>handleSliderChange(newValue, slider)}/>)}
-                </div>
-            </div>
-        )
+        var stack = sliders.map((slider) => slider.value);
+        stack[slider.index] = newValue;
+        updateImage(stack);
+        setSliders((prevState) => {
+            var newState = [...prevState];
+            newState[slider.index].value = newValue;
+            return newState;
+        })
     }
+
+
+    const updateImage = (stack?:number[]) => {
+        var stepX = 1;
+        var stepY = 1;
+        const letter = arrayItem.attributes.structure.data_type.kind[0] as keyof typeof numpyTypeSizesBytes;
+        const bytesPerElement = numpyTypeSizesBytes[letter];
+        const totalImageSizeBytes = shape[shape.length-1] * shape[shape.length-2] * bytesPerElement; //last two index are always the frame data to be displayed
+        if (totalImageSizeBytes > maxBytesAllowed) {
+            const ratio = totalImageSizeBytes / maxBytesAllowed;
+            let squareStep = Math.ceil(Math.sqrt(ratio));
+            //TO DO - downsamplke for rectangular images instead of assumed square
+            stepX = squareStep;
+            stepY = squareStep;
+        }
+        const searchPath = generateSearchPath(arrayItem);
+        const reducedImagePath = generateFullImagePngPath(searchPath, stepY, stepX, stack);
+        setImageUrl(reducedImagePath); 
+        const fullSizeImagePath = generateFullImagePngPath(searchPath, 1, 1, stack);
+        setPopoutUrl(fullSizeImagePath); 
+    }
+
+    useEffect(() => {
+        //make an api call to fill the image
+        if (!arrayItem) return;
+
+        const stack = shape.slice(0, sliderCount).map((dim) => Math.floor(dim/2));
+        setSliders(createSliders(sliderCount, shape));
+        updateImage(stack);
+    }, [arrayItem])
+    return (
+        <div className="flex flex-col space-y-2">
+            <p className="text-sky-900 text-center">{arrayItem.id}</p>
+            <div className="relative bg-slate-300 h-72 aspect-square m-auto">
+                {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
+                {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
+            </div>
+            <p className="text-sm text-center text-slate-500">{`True Dimensions:  [${arrayItem.attributes.structure.shape.join(', ')}]`}</p>
+            <div className="flex flex-col space-y-4">
+                {sliders.map((slider, index) => <InputSlider key={index} showSideInput={false} min={slider.min} max={slider.max} value={slider.value} onChange={(newValue)=>handleSliderChange(newValue, slider)}/>)}
+            </div>
+        </div>
+    )
 }

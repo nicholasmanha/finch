@@ -18,7 +18,7 @@ export default function TiledFooter({
     };
     //console.log({breadcrumbs})
     return (
-        <div className="w-full h-8 pl-2 overflow-x-auto" {...props}>
+        <div className="w-full h-8 flex-shrink-0 pl-2 overflow-x-auto" {...props}>
             <div className="flex space-x-2">
                 {breadcrumbs && 
                     breadcrumbs.map((item, index) => {

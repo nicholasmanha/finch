@@ -23,9 +23,7 @@ export const useTiled = () => {
     const [ imageUrl, setImageUrl ] = useState<string | undefined>();
     const [ popoutUrl, setPopoutUrl ] = useState<string | undefined>();
     const [ previewSize, setPreviewSize ] = useState<PreviewSize>('hidden');
-    const [ goBack, setGoBack ] = useState<Function | undefined>(undefined);
-    const [ goForward, setGoForward ] = useState<Function | undefined>(undefined);
-    const [ handleArrowClick, setHandleArrowClick ] = useState<Function | undefined>(undefined);
+    const [ arrayItem, setArrayItem ] = useState<TiledSearchItem<ArrayStructure> | null>(null);
     const ancestorStack = useRef<TiledSearchItem<TiledStructures>[]>([]);
     const currentAncestorId = useRef<number>(-1);
 
@@ -129,8 +127,6 @@ export const useTiled = () => {
 
     const updateAncestorRefs = (item:TiledSearchItem<TiledStructures>) => {
         //this function is only called when the user navigates by directly clicking an item, not using the nav arrows
-        console.log(item.attributes.ancestors)
-        console.log(item.attributes.ancestors.length)
         currentAncestorId.current = item.attributes.ancestors.length;
         ancestorStack.current = ancestorStack.current.slice(0, currentAncestorId.current);
         ancestorStack.current = [...ancestorStack.current, item];
@@ -154,9 +150,12 @@ export const useTiled = () => {
 
 
     const handleArrayClick = useCallback((item:TiledSearchItem<ArrayStructure>) => {
-        //get path of array and set as image URL
-        //we need to downsample certain images based on size
-        const arrayLength = item.attributes.structure.shape.length;
+
+        setArrayItem(item);
+        updateBreadcrumbs(item);
+        setPreviewSize(defaultPreviewSize);
+        updateColumns(item);
+/*         const arrayLength = item.attributes.structure.shape.length;
         if (arrayLength != 2) {
             console.error('Current UI only supports displaying 2D arrays');
             return;
@@ -185,7 +184,7 @@ export const useTiled = () => {
           } else {
             console.error(`Unknown data type kind: ${letter}`);
           }
-        }
+        } */
     }, []);
 
     const handleTableClick = (item:any) => {
@@ -223,6 +222,7 @@ export const useTiled = () => {
         imageUrl,
         popoutUrl,
         previewSize,
+        arrayItem,
         handleColumnItemClick,
         handleLeftArrowClick,
         handleRightArrowClick,
