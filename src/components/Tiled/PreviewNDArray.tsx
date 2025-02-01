@@ -37,7 +37,7 @@ const createSliders = (sliderCount:number, shape:number[]) => {
     for ( let i = 0; i < sliderCount; i++) {
         const newSlider = {
             min: 0,
-            max: shape[i],
+            max: shape[i]-1,
             index: i,
             value: Math.floor((shape[i]) / 2)
         };
@@ -103,13 +103,15 @@ export default function PreviewNDArray({
     return (
         <div className="flex flex-col space-y-2">
             <p className="text-sky-900 text-center">{arrayItem.id}</p>
-            <div className="relative bg-slate-300 h-72 aspect-square m-auto">
-                {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
-                {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
-            </div>
-            <p className="text-sm text-center text-slate-500">{`True Dimensions:  [${arrayItem.attributes.structure.shape.join(', ')}]`}</p>
-            <div className="flex flex-col space-y-4">
-                {sliders.map((slider, index) => <InputSlider key={index} showSideInput={false} min={slider.min} max={slider.max} value={slider.value} onChange={(newValue)=>handleSliderChange(newValue, slider)}/>)}
+            <div className={`${sliderCount > 2 ? 'flex-wrap' : 'flex-col'} flex items-center justify-center`}>
+                <div className="relative bg-slate-300 h-72 aspect-square m-auto">
+                    {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute px-2 top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
+                    {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
+                    <p className="text-sm text-center text-slate-500">{`True Dimensions:  [${arrayItem.attributes.structure.shape.join(', ')}]`}</p>
+                </div>
+                <div className={`${sliderCount > 0 ? 'w-72' : 'hidden'} flex flex-col space-y-4 pt-6 px-4`}>
+                    {sliders.map((slider, index) => <InputSlider key={index} showSideInput={false} min={slider.min} max={slider.max} value={slider.value} onChange={(newValue)=>handleSliderChange(newValue, slider)}/>)}
+                </div>
             </div>
         </div>
     )

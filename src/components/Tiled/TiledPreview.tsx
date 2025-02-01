@@ -43,7 +43,7 @@ export default function TiledPreview({
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowsPointingOut}</div>
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
             </div>
-            <div className="w-full flex flex-col items-center space-y-4 py-4">
+            <div className="w-full flex flex-col items-center space-y-8 py-4">
                 {arrayItem && <PreviewNDArray arrayItem={arrayItem}/>}
                 <Button text="Select" size="medium" cb={onSelect} />
             </div>
