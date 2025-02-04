@@ -105,7 +105,7 @@ export default function PreviewNDArray({
             <p className="text-sky-900 text-center">{arrayItem.id}</p>
             <div className={`${sliderCount > 2 ? 'flex-wrap' : 'flex-col'} flex items-center justify-center`}>
                 <div className="relative bg-slate-300 h-72 aspect-square m-auto">
-                    {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute px-2 top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
+                    {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
                     {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
                     <p className="text-sm text-center text-slate-500">{`True Dimensions:  [${arrayItem.attributes.structure.shape.join(', ')}]`}</p>
                 </div>
