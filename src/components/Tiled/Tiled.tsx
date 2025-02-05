@@ -21,6 +21,7 @@ export default function Tiled({
         columns, 
         breadcrumbs,
         imageUrl,
+        tableItem,
         popoutUrl,
         previewSize,
         arrayItem,
@@ -36,7 +37,7 @@ export default function Tiled({
                 <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick} onRightArrowClick={handleRightArrowClick}/>
                 <TiledBody>
                     <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>
-                    <TiledPreview arrayItem={arrayItem} imageUrl={imageUrl} popoutUrl={popoutUrl} previewSize={previewSize}/>
+                    <TiledPreview arrayItem={arrayItem} tableItem={tableItem} imageUrl={imageUrl} popoutUrl={popoutUrl} previewSize={previewSize}/>
                 </TiledBody>
                 <TiledFooter breadcrumbs={breadcrumbs}/>
             </div>

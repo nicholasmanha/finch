@@ -148,3 +148,10 @@ export interface SparseStructure {
 }
 
 export type PreviewSize = 'hidden' | 'small' | 'medium' | 'large';
+
+
+export interface TiledTableRow {
+    [column: string]: number
+}
+
+export type TiledTableData = TiledTableRow[];

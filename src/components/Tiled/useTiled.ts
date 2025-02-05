@@ -24,6 +24,7 @@ export const useTiled = () => {
     const [ popoutUrl, setPopoutUrl ] = useState<string | undefined>();
     const [ previewSize, setPreviewSize ] = useState<PreviewSize>('hidden');
     const [ arrayItem, setArrayItem ] = useState<TiledSearchItem<ArrayStructure> | null>(null);
+    const [ tableItem, setTableItem ] = useState<TiledSearchItem<TableStructure> | null>(null);
     const ancestorStack = useRef<TiledSearchItem<TiledStructures>[]>([]);
     const currentAncestorId = useRef<number>(-1);
 
@@ -150,49 +151,25 @@ export const useTiled = () => {
 
 
     const handleArrayClick = useCallback((item:TiledSearchItem<ArrayStructure>) => {
-
+        setTableItem(null);
         setArrayItem(item);
         updateBreadcrumbs(item);
         setPreviewSize(defaultPreviewSize);
         updateColumns(item);
-/*         const arrayLength = item.attributes.structure.shape.length;
-        if (arrayLength != 2) {
-            console.error('Current UI only supports displaying 2D arrays');
-            return;
-        }
-        var step = 1; //the step to call for both X and Y axis when retrieving array data, 1 is all, 2 is every other, etc..
-        if (item.attributes.structure.data_type && item.attributes.structure.data_type.kind) {
-          const letter = item.attributes.structure.data_type.kind[0] as keyof typeof numpyTypeSizesBytes;
-          const bytesPerElement = numpyTypeSizesBytes[letter];
-      
-          if (bytesPerElement) {
-            //console.log(`Bytes per element: ${bytesPerElement}`);
-            const totalImageSizeBytes = item.attributes.structure.shape[0] * item.attributes.structure.shape[1] * bytesPerElement;
-            const maxBytesAllowed = 1000000;
-            if (totalImageSizeBytes > maxBytesAllowed) {
-                const ratio = totalImageSizeBytes / maxBytesAllowed;
-                step = Math.ceil(Math.sqrt(ratio)); //make a step in both X and Y, so step should be square root of the ratio
-            }
-            const searchPath = generateSearchPath(item);
-            const reducedImagePath = generateFullImagePngPath(searchPath, step, step);
-            setImageUrl(reducedImagePath); //renders in the preview
-            const fullSizeImagePath = generateFullImagePngPath(searchPath, 1);
-            setPopoutUrl(fullSizeImagePath); //attaches to a click handler for when users want to see full image in new tab
-            updateBreadcrumbs(item);
-            setPreviewSize(defaultPreviewSize);
-            updateColumns(item);
-          } else {
-            console.error(`Unknown data type kind: ${letter}`);
-          }
-        } */
     }, []);
 
-    const handleTableClick = (item:any) => {
-        //search table, put results into table preview and render preview
-    };
+    const handleTableClick = useCallback((item:TiledSearchItem<TableStructure>) => {
+        setArrayItem(null)
+        setTableItem(item);
+        updateBreadcrumbs(item);
+        setPreviewSize(defaultPreviewSize);
+        updateColumns(item);
+    }, []);
 
     const handleContainerClick = (item:TiledSearchItem<ContainerStructure>) => {
         //search container, put results into column, disable preview
+        setArrayItem(null);
+        setTableItem(null);
         const searchPath = generateSearchPath(item);
         getSearchResults(searchPath, (res:TiledSearchResult) => handleSearchResponse(item, res));
         closePreview();
@@ -223,6 +200,7 @@ export const useTiled = () => {
         popoutUrl,
         previewSize,
         arrayItem,
+        tableItem,
         handleColumnItemClick,
         handleLeftArrowClick,
         handleRightArrowClick,

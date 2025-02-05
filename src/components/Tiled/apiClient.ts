@@ -14,6 +14,8 @@ const getTiledApiKey = () => {
     return '';
 }
 
+// const sampleTableUrl = http://localhost:8000/api/v1/table/partition/short_table?partition=0&format=application/json-seq
+
 const tiledUrl = getTiledUrl();
 const tiledApiKey = getTiledApiKey();
 
@@ -29,6 +31,24 @@ const getSearchResults = async (searchPath?:string, cb:Function =()=>{}, mock:bo
         console.error('Error searching path: ', error);
     }
 };
+
+const getTableData = async(searchPath?:string, cb:Function=()=>{}) => {
+    try {
+        const response = await axios.get(tiledUrl + '/table/partition/' + searchPath + '?partition=0&format=application/json-seq');
+        
+        const parsedData = response.data
+            .trim() // Remove any extra newlines at start or end
+            .split("\n") // Split by line
+            .map((line:any) => JSON.parse(line)); // Parse each line as JSON
+
+        console.log(parsedData); // Now it's an array of objects
+// [{ A: 0.5699, B: 1.1398, C: 1.7098 }, ...]
+
+        cb(parsedData);
+    } catch (error) {
+        console.error('Error searching table data: ', error);
+    }
+}
 
 const sampleImgUrl = 'http://127.0.0.1:8000/api/v1/array/full/small_image?format=image/png&slice=';
 const sample3dCubeUrlat50thStack = 'http://127.0.0.1:8000/api/v1/array/full/tiny_cube?format=image/png&slice=49,::1,::1'
@@ -204,4 +224,4 @@ const sampleColumnData = [
 ];
 
 
-export { getSearchResults, getTiledUrl }
+export { getSearchResults, getTiledUrl, getTableData }

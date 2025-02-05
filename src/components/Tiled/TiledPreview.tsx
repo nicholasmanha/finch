@@ -1,6 +1,7 @@
 import Button from '../Button.tsx';
 import PreviewNDArray from './PreviewNDArray.tsx';
-import { PreviewSize, TiledSearchItem, ArrayStructure } from './types.ts';
+import PreviewTable from './PreviewTable.tsx';
+import { PreviewSize, TiledSearchItem, ArrayStructure, TableStructure } from './types.ts';
 
 const arrowsPointingOut = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
@@ -14,6 +15,7 @@ const arrowTopRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBo
 
 type TiledPreviewProps = {
     arrayItem?: TiledSearchItem<ArrayStructure> | null;
+    tableItem?: TiledSearchItem<TableStructure> | null;
     imageUrl?:string | undefined;
     popoutUrl?:string | undefined;
     previewSize: PreviewSize;
@@ -21,6 +23,7 @@ type TiledPreviewProps = {
 }
 export default function TiledPreview({
     arrayItem,
+    tableItem,
     imageUrl='',
     popoutUrl,
     onSelect=()=>{},
@@ -45,44 +48,14 @@ export default function TiledPreview({
             </div>
             <div className="w-full flex flex-col items-center space-y-8 py-4">
                 {arrayItem && <PreviewNDArray arrayItem={arrayItem}/>}
+                {tableItem && <PreviewTable tableItem={tableItem}/>}
                 <Button text="Select" size="medium" cb={onSelect} />
             </div>
-            <div>
-               {arrayItem && <pre className="text-sm font-mono text-gray-700 whitespace-pre-wrap">{JSON.stringify(arrayItem, null, 2)}</pre>}
+            <div className="px-8">
+               {arrayItem && <pre className="text-sm font-mono text-gray-700 whitespace-pre-wrap break-words">{JSON.stringify(arrayItem, null, 2)}</pre>}
+               {tableItem && <pre className="text-sm font-mono text-gray-700 whitespace-pre-wrap break-words">{JSON.stringify(tableItem, null, 2)}</pre>}
             </div>
         </div>
     )
 }
 
-
-{/* <h3 className="text-center text-lg">Image ID</h3>
-<div className="relative bg-slate-300 min-h-56 w-56 m-auto">
-    {popoutUrl && <div onClick={onPopoutClick} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
-    {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
-</div>
-<div>
-    <p className="text-sm text-slate-500">Acutal Dimensions: </p>
-</div> */}
-
-/* return (
-    <div className={`${previewSizeMap[previewSize]} flex-shrink-0 h-full bg-red-100 border border-red-800 flex flex-col`} {...props}>
-        <div className="flex justify-between px-2 pt-2">
-            <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowsPointingOut}</div>
-            <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
-        </div>
-        <div className="w-full flex flex-col items-center space-y-4">
-            <h3 className="text-center text-lg">Image ID</h3>
-            <div className="relative bg-slate-300 min-h-56 w-56 m-auto">
-                {popoutUrl && <div onClick={onPopoutClick} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
-                {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
-            </div>
-            <div>
-                <p className="text-sm text-slate-500">Acutal Dimensions: </p>
-            </div>
-            <Button text="Select" size="medium" cb={onSelect} />
-        </div>
-        <div>
-            Metadata
-        </div>
-    </div>
-) */
