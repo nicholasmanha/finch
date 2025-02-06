@@ -1,55 +1,122 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
 import { TiledSearchItem, TableStructure, TiledTableRow } from "./types";
 import { getTableData } from "./apiClient";
-import { generateSearchPath } from './utils';
+import { generateSearchPath } from "./utils";
+import InputSlider from "../InputSlider";
 
 type PreviewTableProps = {
-    tableItem: TiledSearchItem<TableStructure>
+    tableItem: TiledSearchItem<TableStructure>;
 };
 
-export default function PreviewTable ({
-    tableItem,
-}: PreviewTableProps) {
-    const [ tableData, setTableData ] = useState<TiledTableRow[]>([]);
+export default function PreviewTable({ tableItem }: PreviewTableProps) {
+    const [tableData, setTableData] = useState<TiledTableRow[]>([]);
+    const [visibleData, setVisibleData] = useState<TiledTableRow[]>([]);
+    const [partition, setPartition] = useState<number>(0);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    
+    const observerRef = useRef<HTMLDivElement | null>(null);
+    const tableContainerRef = useRef<HTMLDivElement | null>(null);
+
+    const partitionCount = tableItem.attributes.structure.npartitions;
+    const searchPath = generateSearchPath(tableItem);
+    const rowLoadSize = 20;
 
     const columns = tableData.length > 0 ? Object.keys(tableData[0]) : [];
 
-    
+    const updateTable = (newTableData: TiledTableRow[]) => {
+        setTableData(newTableData);
+        setVisibleData(newTableData.slice(0, rowLoadSize));
+        setIsLoading(false);
+    };
+
+    const handlePartitionChange = useCallback((newValue: number) => {
+        setIsLoading(true);
+        getTableData(searchPath, newValue, updateTable);
+        setPartition(newValue);
+    }, [tableItem]);
 
     useEffect(() => {
-        const searchPath = generateSearchPath(tableItem);
-        getTableData(searchPath, setTableData);
+        getTableData(searchPath, partition, updateTable);
     }, [tableItem]);
-    return (
-        <div className="w-full m-auto px-4">
-            <p className="text-sky-900 text-center">{tableItem.id}</p>
-            <div className="h-96 px-6 overflow-auto">
-                <table className=" border border-gray-300 shadow-md h-full bg-white">
-                    {/* Table Head */}
-                    <thead className="bg-gray-200">
-                    <tr>
-                        {columns.map((col) => (
-                        <th key={col} className="border border-gray-300 px-4 py-2 text-left">
-                            {col}
-                        </th>
-                        ))}
-                    </tr>
-                    </thead>
 
-                    {/* Table Body */}
-                    <tbody>
-                    {tableData.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="hover:bg-gray-100">
-                        {columns.map((col) => (
-                            <td key={col} className="border border-gray-300 px-4 py-2">
-                            {row[col].toFixed(4)} {/* Format numbers for better readability */}
-                            </td>
-                        ))}
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+    const loadMoreRows = useCallback(() => {
+        setVisibleData((prev) => {
+            const nextRows = tableData.slice(prev.length, prev.length + rowLoadSize);
+            return [...prev, ...nextRows];
+        });
+    }, [tableData]);
+
+    useEffect(() => {
+        if (!observerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    loadMoreRows();
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        observer.observe(observerRef.current);
+
+        return () => observer.disconnect();
+    }, [loadMoreRows]);
+
+    useEffect(() => {
+        //force scrollbar to the top after clicking from one table to another
+        if (tableContainerRef.current) {
+            tableContainerRef.current.scrollTop = 0
+        }
+    }, [tableItem]);
+
+    return (
+        <div className="w-full px-12">
+            <p className="text-sky-900 text-center mb-4">{tableItem.id}</p>
+
+            
+            <div ref={tableContainerRef} className="h-96 overflow-auto max-w-[100%] w-fit m-auto">
+                {isLoading ? (
+                    <div className="flex items-center justify-center w-full h-20 overflow-hidden">
+                        {/* Loading Wheel */}
+                        <svg className="animate-spin h-10 w-10 overflow-hidden text-slate-400 m-auto my-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </div>
+                ) : (
+                    <table className="m-auto border border-gray-300 shadow-md h-full bg-white">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                {columns.map((col) => (
+                                    <th key={col} className="border border-gray-300 px-4 py-2 text-left">
+                                        {col}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {visibleData.map((row, rowIndex) => (
+                                <tr key={rowIndex} className="hover:bg-gray-100">
+                                    {columns.map((col) => (
+                                        <td key={col} className="border border-gray-300 px-4 py-2">
+                                            {row[col].toFixed(4)}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+                {/* when scroll approaches observerRef more values are loaded */}
+                <div ref={observerRef} className="h-4"></div>
             </div>
+            {partitionCount > 1 && 
+                <div className="pb-1 pt-4">
+                    <InputSlider label="Partition Index" max={partitionCount - 1} min={0} value={partition} onChange={handlePartitionChange} />
+                </div>
+            }
+
         </div>
-    )
+    );
 }

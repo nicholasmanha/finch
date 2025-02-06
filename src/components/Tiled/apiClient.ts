@@ -32,17 +32,17 @@ const getSearchResults = async (searchPath?:string, cb:Function =()=>{}, mock:bo
     }
 };
 
-const getTableData = async(searchPath?:string, cb:Function=()=>{}) => {
+const getTableData = async(searchPath:string, partition:number, cb:Function=()=>{}) => {
     try {
-        const response = await axios.get(tiledUrl + '/table/partition/' + searchPath + '?partition=0&format=application/json-seq');
-        
+        const response = await axios.get(tiledUrl + '/table/partition/' + searchPath + '?partition=' + partition + '&format=application/json-seq');
+        //the data comes as a long string that unfortunately does not comply with JSON.parse(data)
         const parsedData = response.data
             .trim() // Remove any extra newlines at start or end
             .split("\n") // Split by line
             .map((line:any) => JSON.parse(line)); // Parse each line as JSON
 
-        console.log(parsedData); // Now it's an array of objects
-// [{ A: 0.5699, B: 1.1398, C: 1.7098 }, ...]
+        //console.log(parsedData); // Now it's an array of objects
+        // [{ A: 0.5699, B: 1.1398, C: 1.7098 }, ...]
 
         cb(parsedData);
     } catch (error) {
