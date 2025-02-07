@@ -70,6 +70,8 @@ export default function PreviewNDArray({
             return newState;
         })
     }
+    const searchPath = generateSearchPath(arrayItem);
+
 
 
     const updateImage = (stack?:number[]) => {
@@ -85,7 +87,6 @@ export default function PreviewNDArray({
             stepX = squareStep;
             stepY = squareStep;
         }
-        const searchPath = generateSearchPath(arrayItem);
         const reducedImagePath = generateFullImagePngPath(searchPath, stepY, stepX, stack);
         setImageUrl(reducedImagePath); 
         const fullSizeImagePath = generateFullImagePngPath(searchPath, 1, 1, stack);

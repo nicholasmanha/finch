@@ -10,6 +10,9 @@ import {
     TableStructure, 
     TiledStructures,
     PreviewSize, 
+    isArrayStructure,
+    isContainerStructure,
+    isTableStructure,
  } from "./types";
 import { getTiledStructureIcon, generateFullImagePngPath, generateSearchPath, numpyTypeSizesBytes } from "./utils";
 
@@ -23,8 +26,7 @@ export const useTiled = () => {
     const [ imageUrl, setImageUrl ] = useState<string | undefined>();
     const [ popoutUrl, setPopoutUrl ] = useState<string | undefined>();
     const [ previewSize, setPreviewSize ] = useState<PreviewSize>('hidden');
-    const [ arrayItem, setArrayItem ] = useState<TiledSearchItem<ArrayStructure> | null>(null);
-    const [ tableItem, setTableItem ] = useState<TiledSearchItem<TableStructure> | null>(null);
+    const [ previewItem, setPreviewItem ]  = useState<TiledSearchItem<ArrayStructure> | TiledSearchItem<TableStructure> | null >(null);
     const ancestorStack = useRef<TiledSearchItem<TiledStructures>[]>([]);
     const currentAncestorId = useRef<number>(-1);
 
@@ -98,11 +100,6 @@ export const useTiled = () => {
         })
     }, []);
 
-    const handlePreviewUpdate = (item:any, format:'array' | 'table') => {
-        //renders either an array component or table component
-
-        //set the preview component display to visible
-    };
 
     const closePreview = () => {
         //remove the preview component from 
@@ -110,21 +107,6 @@ export const useTiled = () => {
         setPopoutUrl(undefined);
         setPreviewSize('hidden');
     }
-
-        // Type guard for ArrayStructure
-    const isArrayStructure = (item: TiledSearchItem<any>): item is TiledSearchItem<ArrayStructure> => {
-        return item.attributes.structure_family === 'array';
-    };
-    
-    // Type guard for TableStructure
-    const isTableStructure = (item: TiledSearchItem<any>): item is TiledSearchItem<TableStructure> => {
-        return item.attributes.structure_family === 'table';
-    };
-    
-    // Type guard for ContainerStructure
-    const isContainerStructure = (item: TiledSearchItem<any>): item is TiledSearchItem<ContainerStructure> => {
-        return item.attributes.structure_family === 'container';
-    };
 
     const updateAncestorRefs = (item:TiledSearchItem<TiledStructures>) => {
         //this function is only called when the user navigates by directly clicking an item, not using the nav arrows
@@ -151,16 +133,14 @@ export const useTiled = () => {
 
 
     const handleArrayClick = useCallback((item:TiledSearchItem<ArrayStructure>) => {
-        setTableItem(null);
-        setArrayItem(item);
+        setPreviewItem(item);
         updateBreadcrumbs(item);
         setPreviewSize(defaultPreviewSize);
         updateColumns(item);
     }, []);
 
     const handleTableClick = useCallback((item:TiledSearchItem<TableStructure>) => {
-        setArrayItem(null)
-        setTableItem(item);
+        setPreviewItem(item);
         updateBreadcrumbs(item);
         setPreviewSize(defaultPreviewSize);
         updateColumns(item);
@@ -168,8 +148,7 @@ export const useTiled = () => {
 
     const handleContainerClick = (item:TiledSearchItem<ContainerStructure>) => {
         //search container, put results into column, disable preview
-        setArrayItem(null);
-        setTableItem(null);
+        setPreviewItem(null)
         const searchPath = generateSearchPath(item);
         getSearchResults(searchPath, (res:TiledSearchResult) => handleSearchResponse(item, res));
         closePreview();
@@ -199,8 +178,7 @@ export const useTiled = () => {
         imageUrl,
         popoutUrl,
         previewSize,
-        arrayItem,
-        tableItem,
+        previewItem,
         handleColumnItemClick,
         handleLeftArrowClick,
         handleRightArrowClick,

@@ -155,3 +155,15 @@ export interface TiledTableRow {
 }
 
 export type TiledTableData = TiledTableRow[];
+
+export const isArrayStructure = (item: TiledSearchItem<any>): item is TiledSearchItem<ArrayStructure> => {
+    return item.attributes.structure_family === 'array';
+};
+
+export const isTableStructure = (item: TiledSearchItem<any>): item is TiledSearchItem<TableStructure> => {
+    return item.attributes.structure_family === 'table';
+};
+
+export const isContainerStructure = (item: TiledSearchItem<any>): item is TiledSearchItem<ContainerStructure> => {
+    return item.attributes.structure_family === 'container';
+};
