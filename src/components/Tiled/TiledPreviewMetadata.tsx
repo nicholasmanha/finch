@@ -16,10 +16,12 @@ export default function TiledPreviewMetadata({
             <h3 className="m-auto text-left pl-4 text-sky-950">Links</h3>
             <ul className="flex w-full justify-start pl-8 space-x-6">
                 {linkKeys.map((key:string) => {
+                    var value = item.links[key as keyof typeof item.links];
+                    if (typeof value !== "string") return null;
                     return (
                         <li key={key} className="flex space-x-1 text-sm">
-                            <ButtonCopyToClipboard copyText={item.links[key as keyof typeof item.links]} size="small"/>
-                            <a className="text-blue-600 underline" href={item.links[key as keyof typeof item.links]}>{key}</a>
+                            <ButtonCopyToClipboard copyText={value} size="small"/>
+                            <a className="text-blue-600 underline hover:text-blue-500" href={item.links[key as keyof typeof item.links]}>{key}</a>
                         </li>
                     )
                 })}

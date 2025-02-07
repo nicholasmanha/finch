@@ -36,7 +36,12 @@ export default function PreviewTable({ tableItem }: PreviewTableProps) {
     }, [tableItem]);
 
     useEffect(() => {
-        getTableData(searchPath, partition, updateTable);
+        if (tableContainerRef.current) {
+            tableContainerRef.current.scrollTop = 0
+        }
+        const searchPath = generateSearchPath(tableItem);
+        setPartition(0);
+        getTableData(searchPath, 0, updateTable);
     }, [tableItem]);
 
     const loadMoreRows = useCallback(() => {
@@ -65,9 +70,8 @@ export default function PreviewTable({ tableItem }: PreviewTableProps) {
 
     useEffect(() => {
         //force scrollbar to the top after clicking from one table to another
-        if (tableContainerRef.current) {
-            tableContainerRef.current.scrollTop = 0
-        }
+
+        
     }, [tableItem]);
 
     return (
