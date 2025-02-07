@@ -68,12 +68,6 @@ export default function PreviewTable({ tableItem }: PreviewTableProps) {
         return () => observer.disconnect();
     }, [loadMoreRows]);
 
-    useEffect(() => {
-        //force scrollbar to the top after clicking from one table to another
-
-        
-    }, [tableItem]);
-
     return (
         <div className="w-full px-12">
             <p className="text-sky-900 text-center mb-4">{tableItem.id}</p>

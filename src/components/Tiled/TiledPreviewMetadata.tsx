@@ -10,6 +10,13 @@ export default function TiledPreviewMetadata({
 }: TiledPreviewMetadataProps) {
 
     const linkKeys:string[] = Object.keys(item.links);
+    const onPopoutClick =(e:React.MouseEvent<HTMLAnchorElement>, popoutUrl:string | undefined) => {
+        e.preventDefault();
+        //open a new tab with the specified URL
+        if (popoutUrl) {
+            window.open(popoutUrl, '_blank', 'noopener,noreferrer');
+        }
+    };
     return (
         <div {...props}>
 
@@ -21,7 +28,7 @@ export default function TiledPreviewMetadata({
                     return (
                         <li key={key} className="flex space-x-1 text-sm">
                             <ButtonCopyToClipboard copyText={value} size="small"/>
-                            <a className="text-blue-600 underline hover:text-blue-500" href={item.links[key as keyof typeof item.links]}>{key}</a>
+                            <a onClick={e => onPopoutClick(e, value)} className="text-blue-600 underline hover:text-blue-500" href={item.links[key as keyof typeof item.links]}>{key}</a>
                         </li>
                     )
                 })}
