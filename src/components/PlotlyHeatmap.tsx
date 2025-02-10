@@ -11,7 +11,7 @@ type PlotlyHeatMapProps = {
     /** y axis title, adds padding to left */
     yAxisTitle?: string,
     /** Plotly specific colorscales */
-    colorScale?: 'Viridis' | 'Thermal' | 'Cividis' | 'Inferno' | 'Magma' | 'Plasma',
+    colorScale?: 'Viridis' | 'YlOrRd' | 'Cividis' | 'Hot' | 'Electric' | 'Plasma',
     /** Adjust the height of the plot. ex) a factor of 2 makes each row in the array take up 2 pixels */
     verticalScaleFactor?: number,
     /** Tailwind ClassName, width of the plot container */
