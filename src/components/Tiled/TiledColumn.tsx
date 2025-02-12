@@ -30,14 +30,14 @@ const renderIcon = (structureFamily:string) => {
     }
 
     return (
-        <div className={`w-6 aspect-square ${lineColor}`}>{icon}</div>
+        <div className={`w-6 aspect-square flex-shrink-0 ${lineColor}`}>{icon}</div>
     )
 };
 
 export function TiledColumn ({data, index, onItemClick, breadcrumbs}: TiledColumnProps) {
 
     return (
-        <div className="flex flex-col-reverse border-r border-r-slate-300 min-w-[250px] w-fit px-4 h-full pt-2">
+        <div className="flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-full pt-2">
             <div className={`${breadcrumbs.length  === index ? '' : 'hidden'} peer m-auto py-2 mt-1 w-full text-center border-t`}>
                 <Button text="Select Container" size="small"/>
             </div>            
@@ -50,7 +50,7 @@ export function TiledColumn ({data, index, onItemClick, breadcrumbs}: TiledColum
                             onClick={()=>onItemClick(item)}
                         >
                             {renderIcon(item.attributes.structure_family)}
-                            <p>{item.id}</p>
+                            <p className="truncate max-w-full">{item.id}</p>
                             {item.attributes.structure_family === 'container' ? <p className="absolute right-1 text-slate-500">&gt;</p> : ''}
                         </li>
                     )

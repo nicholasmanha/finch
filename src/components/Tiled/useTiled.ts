@@ -14,7 +14,7 @@ import {
     isContainerStructure,
     isTableStructure,
  } from "./types";
-import { getTiledStructureIcon, generateFullImagePngPath, generateSearchPath, numpyTypeSizesBytes } from "./utils";
+import { getTiledStructureIcon, generateSearchPath, } from "./utils";
 
 export const useTiled = () => {
     //console.log('run useTiled.ts')
@@ -159,12 +159,13 @@ export const useTiled = () => {
         updateBreadcrumbs(clickedItem);
     }, []);
 
-    const logResponse = (response:any) => {
-        console.log({response});
-    };
-
-    const initializeData = (result:TiledSearchResult) => {
-        setColumns([result]);
+    const resetAllData = () => {
+        setBreadcrumbs([]);
+        ancestorStack.current = [];
+        currentAncestorId.current = -1;
+        setPreviewItem(null);
+        setPreviewSize('hidden');
+        getSearchResults('', (res:TiledSearchResult) => setColumns([res]));
     }
 
     useEffect(() => {
@@ -182,6 +183,7 @@ export const useTiled = () => {
         handleColumnItemClick,
         handleLeftArrowClick,
         handleRightArrowClick,
+        resetAllData,
     }), [columns, breadcrumbs, imageUrl, popoutUrl, previewSize, handleColumnItemClick])
 
 }
