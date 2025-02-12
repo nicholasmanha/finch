@@ -6,6 +6,7 @@ type TiledColumnProps = {
     onItemClick: Function;
     index: number;
     breadcrumbs: Breadcrumb[];
+    handleSelectClick?: Function;
 };
 
 
@@ -34,12 +35,12 @@ const renderIcon = (structureFamily:string) => {
     )
 };
 
-export function TiledColumn ({data, index, onItemClick, breadcrumbs}: TiledColumnProps) {
+export function TiledColumn ({data, index, onItemClick, breadcrumbs, handleSelectClick}: TiledColumnProps) {
 
     return (
         <div className="flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-full pt-2">
             <div className={`${breadcrumbs.length  === index ? '' : 'hidden'} peer m-auto py-2 mt-1 w-full text-center border-t`}>
-                <Button text="Select Container" size="small"/>
+                <Button text="Select Container" size="small" cb={handleSelectClick ? ()=>handleSelectClick(data) : () =>{}}/>
             </div>            
             <ul className="scrollbar-always-visible overflow-y-auto flex-grow peer-hover:text-slate-500 peer-hover:border peer-hover:border-blue-400 rounded-md">
                 {data.map((item:any) => {

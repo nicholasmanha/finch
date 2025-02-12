@@ -54,6 +54,7 @@ export interface TiledSearchItem<StructureType> {
         buffers?: string;
         partition?: string;
         search?: string;
+        default?: string;
     };
     meta: unknown | null; // Optional metadata
 }

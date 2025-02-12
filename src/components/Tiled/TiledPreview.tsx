@@ -17,11 +17,11 @@ const arrowTopRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBo
 type TiledPreviewProps = {
     previewItem: TiledSearchItem<ArrayStructure> | TiledSearchItem<TableStructure>
     previewSize: PreviewSize;
-    onSelect?:Function;
+    handleSelectClick?:Function;
 }
 export default function TiledPreview({
     previewItem,
-    onSelect=()=>{},
+    handleSelectClick,
     previewSize='medium',
     ...props
 }: TiledPreviewProps) {
@@ -31,7 +31,7 @@ export default function TiledPreview({
         'medium': 'min-w-96',
         'large': 'min-w-[30rem]'
     }
-    // Type guard for ArrayStructure
+
 
     return (
         <div className={`${previewSizeMap[previewSize]} flex-grow h-full flex flex-col overflow-y-auto relative`} {...props}>
@@ -42,7 +42,7 @@ export default function TiledPreview({
             <div className="w-full flex flex-col items-center space-y-8 py-4">
                 {isArrayStructure(previewItem) && <PreviewNDArray arrayItem={previewItem}/>}
                 {isTableStructure(previewItem) && <PreviewTable tableItem={previewItem}/>}
-                <Button text="Select" size="medium" cb={onSelect} />
+                { handleSelectClick && <Button text="Select" size="medium" cb={()=>handleSelectClick(previewItem)} />}
             </div>
             <TiledPreviewMetadata item={previewItem}/>
         </div>

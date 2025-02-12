@@ -6,17 +6,20 @@ import TiledFooter from "./TiledFooter";
 import TiledBody from "./TiledBody";
 import './Tiled.css'
 
+import { TiledSearchItem, TiledStructures } from "./types";
+import { generateLinksForCallback } from "./utils";
+
 
 import { useTiled } from './useTiled';
 
 type TiledProps = {
-
+    onSelectCallback?: Function,
 }
 export default function Tiled({
+    onSelectCallback,
     ...props
 }: TiledProps) {
 
-    //console.log('Render Tiled.tsx')
     const { 
         columns, 
         breadcrumbs,
@@ -26,7 +29,12 @@ export default function Tiled({
         handleLeftArrowClick, 
         handleRightArrowClick,
         resetAllData,
-    } = useTiled(); 
+    } = useTiled();
+    
+    const handleSelectClick = (item:TiledSearchItem<TiledStructures>) => {
+        const links = generateLinksForCallback(item);
+        onSelectCallback && onSelectCallback(links);
+    }
 
 
     return (
@@ -34,8 +42,8 @@ export default function Tiled({
             <div className="flex flex-col min-w-[800px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border border-slate-400 shadow-lg rounded-md ">
                 <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick} onRightArrowClick={handleRightArrowClick} onHomeClick={resetAllData}/>
                 <TiledBody>
-                    <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick}/>
-                    {previewItem && <TiledPreview previewItem={previewItem} previewSize={previewSize}/>}
+                    <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick} handleSelectClick={handleSelectClick}/>
+                    {previewItem && <TiledPreview previewItem={previewItem} previewSize={previewSize} handleSelectClick={handleSelectClick}/>}
                 </TiledBody>
                 <TiledFooter breadcrumbs={breadcrumbs}/>
             </div>

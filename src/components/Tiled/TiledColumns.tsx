@@ -7,19 +7,30 @@ type TiledColumnsProps = {
     columns:TiledSearchResult[];
     onItemClick: Function;
     breadcrumbs: Breadcrumb[];
+    handleSelectClick?: Function;
 }
 export default function TiledColumns({
     columns,
     onItemClick=()=>{},
     breadcrumbs,
+    handleSelectClick,
     ...props
 }: TiledColumnsProps) {
 
 
-    //TODO - we can propbably just remove TiledColumns entirely and hoist this map call up into the previous component
+    console.log({columns})
     return (
         <div className="flex h-full" {...props}>
-            {columns.map((column, index) => <TiledColumn data={column.data} key={index} index={index} onItemClick={onItemClick} breadcrumbs={breadcrumbs}/>)}
+            {columns.map((column, index) => 
+                <TiledColumn 
+                    handleSelectClick={handleSelectClick} 
+                    data={column.data} 
+                    key={index} 
+                    index={index} 
+                    onItemClick={onItemClick} 
+                    breadcrumbs={breadcrumbs}
+                />
+            )}
         </div>
     )
 }
