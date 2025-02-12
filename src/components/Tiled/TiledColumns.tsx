@@ -17,8 +17,6 @@ export default function TiledColumns({
     ...props
 }: TiledColumnsProps) {
 
-
-    console.log({columns})
     return (
         <div className="flex h-full" {...props}>
             {columns.map((column, index) => 

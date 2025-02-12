@@ -1,4 +1,5 @@
 import { TiledSearchItem, TiledStructures, Breadcrumb } from "./types";
+import { Tooltip } from "react-tooltip";
 import Button from "../Button";
 
 type TiledColumnProps = {
@@ -39,20 +40,45 @@ export function TiledColumn ({data, index, onItemClick, breadcrumbs, handleSelec
 
     return (
         <div className="flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-full pt-2">
-            <div className={`${breadcrumbs.length  === index ? '' : 'hidden'} peer m-auto py-2 mt-1 w-full text-center border-t`}>
+{/*             <div className={`${breadcrumbs.length  === index ? '' : 'hidden'} peer m-auto py-2 mt-1 w-full text-center border-t`}>
                 <Button text="Select Container" size="small" cb={handleSelectClick ? ()=>handleSelectClick(data) : () =>{}}/>
-            </div>            
+            </div>     */}        
             <ul className="scrollbar-always-visible overflow-y-auto flex-grow peer-hover:text-slate-500 peer-hover:border peer-hover:border-blue-400 rounded-md">
-                {data.map((item:any) => {
+                {data.map((item:TiledSearchItem<TiledStructures>) => {
+                    let id = item.id+index;
                     return (
                         <li 
                             className={`${ (breadcrumbs.length > index) && breadcrumbs[index].label === item.id ? 'bg-sky-200 hover:bg-sky-300' : 'hover:bg-sky-300'} flex space-x-2 px-2 rounded-sm hover:cursor-pointer relative`} 
-                            key={item.id+index}
+                            key={id}
                             onClick={()=>onItemClick(item)}
+                            id={id}
                         >
                             {renderIcon(item.attributes.structure_family)}
                             <p className="truncate max-w-full">{item.id}</p>
                             {item.attributes.structure_family === 'container' ? <p className="absolute right-1 text-slate-500">&gt;</p> : ''}
+                            {handleSelectClick &&
+                                <Tooltip 
+                                    children={
+                                        <Button 
+                                            text="Select" 
+                                            size="small" 
+                                            cb={(event:React.MouseEvent)=> {
+                                                event.stopPropagation();
+                                                handleSelectClick(item);
+                                            }
+                                        
+                                        }/>
+                                    } 
+                                    anchorSelect={`#${id}`} 
+                                    clickable 
+                                    delayShow={600}
+                                    opacity={1} 
+                                    offset={10} 
+                                    place="top" 
+                                    variant="info" 
+                                    style={{'maxWidth' : "500px", margin:"0", padding:"0.3rem", 'height': 'fit-content', backgroundColor: "#e9e8eb", borderWidth: "1px", borderRadius: "1rem"}}
+                                />
+                            }
                         </li>
                     )
                 })}

@@ -6,7 +6,6 @@ const tiledUrl = getTiledUrl();
 export const generateLinksForCallback = (item: TiledSearchItem<TiledStructures>) => {
     //this function will create a set of links
     //var exampleLink = "http://127.0.0.1:8000/api/v1/metadata/rec20230606_152011_jong-seto_fungal-mycelia_flat-AQ_fungi2_fast/scale3/image";
-    console.log({item})
     var links= {...item.links};
     const path = generateSearchPath(item);
     links.default = tiledUrl + '/' + path; //add another link which is the direct path ex)http://127.0.0.1:8000/api/v1/rec20230606_152011_jong-seto_fungal-mycelia_flat-AQ_fungi2_fast/scale3/image
