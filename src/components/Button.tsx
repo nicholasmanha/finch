@@ -1,4 +1,4 @@
-type ButtonProps = {
+export type ButtonProps = {
     /** callback function on click */
     cb?: Function;
     /** text inside button */ 
