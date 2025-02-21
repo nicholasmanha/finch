@@ -39,7 +39,7 @@ export default function SamplePage1 () {
                         <p>stuff</p>
                     </SidebarItem>
                 </Sidebar>
-                <Main>
+                <Main flexWrap={true}>
                     <>
                         <p>{age}</p>
                         <Widget title="My Widget">

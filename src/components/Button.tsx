@@ -32,7 +32,7 @@ export default function Button({
 }: ButtonProps) {
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        cb();
+        cb(e);
     };
 
     const textSizes = {
