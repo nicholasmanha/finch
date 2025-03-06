@@ -1,4 +1,5 @@
 import { Breadcrumb } from "./types";
+import { getDefaultTiledUrl } from "./apiClient";
 
 
 const chevronLeft = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="">
@@ -8,6 +9,7 @@ const chevronRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox
 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
 </svg>;
 
+const defaultUrl = getDefaultTiledUrl();
 
 
 type TiledHeaderProps = {
@@ -26,7 +28,7 @@ export default function TiledHeader({
     onHomeClick,
     imageUrl="/images/bluesky_logo.png",
     title="Tiled",
-    secondaryTitle="127.0.0.1:8000/api/v1",
+    secondaryTitle=defaultUrl,
     ...props
 }: TiledHeaderProps) {
     //console.log('render TiledHeader.tsx');

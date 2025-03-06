@@ -51,13 +51,13 @@ export const Default: Story = {
     }
 }
 
-export const Inferno: Story = {
+export const Electric: Story = {
     args: {
         array: eggData,
         width: 'w-96',
         height: 'h-96',
         lockPlotHeightToParent: true,
-        colorScale: 'Inferno'
+        colorScale: 'Electric'
 
     }
 }

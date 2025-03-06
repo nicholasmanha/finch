@@ -1,7 +1,7 @@
 //import { sampleTiledSearchData } from './sampleData';
 import './Tiled.css'
 import {TiledSearchResult, Breadcrumb } from './types';
-import { TiledColumn } from './TiledColumn.tsx';
+import { TiledColumn } from './TiledColumn';
 
 type TiledColumnsProps = {
     columns:TiledSearchResult[];

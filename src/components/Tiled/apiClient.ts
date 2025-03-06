@@ -1,40 +1,52 @@
 import axios from "axios";
-import { sampleTiledSearchData } from "./sampleData.ts";
+import { sampleTiledSearchData } from "./sampleData";
 
 // when you start tiled, need to pass in CORS
 //TILED_ALLOW_ORIGINS=http://localhost:5174 tiled serve demo
 
-const getTiledUrl = () => {
+const getDefaultTiledUrl = () => {
     //return the url from any available env variables
-    return 'http://127.0.0.1:8000/api/v1';
+    if (import.meta.env.VITE_API_TILED_URL) {
+        return import.meta.env.VITE_API_TILED_URL;
+    } else {
+        return 'http://127.0.0.1:8000/api/v1';
+    }
 };
 
 const getTiledApiKey = () => {
     //return the tiled api key from env variables
-    return '';
+    if (import.meta.env.VITE_API_TILED_API_KEY) {
+        return import.meta.env.VITE_API_TILED_API_KEY;
+    } else {
+        return null;
+    }
 }
 
 // const sampleTableUrl = http://localhost:8000/api/v1/table/partition/short_table?partition=0&format=application/json-seq
 
-const tiledUrl = getTiledUrl();
+const defaultTiledUrl = getDefaultTiledUrl();
 const tiledApiKey = getTiledApiKey();
 
-const getSearchResults = async (searchPath?:string, cb:Function =()=>{}, mock:boolean = false) => {
+const getSearchResults = async (searchPath?:string, cb:Function =()=>{}, url?:string, mock:boolean = false) => {
     if (mock) {
         cb(sampleTiledSearchData.data);
         return;
     }
     try {
-        const response = await axios.get(tiledUrl + '/search/' + searchPath);
+        const baseUrl = url ? url : defaultTiledUrl;
+        const response = await axios.get(baseUrl + '/search/' + searchPath);
         cb(response.data);
+        return response.data;
     } catch (error) {
         console.error('Error searching path: ', error);
+        return null;
     }
 };
 
-const getTableData = async(searchPath:string, partition:number, cb:Function=()=>{}) => {
+const getTableData = async(searchPath:string, partition:number, cb:Function=()=>{}, url?:string) => {
     try {
-        const response = await axios.get(tiledUrl + '/table/partition/' + searchPath + '?partition=' + partition + '&format=application/json-seq');
+        const baseUrl = url ? url : defaultTiledUrl;
+        const response = await axios.get(baseUrl + '/table/partition/' + searchPath + '?partition=' + partition + '&format=application/json-seq');
         //the data comes as a long string that unfortunately does not comply with JSON.parse(data)
         const parsedData = response.data
             .trim() // Remove any extra newlines at start or end
@@ -224,4 +236,4 @@ const sampleColumnData = [
 ];
 
 
-export { getSearchResults, getTiledUrl, getTableData }
+export { getSearchResults, getDefaultTiledUrl, getTableData, }

@@ -1,8 +1,8 @@
-import Button from '../Button.tsx';
-import PreviewNDArray from './PreviewNDArray.tsx';
-import PreviewTable from './PreviewTable.tsx';
-import { PreviewSize, TiledSearchItem, ArrayStructure, TableStructure, isArrayStructure, isTableStructure } from './types.ts';
-import TiledPreviewMetadata from './TiledPreviewMetadata.tsx';
+import Button from '../Button';
+import PreviewNDArray from './PreviewNDArray';
+import PreviewTable from './PreviewTable';
+import { PreviewSize, TiledSearchItem, ArrayStructure, TableStructure, isArrayStructure, isTableStructure } from './types';
+import TiledPreviewMetadata from './TiledPreviewMetadata';
 
 const arrowsPointingOut = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
@@ -18,11 +18,13 @@ type TiledPreviewProps = {
     previewItem: TiledSearchItem<ArrayStructure> | TiledSearchItem<TableStructure>
     previewSize: PreviewSize;
     handleSelectClick?:Function;
+    url?: string;
 }
 export default function TiledPreview({
     previewItem,
     handleSelectClick,
     previewSize='medium',
+    url,
     ...props
 }: TiledPreviewProps) {
     const previewSizeMap = {
@@ -40,8 +42,8 @@ export default function TiledPreview({
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
             </div>
             <div className="w-full flex flex-col items-center space-y-8 py-4">
-                {isArrayStructure(previewItem) && <PreviewNDArray arrayItem={previewItem}/>}
-                {isTableStructure(previewItem) && <PreviewTable tableItem={previewItem}/>}
+                {isArrayStructure(previewItem) && <PreviewNDArray arrayItem={previewItem} url={url}/>}
+                {isTableStructure(previewItem) && <PreviewTable tableItem={previewItem} url={url}/>}
                 { handleSelectClick && <Button text="Select" size="medium" cb={()=>handleSelectClick(previewItem)} />}
             </div>
             <TiledPreviewMetadata item={previewItem}/>

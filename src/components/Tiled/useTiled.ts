@@ -15,8 +15,11 @@ import {
     isTableStructure,
  } from "./types";
 import { getTiledStructureIcon, generateSearchPath, } from "./utils";
-
-export const useTiled = () => {
+type useTiledProps = {
+    url?: string
+}
+type Url = string;
+export const useTiled = (url?:Url) => {
     //console.log('run useTiled.ts')
 
     const [ columns, setColumns ] = useState<TiledSearchResult[]>([]);
@@ -150,7 +153,7 @@ export const useTiled = () => {
         //search container, put results into column, disable preview
         setPreviewItem(null)
         const searchPath = generateSearchPath(item);
-        getSearchResults(searchPath, (res:TiledSearchResult) => handleSearchResponse(item, res));
+        getSearchResults(searchPath, (res:TiledSearchResult) => handleSearchResponse(item, res), url);
         closePreview();
     };
 
@@ -165,12 +168,27 @@ export const useTiled = () => {
         currentAncestorId.current = -1;
         setPreviewItem(null);
         setPreviewSize('hidden');
-        getSearchResults('', (res:TiledSearchResult) => setColumns([res]));
+        getSearchResults('', (res:TiledSearchResult) => setColumns([res]), url);
+    }
+
+    const initializeData = async () => {
+        //attempt to get data from base Tiled Url. Display error on UI if no data comes back
+        const response = await getSearchResults('', ()=>{});
+        if (typeof response !== 'string' && 'data' in response) {
+            setColumns([response]);
+        }
+        console.log({response})
     }
 
     useEffect(() => {
         //get first set of results from root
-        getSearchResults('', (res:TiledSearchResult) => setColumns([res]));
+        try{
+            //getSearchResults('', (res:TiledSearchResult) => setColumns([res]), url);
+            initializeData();
+
+        } catch (e) {
+            console.error('error getting first tiled request: ', e);
+        }
     }, []);
 
     return useMemo(() => ({

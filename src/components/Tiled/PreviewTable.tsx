@@ -6,9 +6,10 @@ import InputSlider from "../InputSlider";
 
 type PreviewTableProps = {
     tableItem: TiledSearchItem<TableStructure>;
+    url?: string
 };
 
-export default function PreviewTable({ tableItem }: PreviewTableProps) {
+export default function PreviewTable({ tableItem, url }: PreviewTableProps) {
     const [tableData, setTableData] = useState<TiledTableRow[]>([]);
     const [visibleData, setVisibleData] = useState<TiledTableRow[]>([]);
     const [partition, setPartition] = useState<number>(0);
@@ -31,7 +32,7 @@ export default function PreviewTable({ tableItem }: PreviewTableProps) {
 
     const handlePartitionChange = useCallback((newValue: number) => {
         setIsLoading(true);
-        getTableData(searchPath, newValue, updateTable);
+        getTableData(searchPath, newValue, updateTable, url);
         setPartition(newValue);
     }, [tableItem]);
 
@@ -41,7 +42,7 @@ export default function PreviewTable({ tableItem }: PreviewTableProps) {
         }
         const searchPath = generateSearchPath(tableItem);
         setPartition(0);
-        getTableData(searchPath, 0, updateTable);
+        getTableData(searchPath, 0, updateTable, url);
     }, [tableItem]);
 
     const loadMoreRows = useCallback(() => {

@@ -1,4 +1,4 @@
-import '../../tailwind.css';
+import './style.css';
 
 export { default as Button } from './Button';
 export type { ButtonProps } from './Button';

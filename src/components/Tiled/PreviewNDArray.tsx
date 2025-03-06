@@ -7,6 +7,7 @@ import {  } from "./apiClient";
 
 type PreviewNDArrayProps = {
     arrayItem: TiledSearchItem<ArrayStructure>;
+    url?: string;
 };
 
 type Slider = {
@@ -46,7 +47,8 @@ const createSliders = (sliderCount:number, shape:number[]) => {
     return initialSliders;
 }
 export default function PreviewNDArray({
-    arrayItem
+    arrayItem,
+    url
 }: PreviewNDArrayProps) {
     const [ sliders, setSliders ] = useState<Slider[]>([]);
     const [ imageUrl, setImageUrl ] = useState('');
@@ -87,9 +89,9 @@ export default function PreviewNDArray({
             stepX = squareStep;
             stepY = squareStep;
         }
-        const reducedImagePath = generateFullImagePngPath(searchPath, stepY, stepX, stack);
+        const reducedImagePath = generateFullImagePngPath(searchPath, stepY, stepX, stack, url);
         setImageUrl(reducedImagePath); 
-        const fullSizeImagePath = generateFullImagePngPath(searchPath, 1, 1, stack);
+        const fullSizeImagePath = generateFullImagePngPath(searchPath, 1, 1, stack, url);
         setPopoutUrl(fullSizeImagePath); 
     }
 
