@@ -8,7 +8,7 @@ type InputSliderRangeProps = {
   /** Greatest possible value */
   max: number;
   /** Current value of slider */
-  value: number;
+  value: [number, number];
   /** Unit type */
   units?: string;
   /** An extra unit label underneath the min/max tickmark value */
@@ -19,14 +19,12 @@ type InputSliderRangeProps = {
   marks?: number[];
   /** The spacing between snap points for the slider thumb, defaults to 1 */
   step?: number;
-  /** Should the input bar be filled up with blue color up to the thumb? */
-  showFill?: boolean
   /**Tailwind ClassName */
   width?: `w-${string}`
   /** How big should the text and tick marks be? */
   size?: 'small' | 'medium' | 'large'
   /** A function that is called with the newest value */
-  onChange?: (value: number) => void;
+  onChange?: (value:[number, number]) => void;
   /** Tailwind ClassNames applied to parent container */
   styles?: string;
 };
@@ -40,7 +38,6 @@ export default function InputSliderRange({
   shorthandUnits,
   marks,
   step=1,
-  showFill=false,
   size='medium',
   width='w-full',
   showSideInput=true,
@@ -74,21 +71,27 @@ export default function InputSliderRange({
     //todo: make this variable based on a thumb size
     const thumbWidth = 16; //pixels
 
-    const handleInputChange = (newValue: number) => {
+    const handleInputChange = (index: 0| 1, newValue: number) => {
         if (newValue < min) newValue = min;
         if (newValue > max) newValue = max;
-        setCurrentValue(newValue);
-        if (onChange) onChange(newValue);
+        var newRange:[number, number] = [...value];
+        newRange[index] = newValue;
+        setCurrentValue(newRange);
+        if (onChange) onChange(newRange);
     };
 
-    const handleDrag = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = Number(e.target.value);
-        handleInputChange(newValue);
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDrag = (index: 0 | 1, e: React.ChangeEvent<HTMLInputElement>) => {
         var newValue = Number(e.target.value);
-        handleInputChange(newValue);
+        var newRange:[number, number] = [...value];
+        newRange[index] = newValue;
+        handleInputChange(index, newValue);
+    };
+
+    const handleChange = (index: 0 | 1, e: React.ChangeEvent<HTMLInputElement>) => {
+        var newValue = Number(e.target.value);
+        var newRange:[number, number] = [...value];
+        newRange[index] = newValue;
+        handleInputChange(index, newValue);
     };
 
     if (marks) {
@@ -127,53 +130,97 @@ export default function InputSliderRange({
             {/** Optional Label on Left of Slider*/}
             {label && <label className="font-medium text-gray-700 w-fit pr-2">{label}</label>}
 
-            {/** Main Slider Component with ticks and thumb input*/}
-            <div className="flex-grow flex items-center relative">
-                <input
-                    type="range"
-                    min={min}
-                    max={max}
-                    value={value}
-                    step={step}
-                    onChange={handleDrag}
-                    className={`${showFill ? 'appearance-auto' : 'appearance-none'} w-full absolute z-10 appearance-nonee hover:cursor-pointer bg-slate-400/50 h-2 rounded-lg focus:outline-none`}
-                />
-                {/** Thumb Input Number */}
-                <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `calc(${((value - min) / (max - min)) * 100}% + ${(-((value - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`}}>
-                    <div className="relative ">
-                        <div className="absolute w-[0] h-4 top-1 bg-gray-400"></div>
-                        <div className="absolute -translate-x-1/2 left-2 -y-translate-full -top-0">
-                            <input 
-                                type="number" 
-                                value={value}
-                                className="w-16 text-center text-xs appearance-none bg-transparent py-[1px] group-hover:border border-slate-400"
-                                onChange={handleChange}
-                            />
+            <div className="relative flex-grow">
+                <div className="w-full absolute top-0 left-0">
+                    {/** Main Slider Component with ticks and thumb input*/}
+                    <div className="flex-grow flex items-center relative">
+                        <input
+                            type="range"
+                            min={min}
+                            max={max}
+                            value={value[0]}
+                            step={step}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleDrag(0, e)}
+                            style={{ pointerEvents: 'none' }} // disables track and thumb
+                            className={`range-slider appearance-none w-full absolute z-10  hover:cursor-pointer bg-slate-400/50 h-2 rounded-lg focus:outline-none`}
+                        />
+                        {/** Thumb Input Number */}
+                        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `calc(${((value[0] - min) / (max - min)) * 100}% + ${(-((value[0] - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`}}>
+                            <div className="relative ">
+                                <div className="absolute w-[0] h-4 top-1 bg-gray-400"></div>
+                                <div className="absolute -translate-x-1/2 left-2 -y-translate-full -top-0">
+                                    <input 
+                                        type="number" 
+                                        value={value[0]}
+                                        className="w-16 text-center text-xs appearance-none bg-transparent py-[1px] group-hover:border border-slate-400"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleChange(0, e)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/** Optional TickMarks */}
+                        {marks && (
+                            <div className="absolute z-0 w-full">
+                            {marks.map((mark, index) => (
+                                <TickMark mark={mark} key={index.toString()} displayValue={isIndexFirstOrLast(marks, index)}/>
+                            ))}
+                            </div>
+                        )}
+                        {/** Min Tickmark with value label */}
+                        {(!marks || !marks.includes(min)) && <TickMark mark={min} displayValue={true} key={min.toString()}/>}
+                        {/** Max Tickmark with value label */}
+                        {(!marks || !marks.includes(max)) && <TickMark mark={max} displayValue={true} key={max.toString()}/>}
+                    </div>
+                </div>
+                <div className="w-full absolute top-0 left-0">
+                    {/** Second Slider Component with thumb input*/}
+                    <div className="flex-grow flex items-center relative">
+                        <input
+                            type="range"
+                            min={min}
+                            max={max}
+                            value={value[1]}
+                            step={step}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleDrag(1, e)}
+                            style={{ pointerEvents: 'none' }} // disables track and thumb
+                            className={`range-slider appearance-none w-full absolute z-10  hover:cursor-pointer bg-transparent h-2 rounded-lg focus:outline-none`}
+                        />
+                            <style>{`
+                                .range-slider::-webkit-slider-thumb {
+                                    pointer-events: auto;
+                                }
+                                .range-slider::-moz-range-thumb {
+                                    pointer-events: auto;
+                                }
+                            `}</style>
+                        {/** Thumb Input Number */}
+                        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `calc(${((value[1] - min) / (max - min)) * 100}% + ${(-((value[1] - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`}}>
+                            <div className="relative ">
+                                <div className="absolute w-[0] h-4 top-1 bg-gray-400"></div>
+                                <div className="absolute -translate-x-1/2 left-2 -y-translate-full -top-0">
+                                    <input 
+                                        type="number" 
+                                        value={value[1]}
+                                        className="w-16 text-center text-xs appearance-none bg-transparent py-[1px] group-hover:border border-slate-400"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleChange(1, e)}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {/** Optional TickMarks */}
-                {marks && (
-                    <div className="absolute z-0 w-full">
-                    {marks.map((mark, index) => (
-                        <TickMark mark={mark} key={index.toString()} displayValue={isIndexFirstOrLast(marks, index)}/>
-                    ))}
-                    </div>
-                )}
-                {/** Min Tickmark with value label */}
-                {(!marks || !marks.includes(min)) && <TickMark mark={min} displayValue={true} key={min.toString()}/>}
-                {/** Max Tickmark with value label */}
-                {(!marks || !marks.includes(max)) && <TickMark mark={max} displayValue={true} key={max.toString()}/>}
             </div>
+
 
             {/** Optional Input Box on Right of Slider*/}
             {showSideInput && 
                 <div className="w-fit pl-2 text-gray-700 flex justify-center items-center">
                     <input 
                         type="number" 
-                        value={value}
+                        value={value[0]}
                         className="text-center text-md w-12 border appearance-none bg-white/50"
-                        onChange={handleChange}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleChange(0, e)}
                     />
                     <p className="pl-1">{units}</p> 
                 </div>
