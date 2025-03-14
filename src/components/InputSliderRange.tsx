@@ -23,6 +23,8 @@ type InputSliderRangeProps = {
   width?: `w-${string}`
   /** How big should the text and tick marks be? */
   size?: 'small' | 'medium' | 'large'
+  /** Is it allowed to have the min value equal the max value? */
+  allowValueOverlap?: boolean;
   /** A function that is called with the newest value */
   onChange?: (value:[number, number]) => void;
   /** Tailwind ClassNames applied to parent container */
@@ -39,6 +41,7 @@ export default function InputSliderRange({
   marks,
   step=1,
   size='medium',
+  allowValueOverlap=false,
   width='w-full',
   showSideInput=true,
   onChange,
@@ -76,6 +79,16 @@ export default function InputSliderRange({
         if (newValue > max) newValue = max;
         var newRange:[number, number] = [...value];
         newRange[index] = newValue;
+        //prevent the range from being reversed
+        if (allowValueOverlap) {
+            if (newRange[0] > newRange[1]) {
+                return;
+            }
+        } else {
+            if (newRange[0] >= newRange[1]) {
+                return;
+            }
+        }
         setCurrentValue(newRange);
         if (onChange) onChange(newRange);
     };
@@ -94,11 +107,24 @@ export default function InputSliderRange({
         handleInputChange(index, newValue);
     };
 
+    const calculatePositionStyle = (value: number) => {
+        const positionStyle = `calc(${((value - min) / (max - min)) * 100}% + ${(-((value - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`
+        return positionStyle;
+    };
+
+    const calculateTrackWidthStyle = (value: [number, number]) => {
+        const maxValue = Math.max(value[0], value[1]);
+        const minValue = Math.min(value[0], value[1]);
+        const trackWidthStyle = `calc(${((maxValue - minValue) / (max - min)) * 100}% + ${(-((maxValue - minValue) / (max - min))*thumbWidth)}px)`
+        return trackWidthStyle;
+    }
+
+
     if (marks) {
         for ( let i = 0; i < marks?.length; i++) {
             let val = marks[i];
             let cssStyle = `calc(${((val - min) / (max - min)) * 100}% + ${(-((val - min) / (max - min))*8) + thumbWidth/2}px)`
-            console.log(cssStyle);
+            //console.log(cssStyle);
         }
     }
 
@@ -130,9 +156,23 @@ export default function InputSliderRange({
             {/** Optional Label on Left of Slider*/}
             {label && <label className="font-medium text-gray-700 w-fit pr-2">{label}</label>}
 
+            {/** Optional Input Box on Left of Slider*/}
+            {showSideInput && 
+                <div className="w-fit pl-2 text-gray-700 flex justify-center items-center">
+                    <input 
+                        type="number" 
+                        value={value[0]}
+                        className="text-center text-md w-12 border appearance-none bg-white/50"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleChange(0, e)}
+                    />
+                    <p className="pl-1">{units}</p> 
+                </div>
+            }
+
+            {/** Container for two superimposed sliders to create a single 'range' slider with two thumbs*/}
             <div className="relative flex-grow">
                 <div className="w-full absolute top-0 left-0">
-                    {/** Main Slider Component with ticks and thumb input*/}
+                    {/** First Main Slider Component with ticks and thumb input*/}
                     <div className="flex-grow flex items-center relative">
                         <input
                             type="range"
@@ -145,7 +185,7 @@ export default function InputSliderRange({
                             className={`range-slider appearance-none w-full absolute z-10  hover:cursor-pointer bg-slate-400/50 h-2 rounded-lg focus:outline-none`}
                         />
                         {/** Thumb Input Number */}
-                        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `calc(${((value[0] - min) / (max - min)) * 100}% + ${(-((value[0] - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`}}>
+                        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: calculatePositionStyle(value[0])}}>
                             <div className="relative ">
                                 <div className="absolute w-[0] h-4 top-1 bg-gray-400"></div>
                                 <div className="absolute -translate-x-1/2 left-2 -y-translate-full -top-0">
@@ -159,7 +199,7 @@ export default function InputSliderRange({
                             </div>
                         </div>
 
-                        {/** Optional TickMarks */}
+                        {/** Optional TickMarks Part of First Slider*/}
                         {marks && (
                             <div className="absolute z-0 w-full">
                             {marks.map((mark, index) => (
@@ -173,8 +213,9 @@ export default function InputSliderRange({
                         {(!marks || !marks.includes(max)) && <TickMark mark={max} displayValue={true} key={max.toString()}/>}
                     </div>
                 </div>
+
+                {/** Second Slider Component with thumb input only, no ticks*/}
                 <div className="w-full absolute top-0 left-0">
-                    {/** Second Slider Component with thumb input*/}
                     <div className="flex-grow flex items-center relative">
                         <input
                             type="range"
@@ -195,7 +236,7 @@ export default function InputSliderRange({
                                 }
                             `}</style>
                         {/** Thumb Input Number */}
-                        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: `calc(${((value[1] - min) / (max - min)) * 100}% + ${(-((value[1] - min) / (max - min))*thumbWidth) + thumbWidth/2}px)`}}>
+                        <div className="absolute z-0 -top-8 w-12 h-24" style={{left: calculatePositionStyle(value[1])}}>
                             <div className="relative ">
                                 <div className="absolute w-[0] h-4 top-1 bg-gray-400"></div>
                                 <div className="absolute -translate-x-1/2 left-2 -y-translate-full -top-0">
@@ -210,6 +251,9 @@ export default function InputSliderRange({
                         </div>
                     </div>
                 </div>
+
+                {/* The highilghted bar in between the thumbs */}
+                <span className="absolute z-0 top-0 left-0 h-2 bg-blue-700/80 -translate-y-1/2" style={{left: calculatePositionStyle(Math.min(value[0], value[1])), width: calculateTrackWidthStyle(value)}}></span>
             </div>
 
 
@@ -218,9 +262,9 @@ export default function InputSliderRange({
                 <div className="w-fit pl-2 text-gray-700 flex justify-center items-center">
                     <input 
                         type="number" 
-                        value={value[0]}
+                        value={value[1]}
                         className="text-center text-md w-12 border appearance-none bg-white/50"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleChange(0, e)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>handleChange(1, e)}
                     />
                     <p className="pl-1">{units}</p> 
                 </div>
