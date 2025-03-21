@@ -1,13 +1,15 @@
 type MainProps = {
-    children?: JSX.Element
+    flexWrap?: boolean;
+    children?: JSX.Element;
 };
 
 export default function Main({
+    flexWrap,
     children,
     ...props
 }: MainProps) {
     return (
-        <main className="flex-grow bg-slate-500 overflow-auto z-0" {...props}>
+        <main className={`flex flex-grow ${flexWrap && 'flex-wrap'} bg-slate-500 overflow-auto z-0`} {...props}>
             {children}
         </main>
     )

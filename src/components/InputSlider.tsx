@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-type InputSliderProps = {
+export type InputSliderProps = {
   /** Slider label */
   label?: string;
   /** Lowest possible value */
@@ -21,6 +21,8 @@ type InputSliderProps = {
   step?: number;
   /** Should the input bar be filled up with blue color up to the thumb? */
   showFill?: boolean
+  /**Tailwind ClassName */
+  width?: `w-${string}`
   /** How big should the text and tick marks be? */
   size?: 'small' | 'medium' | 'large'
   /** A function that is called with the newest value */
@@ -40,6 +42,7 @@ export default function InputSlider({
   step=1,
   showFill=false,
   size='medium',
+  width='w-full',
   showSideInput=true,
   onChange,
   styles = "",
@@ -92,19 +95,16 @@ export default function InputSlider({
         for ( let i = 0; i < marks?.length; i++) {
             let val = marks[i];
             let cssStyle = `calc(${((val - min) / (max - min)) * 100}% + ${(-((val - min) / (max - min))*8) + thumbWidth/2}px)`
-            console.log(cssStyle);
         }
     }
 
     type TickMarkProps = {
         mark: number,
-        key: string,
         displayValue?: boolean
     }
-    const TickMark = ({mark, key, displayValue=true}: TickMarkProps) => {
+    const TickMark = ({mark, displayValue=true}: TickMarkProps) => {
         return (
             <div
-                key={key}
                 className="absolute -top-2 w-[1px] h-4 bg-gray-400"
                 style={{ left: generateLeftOffsetString(mark) }}
             >
@@ -122,7 +122,7 @@ export default function InputSlider({
     };
 
     return (
-        <div className={`flex items-center w-full pt-4 pb-4 pr-2 min-h-12 ${styles}`} {...props}>
+        <div className={`flex items-center pt-4 pb-4 pr-2 min-h-12 group ${width} ${styles}`} {...props}>
             {/** Optional Label on Left of Slider*/}
             {label && <label className="font-medium text-gray-700 w-fit pr-2">{label}</label>}
 
@@ -145,7 +145,7 @@ export default function InputSlider({
                             <input 
                                 type="number" 
                                 value={value}
-                                className="w-16 text-center text-xs appearance-none bg-transparent py-[1px]"
+                                className="w-16 text-center text-xs appearance-none bg-transparent py-[1px] group-hover:border border-slate-400"
                                 onChange={handleChange}
                             />
                         </div>
