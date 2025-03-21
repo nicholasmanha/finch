@@ -1,3 +1,32 @@
+# React Vite Boilerplate
+This repo currently contains various components written in Typescript and viewable with Storybook. The components are configured here to publish to npm as well, through the bluesky-web package.
+
+# Dev Setup
+## Pull down and install
+
+```
+git clone https://github.com/SeijDeLeon/react-vite-boilerplate.git
+```
+
+```
+cd react-vite-boilerplate
+npm install
+```
+
+## Run the dev servers
+To start up the react app:
+```
+npm run dev
+```
+
+To start up the storybook server:
+```
+npm run storybook
+```
+
+Issues installing? Make sure you have [npm installed first](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
