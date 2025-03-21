@@ -9,7 +9,7 @@ export default function About() {
             <p className="text-sky-600">About</p>
             <Button text="sample page" cb={()=> {navigate('/samplepage1')}}/>
             <div>
-                <Tiled onSelectCallback={(links:any) => console.log(links)} isPopup={true}  />
+                <Tiled onSelectCallback={(links:any) => console.log(links)} isPopup={true} closeOnSelect={true}/>
             </div>
         </div>
     )

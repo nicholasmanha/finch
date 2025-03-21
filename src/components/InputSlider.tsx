@@ -95,7 +95,6 @@ export default function InputSlider({
         for ( let i = 0; i < marks?.length; i++) {
             let val = marks[i];
             let cssStyle = `calc(${((val - min) / (max - min)) * 100}% + ${(-((val - min) / (max - min))*8) + thumbWidth/2}px)`
-            console.log(cssStyle);
         }
     }
 

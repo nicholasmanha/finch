@@ -13,7 +13,7 @@ import { generateLinksForCallback } from "./utils";
 
 import { useTiled } from './useTiled';
 
-type TiledProps = {
+export type TiledProps = {
     onSelectCallback?: Function,
     closeOnSelect?: boolean,
     isPopup?: boolean,

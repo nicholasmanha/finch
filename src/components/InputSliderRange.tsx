@@ -27,6 +27,8 @@ type InputSliderRangeProps = {
   allowValueOverlap?: boolean;
   /** A function that is called with the newest value */
   onChange?: (value:[number, number]) => void;
+  /** Should the slider be disabled? */
+  isDisabled?: boolean;
   /** Tailwind ClassNames applied to parent container */
   styles?: string;
 };
@@ -45,6 +47,7 @@ export default function InputSliderRange({
   width='w-full',
   showSideInput=true,
   onChange,
+  isDisabled=false,
   styles = "",
   ...props
 }: InputSliderRangeProps) {
@@ -94,6 +97,7 @@ export default function InputSliderRange({
     };
 
     const handleDrag = (index: 0 | 1, e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isDisabled) return;
         var newValue = Number(e.target.value);
         var newRange:[number, number] = [...value];
         newRange[index] = newValue;
@@ -101,6 +105,7 @@ export default function InputSliderRange({
     };
 
     const handleChange = (index: 0 | 1, e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isDisabled) return;
         var newValue = Number(e.target.value);
         var newRange:[number, number] = [...value];
         newRange[index] = newValue;
@@ -253,7 +258,7 @@ export default function InputSliderRange({
                 </div>
 
                 {/* The highilghted bar in between the thumbs */}
-                <span className="absolute z-0 top-0 left-0 h-2 bg-blue-700/80 -translate-y-1/2" style={{left: calculatePositionStyle(Math.min(value[0], value[1])), width: calculateTrackWidthStyle(value)}}></span>
+                <span className="absolute z-0 top-0 h-2 bg-blue-700/80 -translate-y-1/2" style={{left: calculatePositionStyle(Math.min(value[0], value[1])), width: calculateTrackWidthStyle(value)}}></span>
             </div>
 
 
