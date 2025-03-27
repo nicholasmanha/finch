@@ -52,6 +52,29 @@ const getHttpServerUrl = () => {
    const httpUrl = 'api/qserver';
     return httpUrl;
 };
+
+const getQSConsoleUrl = () => {
+    //if no env variable is set, then assume that the React App is on the same workstation as the fastAPI server
+        //having an env variable would be for developers running React on a separate workstation from fastAPI
+    const currentWebsiteIP = window.location.hostname;
+    const currentWebsitePort = window.location.port;
+    const pathname = "/queue_server";
+    const port = ":8000";
+    var wsUrl;
+
+    if (process.env.REACT_APP_QS_CONSOLE_URL) {
+        wsUrl = process.env.REACT_APP_QS_CONSOLE_URL; //custom
+    } else {
+        if (process.env.REACT_APP_PROXY_WS === 'false') {
+            wsUrl = "ws://" + currentWebsiteIP + port + pathname; //default when ran locally
+        } else {
+            wsUrl=`ws://${currentWebsiteIP}:${currentWebsitePort}/api/qserver/console` //reverse proxy, does not work with React live dev server
+        }
+    }
+
+    return wsUrl;
+};
+
 const httpServerUrl = getHttpServerUrl();
 const qServerKey = getQServerKey();
 
@@ -270,4 +293,4 @@ const openWorkerEnvironment = async (cb:(data:PostEnvironmentOpenResponse)=>void
 
 
 
-export { getQueue, getStatus, getPlansAllowed, getDevicesAllowed, startRE, postQueueItem, getQueueItem, deleteQueueItem, getQueueHistory, executeItem, openWorkerEnvironment };
+export { getQueue, getStatus, getPlansAllowed, getDevicesAllowed, startRE, postQueueItem, getQueueItem, deleteQueueItem, getQueueHistory, executeItem, openWorkerEnvironment, getQSConsoleUrl };

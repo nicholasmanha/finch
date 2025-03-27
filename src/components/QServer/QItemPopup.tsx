@@ -9,6 +9,7 @@ import { getPlanColor, getPlanColorOpacity } from "./utils/qItemColorData";
 import { tailwindIcons } from "../../assets/icons";
 import { Tooltip } from 'react-tooltip';
 import { deleteQueueItem } from "./utils/apiClient";
+import { PostItemRemoveResponse } from "./types/apiTypes";
 
 import dayjs from "dayjs";
 
@@ -41,7 +42,7 @@ type QItemPopupProps = {
 export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, isItemDeleteButtonVisible=true, handleCopyItemClick=()=>{} }: QItemPopupProps) {
     const [isDeleteModeVisible, setIsDeleteModeVisibile] = useState(false);
     const [areResultsVisible, setAreResultsVisible] = useState(false);
-    const [response, setResponse] = useState({});
+    const [response, setResponse] = useState<PostItemRemoveResponse | null>(null);
     const [isTracebackCopied, setIsTracebackCopied] = useState(false);
 
     //check if item is in the current queue or the history
@@ -262,8 +263,8 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
         return (
             <div  onClick={handleQItemPopupClose} className={`absolute top-0 left-0 w-full h-full z-40 rounded-md ${getPlanColorOpacity(popupItem.name)} flex justify-center items-center ${isDeleteModeVisible ? 'bg-red-600/40' : ''}`}>
                 <div  onClick={(e)=> e.stopPropagation()} className={`z-50 relative  ${isHistory ? 'w-[90%] h-[70%] max-w-6xl max-h-[80rem]' : 'w-[75%]  h-[50%] min-h-[40rem] max-w-[40rem] max-h-[60rem]'} rounded-lg ${isDeleteModeVisible ? deleteBg : 'bg-slate-50'}`}>
-                    {areResultsVisible ? <DeleteResultPopup response={response} cb={handleCloseResults}/> : ''}
-                    {isDeleteModeVisible ? <ConfirmDeleteItemPopup handleCancel={handleCancelDeleteClick} handleDelete={handleConfirmDeleteClick} /> : ''}
+                    {areResultsVisible && <DeleteResultPopup response={response} handleCloseClick={handleCloseResults}/>}
+                    {isDeleteModeVisible && <ConfirmDeleteItemPopup handleCancel={handleCancelDeleteClick} handleDelete={handleConfirmDeleteClick} />}
                     <span  className={`${getPlanColor(popupItem.name)} h-[10%] max-h-12 flex items-center justify-between rounded-t-lg ${isDeleteModeVisible ? 'opacity-20' : ''}`}>
                         <div className="h-5/6 aspect-square w-fit text-red-500 ml-4">{popupItem.result && popupItem.result.exit_status === 'failed' ? tailwindIcons.exclamationTriangle : ''}</div>
                         <p className={`text-center text-white text-2xl py-1  `}>{popupItem.name}</p>

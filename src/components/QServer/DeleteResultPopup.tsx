@@ -4,13 +4,14 @@ import Button from "../Button";
 import { PostItemRemoveResponse } from './types/apiTypes';
 
 type DeleteResultPopupProps = {
-    isVisible: boolean;
-    cb: () => void;
-    response: PostItemRemoveResponse;
+    handleCloseClick: () => void;
+    response: PostItemRemoveResponse | null;
 };
-export default function DeleteResultPopup( {isVisible=false, cb=()=>{}, response }: DeleteResultPopupProps ) {
+export default function DeleteResultPopup( {handleCloseClick=()=>{}, response }: DeleteResultPopupProps ) {
+    if (response === null) return;
+
     const closePopup = () => {
-        cb();
+        handleCloseClick();
     };
 
     const mockDeleteQueueItemResponse = {
@@ -50,6 +51,8 @@ export default function DeleteResultPopup( {isVisible=false, cb=()=>{}, response
         </Fragment>
        )
     }
+
+
 
     return (
         <div className={` absolute z-20 top-0 h-full w-full bg-slate-100/90 flex items-center justify-center rounded-lg`}>

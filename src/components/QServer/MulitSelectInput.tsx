@@ -2,20 +2,37 @@ import React, { useState, useEffect, useRef } from 'react';
 import { tailwindIcons } from '../../assets/icons';
 import { Tooltip } from 'react-tooltip';
 
-export default function MultiSelectInput({cb=()=>{}, label='', isItemInArray=()=>{}, addItem=()=>{}, removeItem=()=>{}, selectedItems=[], allowedDevices=[], parameters={}, setParameters=()=>{}, plan={plan}, description='', required=false, inputType='int', deviceList=[], styles=''}) {
+type MultiSelectInputProps = { 
+    cb: (value: string[]) => void;
+    label: string;
+    isItemInArray: (item: string) => boolean;
+    addItem: (item: string) => void;
+    removeItem: (item: string) => void;
+    selectedItems: string[];
+    allowedDevices: string[];
+    parameters: {[key: string]: any};
+    setParameters: (value: {[key: string]: any}) => void;
+    plan: {[key: string]: any};
+    description: string;
+    required: boolean;
+    inputType: string;
+    deviceList: string[];
+    styles: string;
+};
+export default function MultiSelectInput({cb, label='', isItemInArray, addItem=()=>{}, removeItem=()=>{}, selectedItems=[], allowedDevices, parameters, setParameters=()=>{}, plan, description='', required=false, inputType='int', deviceList=[], styles=''}: MultiSelectInputProps) {
     const [inputValue, setInputValue] = useState('');
     const [availableItems, setAvailableItems] = useState(Object.keys(allowedDevices));
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [isWiggling, setIsWiggling] = useState(false);
 
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
         setDropdownVisible(true);
     };
 
-    const handleItemClick = (item) => {
+    const handleItemClick = (item:string) => {
         //TODO: refactor this to take an arg that does not close dropdown if we came from an 'enter' key
 
         if (!isItemInArray(item)) { 
@@ -28,20 +45,20 @@ export default function MultiSelectInput({cb=()=>{}, label='', isItemInArray=()=
 
 
 
-    const handleRemoveItem = (item) => {
+    const handleRemoveItem = (item: string) => {
         removeItem(item);
         setAvailableItems([...availableItems, item]);
     };
 
 
 
-    const handleClickOutside = (event) => {
-        if (containerRef.current && !containerRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
             setDropdownVisible(false);
         }
     };
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             const matchingItem = availableItems.find((item) => item.toLowerCase() === inputValue.toLowerCase());
@@ -65,7 +82,7 @@ export default function MultiSelectInput({cb=()=>{}, label='', isItemInArray=()=
     return (
         <div ref={containerRef} className="relative w-full max-w-96 border-2 border-slate-300 rounded-lg mt-2 h-fit">
             <p id={label + 'ParamInputTooltip'} className="text-sm pl-4 text-gray-500 border-b border-dashed border-slate-300">{`${label} ${required ? '(required)' : '(optional)'}`}</p> 
-            <Tooltip anchorSelect={'#' + label + 'ParamInputTooltip'} children={<p className="whitespace-pre-wrap">{description}</p>} place="top" variant="info" style={{'maxWidth' : "500px", 'height': 'fit-content'}} delayShow='400'/>
+            <Tooltip anchorSelect={'#' + label + 'ParamInputTooltip'} children={<p className="whitespace-pre-wrap">{description}</p>} place="top" variant="info" style={{'maxWidth' : "500px", 'height': 'fit-content'}} delayShow={400}/>
             <div className="flex flex-wrap justify-around rounded p-2">
                 {selectedItems.map((item) => ( 
                     <div key={item} className="flex items-center bg-[#DCEAF1] text-sky-900 pl-2 pr-1 py-1 m-1 rounded">

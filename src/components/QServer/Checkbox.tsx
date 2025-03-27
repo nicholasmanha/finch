@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
-export default function Checkbox({ label=false, cb=()=>{}, isChecked=false }) {
+type CheckboxProps = {
+  label?: string | boolean;
+  cb?: (isChecked:boolean) => void;
+  isChecked?: boolean;
+};
+export default function Checkbox({ label=false, cb=()=>{}, isChecked=false }: CheckboxProps) {
   //const [checked, setChecked] = useState(false);
 
   const handleCheckboxChange = () => {

@@ -1,8 +1,16 @@
 import { tailwindIcons, customIcons } from "../../assets/icons";
 import '../../App.css';
 import './RunningIcon.css';
-import { Fragment, Children } from "react";
+import React, { Fragment, Children } from "react";
 
+type SidePanelProps = {
+    queueData: any[];
+    queueHistoryData: any[];
+    isREToggleOn: boolean;
+    handleSidepanelExpandClick: (isExpanded: boolean) => void;
+    isSidepanelExpanded: boolean;
+    children: React.ReactNode;
+};
 export default function SidePanel({
     queueData=[],
     queueHistoryData=[], 
@@ -10,7 +18,7 @@ export default function SidePanel({
     handleSidepanelExpandClick=()=>{},
     isSidepanelExpanded=false,
     children
-}) {
+}: SidePanelProps) {
 
     const childrenArray = Children.toArray(children);
 

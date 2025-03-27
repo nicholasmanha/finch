@@ -1,24 +1,35 @@
 import { useState } from "react";
 import Checkbox from "./Checkbox";
 
-var inputDictDefault = {
-    input1: {
-        key: '',
-        val: '',
-        msg: ''
-    },
-    input2: {
+
+type InputDict = {
+    [key: string]: {
+        key: string;
+        val: string;
+        msg: string;
+    };
+};
+
+const inputDictDefault: InputDict = {
+    exampleKey: {
         key: '',
         val: '',
         msg: ''
     },
 };
 
-export default function SettingsMetadata({isGlobalMetadataChecked=false, handleGlobalMetadataCheckboxChange=()=>{}, globalMetadata={}, updateGlobalMetadata=()=>{}}) {
+type SettingsMetadataProps = {  
+    isGlobalMetadataChecked: boolean;
+    handleGlobalMetadataCheckboxChange: (isChecked:boolean) => void;
+    globalMetadata: any;
+    updateGlobalMetadata: (newGlobalMetadata: any) => void;
+};
+export default function SettingsMetadata({isGlobalMetadataChecked=false, handleGlobalMetadataCheckboxChange=()=>{}, globalMetadata={}, updateGlobalMetadata=()=>{}}: SettingsMetadataProps) {
 
-    const [inputDict, setInputDict] = useState(inputDictDefault);
+    const [inputDict, setInputDict] = useState<InputDict>(inputDictDefault);
 
-    const handleChange = (inputNum, type, newValue) => {
+    //old one prior to TS conversion
+/*     const handleChange = (inputNum:string, type:string, newValue:any) => {
         var stateCopy = '';
         var dictionary = {};
         //var deleteParam = false;
@@ -40,12 +51,41 @@ export default function SettingsMetadata({isGlobalMetadataChecked=false, handleG
         //setCallbackData({dictionary, deleteParam});
         setInputDict(stateCopy);
         updateGlobalMetadata(dictionary);
+    }; */
+    const handleChange = (inputNum: string, type: string, newValue: any) => {
+        let stateCopy = JSON.parse(JSON.stringify(inputDict));
+        let dictionary = {};
+        stateCopy[inputNum][type] = newValue;
+
+        if (stateCopy[inputNum].key === '' && stateCopy[inputNum].val !== '') {
+            stateCopy[inputNum].msg = 'Provide a key';
+            const wipedDictionary = JSON.parse(JSON.stringify(stateCopy));
+            wipedDictionary[inputNum].val = '';
+            wipedDictionary[inputNum].key = '';
+            dictionary = createJSON(wipedDictionary);
+        } else {
+            stateCopy[inputNum].msg = '';
+            dictionary = createJSON(stateCopy);
+        }
+
+        setInputDict(stateCopy);
+        updateGlobalMetadata(dictionary);
     };
 
-    const createJSON = (nestedObject) => {
+
+/*     const createJSON = (nestedObject) => {
         //transform the nested inputDict used for the form
         //into a JSON object before sending into callback
         var JSONObject = {};
+        for (const key in nestedObject) {
+            if (nestedObject[key].key !== '') {
+                JSONObject[nestedObject[key].key] = nestedObject[key].val;
+            }
+        }
+        return JSONObject;
+    }; */
+    const createJSON = (nestedObject: InputDict): Record<string, string> => {
+        const JSONObject: Record<string, string> = {};
         for (const key in nestedObject) {
             if (nestedObject[key].key !== '') {
                 JSONObject[nestedObject[key].key] = nestedObject[key].val;

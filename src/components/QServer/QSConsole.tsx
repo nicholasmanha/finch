@@ -1,22 +1,33 @@
 import { useState, useRef, useEffect } from 'react';
-import { getQSConsoleUrl } from '../../utilities/connectionHelper';
-import '../../App.css';
+//import { getQSConsoleUrl } from '../../utilities/connectionHelper';
+import { getQSConsoleUrl } from './utils/apiClient';
+import { WidgetStyleProps } from './Widget';
+import './styles/qserver.css';
 
 import dayjs from 'dayjs';
 
-import Button from '../library/Button';
 //import ToggleSlider from '../library/ToggleSlider'; //to do  - see if this can be refactored to include the functionality for turning off if connection fails
+type ConsoleMessage = {
+    mainText: string;
+    bracketText: string;
+    time: string;
+    id: number;
+};
 
-export default function QSConsole({type="default", title=true, description = true, processConsoleMessage=() =>{} }) {
+type QSConsoleProps = WidgetStyleProps &{
+
+    processConsoleMessage: (message: string) => void
+}
+export default function QSConsole({ processConsoleMessage=() =>{} }: QSConsoleProps) {
 
     
-    const [ wsMessages, setWsMessages ] = useState([]); //text for the websocket output
+    const [ wsMessages, setWsMessages ] = useState<ConsoleMessage[]>([]); //text for the websocket output
     const [ isOpened, setIsOpened ] = useState(false); //boolean representing status of WS connection
-    const [ statusMessage, setStatusMessage ] = useState('');
+    const [ statusMessage, setStatusMessage ] = useState<string>('');
     const [isToggleOn, setIsToggleOn] = useState(false); //toggle UI switch for turning output on and off
-    const connection = useRef(null); //queue server WS via FastAPI
+    const connection = useRef<WebSocket | null>(null); //queue server WS via FastAPI
     const wsUrl = getQSConsoleUrl();
-    const messageContainerRef = useRef(null);
+    const messageContainerRef = useRef<HTMLDivElement | null>(null);
     const hasErrorOccuredRef = useRef(false);
     const didUserTurnOffWS = useRef(false);
 
@@ -29,7 +40,7 @@ export default function QSConsole({type="default", title=true, description = tru
         setIsToggleOn(!isToggleOn);
     };
 
-    const handleWebSocketMessage = (event) => {
+    const handleWebSocketMessage = (event:any) => {
         //console.log('received message from ws');
         //this function receives the websocket message and displays it to the client
         var eventData = JSON.parse(event.data);
@@ -74,7 +85,7 @@ export default function QSConsole({type="default", title=true, description = tru
         }
     }
 
-    const closeWebSocket = (connection) => {
+    const closeWebSocket = (connection:React.MutableRefObject<WebSocket | null>) => {
         if (connection.current !== null) {
             try {
                 console.log("Attempting to close existing connection");
@@ -92,7 +103,7 @@ export default function QSConsole({type="default", title=true, description = tru
         }
     }
 
-    const initializeConnection = (wsUrl, connection, isOpened) => {
+    const initializeConnection = (wsUrl:string, connection:React.MutableRefObject<WebSocket | null>, isOpened:boolean) => {
         //Ensure wsUrl is not empty
         if (wsUrl === '') {
             return;
@@ -151,8 +162,7 @@ export default function QSConsole({type="default", title=true, description = tru
     }
 
     const handleOpenWS = () => {
-        //stuff
-        initializeConnection(wsUrl, connection,)
+        initializeConnection(wsUrl, connection, isOpened)
     }
 
     const handleCloseWS = () => {
@@ -174,8 +184,9 @@ export default function QSConsole({type="default", title=true, description = tru
     
     return (
         <main className="h-full bg-white rounded-b-lg relative">
-            <div name="toggle switch, status" className="flex items-start justify-start space-x-12 pl-12 pt-1 absolute top-0 z-10">
-                <div name="toggle" className="flex w-fit items-center space-x-2">
+            {/* Toggle Switch & Status Header */}
+            <div  className="flex items-start justify-start space-x-12 pl-12 pt-1 absolute top-0 z-10">
+                <div className="flex w-fit items-center space-x-2">
                     <p className={`${isToggleOn ? 'text-gray-400' : 'text-gray-800'}`}>OFF</p>
                     <button
                         onClick={toggleSwitch}
@@ -191,10 +202,11 @@ export default function QSConsole({type="default", title=true, description = tru
                     </button>
                     <p className={`${isToggleOn ? 'text-green-600' : 'text-gray-400'}`}>ON</p>
                 </div>
-                <p name="status" className="text-slate-500">{statusMessage}</p>
+                <p className="text-slate-500">{statusMessage}</p>
             </div>
+            {/* Main Body */}
             <div className="h-full w-full rounded-b-lg absolute top-0 pt-8">
-                <section ref={messageContainerRef} name="message container" className="overflow-auto h-full w-full rounded-b-lg scrollbar-always-visible" >
+                <section ref={messageContainerRef} className="overflow-auto h-full w-full rounded-b-lg scrollbar-always-visible" >
                     {isOpened ? <p className="text-slate-400 pl-4">Connection Opened. Listening for Queue Server console output.</p> : <p className="animate-pulse text-white pl-4">Waiting for initialization...</p>}
                     <ul className="flex flex-col">
                         {wsMessages.map((msg) => {
