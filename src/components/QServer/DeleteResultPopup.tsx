@@ -1,12 +1,12 @@
 import { Fragment } from 'react';
 import { tailwindIcons } from "../../assets/icons";
 import Button from "../Button";
-import { apiDeleteItemResponse } from './types/types';
+import { PostItemRemoveResponse } from './types/apiTypes';
 
 type DeleteResultPopupProps = {
     isVisible: boolean;
     cb: () => void;
-    response: apiDeleteItemResponse;
+    response: PostItemRemoveResponse;
 };
 export default function DeleteResultPopup( {isVisible=false, cb=()=>{}, response }: DeleteResultPopupProps ) {
     const closePopup = () => {

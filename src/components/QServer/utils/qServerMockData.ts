@@ -1,4 +1,6 @@
-const mockDevicesAllowedResponse = {
+import {PostItemAddResponse, GetPlansAllowedResponse, GetDevicesAllowedResponse, GetHistoryResponse, GetQueueItemResponse, GetQueueResponse, GetStatusResponse, PostEnvironmentOpenResponse, PostItemExecuteResponse, PostItemRemoveResponse } from "../types/apiTypes";
+
+export const mockGetDevicesAllowedResponse: GetDevicesAllowedResponse = {
     "success": true,
     "msg": "",
     "devices_allowed": {
@@ -1827,7 +1829,7 @@ const mockDevicesAllowedResponse = {
     "devices_allowed_uid": "6c737d64-1567-42be-8d91-713dacda17cf"
 };
 
-const mockPlansAllowedResponse = {
+export const mockGetPlansAllowedResponse: GetPlansAllowedResponse = {
     "success": true,
     "msg": "",
     "plans_allowed": {
@@ -3997,7 +3999,7 @@ const mockPlansAllowedResponse = {
     "plans_allowed_uid": "a2fea229-75eb-496f-a776-d2405d7f24a3"
 };
 
-const mockGetQueueItemResponse = {
+export const mockGetQueueItemResponse = {
     "msg": "",
     "item": {
         "name": "count",
@@ -4013,7 +4015,7 @@ const mockGetQueueItemResponse = {
     }  
 };
 
-const mockDeleteQueueItemResponse = {
+export const mockDeleteQueueItemResponse = {
     "success": true,
     "msg": "",
     "item": {
@@ -4033,65 +4035,7 @@ const mockDeleteQueueItemResponse = {
     "qsize": 0
 };
 
-const mockQueueHistoryData = {
-  "success": true,
-  "msg": "",
-  "items": [
-    {
-      "name": "count",
-      "kwargs": {
-        "detectors": [
-          "ab_det"
-        ]
-      },
-      "item_type": "plan",
-      "user": "UNAUTHENTICATED_SINGLE_USER",
-      "user_group": "primary",
-      "item_uid": "418393b5-ea17-434d-8899-190a1b7b3f9a",
-      "result": {
-        "exit_status": "completed",
-        "run_uids": [
-          "70701cd4-80f8-4559-ae31-685ee8bd5e8f"
-        ],
-        "scan_ids": [
-          1
-        ],
-        "time_start": 1721942455.82465,
-        "time_stop": 1721942456.559789,
-        "msg": "",
-        "traceback": ""
-      }
-    },
-    {
-      "name": "count",
-      "kwargs": {
-        "detectors": [
-          "bool_sig"
-        ]
-      },
-      "item_type": "plan",
-      "user": "UNAUTHENTICATED_SINGLE_USER",
-      "user_group": "primary",
-      "item_uid": "cd103773-ffe6-412a-879b-a02b3610c2fc",
-      "result": {
-        "exit_status": "completed",
-        "run_uids": [
-          "7bc5a727-43d1-455d-a8af-fc1d92743183"
-        ],
-        "scan_ids": [
-          2
-        ],
-        "time_start": 1721942682.8607092,
-        "time_stop": 1721942683.549676,
-        "msg": "",
-        "traceback": ""
-      }
-    }
-  ],
-  "plan_history_uid": "bcaab829-6629-49f4-a6ab-851b7baaf9bb"
-}
-
-const mockAddItemSuccessResponse = {
+export const mockAddItemSuccessResponse:PostItemAddResponse = {
     "success": true,
     "msg": "",
     "qsize": 2,
@@ -4112,7 +4056,26 @@ const mockAddItemSuccessResponse = {
     }
 };
 
-const mockAddItemFailResponse = {
+export const mockAddItemSuccessArgsResponse = {
+    "success": true,
+    "msg": "",
+    "qsize": 1,
+    "item": {
+        "name": "count",
+        "args": [
+            [
+                "det1",
+                "det2"
+            ]
+        ],
+        "item_type": "plan",
+        "user": "UNAUTHENTICATED_SINGLE_USER",
+        "user_group": "primary",
+        "item_uid": "d6a274e8-2e84-4785-ac8e-c34149b4806b"
+    }
+};
+
+export const mockAddItemFailResponse:PostItemAddResponse = {
     "success": false,
     "msg": "Failed to add an item: Plan validation failed: Plan 'countttt' is not in the list of allowed plans.\nPlan: {'name': 'countttt',\n 'kwargs': {'detectors': ['det1', 'det2'], 'num': 10, 'delay': 1},\n 'item_type': 'plan'}",
     "qsize": null,
@@ -4126,11 +4089,30 @@ const mockAddItemFailResponse = {
             "num": 10,
             "delay": 1
         },
-        "item_type": "plan"
+        "item_type": "plan",
     }
 };
 
-const sampleQueueData = [
+export const mockExecuteItemResponse: PostItemExecuteResponse = {
+    "success": true,
+    "msg": "",
+    "qsize": 1,
+    "item": {
+        "name": "count",
+        "args": [
+            [
+                "det1",
+                "det2"
+            ]
+        ],
+        "item_type": "plan",
+        "user": "UNAUTHENTICATED_SINGLE_USER",
+        "user_group": "primary",
+        "item_uid": "f9429eb7-56e0-431e-89bf-449aabf5bb55"
+    }
+};
+
+export const sampleQueueData = [
     {
         "name": "count",
         "args": [
@@ -4184,4 +4166,651 @@ const sampleQueueData = [
     }
 ];
 
-export { mockDevicesAllowedResponse, mockPlansAllowedResponse, mockGetQueueItemResponse, mockDeleteQueueItemResponse, mockQueueHistoryData, mockAddItemFailResponse, mockAddItemSuccessResponse, sampleQueueData };
+export const mockGetQueueResponse = {
+    "success": true,
+    "msg": "",
+    "items": sampleQueueData,
+    "plan_queue_uid": "a2fea229-75eb-496f-a776-d2405d7f24a3",
+    "running_item": {}
+};
+
+export const mockGetHistoryResponse: GetHistoryResponse = {
+    "success": true,
+    "msg": "",
+    "items": [
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "ab_det"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "418393b5-ea17-434d-8899-190a1b7b3f9a",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "70701cd4-80f8-4559-ae31-685ee8bd5e8f"
+                ],
+                "scan_ids": [
+                    1
+                ],
+                "time_start": 1721942455.82465,
+                "time_stop": 1721942456.559789,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "bool_sig"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "cd103773-ffe6-412a-879b-a02b3610c2fc",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "7bc5a727-43d1-455d-a8af-fc1d92743183"
+                ],
+                "scan_ids": [
+                    2
+                ],
+                "time_start": 1721942682.8607092,
+                "time_stop": 1721942683.549676,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det1",
+                    "det2"
+                ],
+                "num": 1,
+                "delay": 2.5
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "41e9df16-1e70-47ad-af6a-5f63097ba8ce",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "1cc6bb7c-7722-4076-8bee-7fe1375ab995"
+                ],
+                "scan_ids": [
+                    3
+                ],
+                "time_start": 1722016112.13761,
+                "time_stop": 1722016115.2865431,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det1",
+                    "det2"
+                ],
+                "num": 1,
+                "delay": 2.5
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "152e0f09-6d1b-430c-8e7b-16218e620cdf",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "27618434-7757-44a3-9bf1-fee1ab94eae2"
+                ],
+                "scan_ids": [
+                    4
+                ],
+                "time_start": 1722016185.598372,
+                "time_stop": 1722016188.725067,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det4",
+                    "det5"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "be4e5f8e-0e5b-4205-ba7e-2f18beb7277e",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "8f79ca7a-3e10-43a5-959a-182034df8c23"
+                ],
+                "scan_ids": [
+                    5
+                ],
+                "time_start": 1722022266.688672,
+                "time_stop": 1722022267.322738,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det5"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "bd1785ef-048b-4ed3-8233-9558c0824c63",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "eef29ab1-3023-419b-9dc6-0ae3e99c88ee"
+                ],
+                "scan_ids": [
+                    6
+                ],
+                "time_start": 1722276783.66215,
+                "time_stop": 1722276783.942198,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "aa92d368-dd62-4318-a50b-1274c818318c",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "183ad2f2-df80-49e8-aa09-deaa01ca128c"
+                ],
+                "scan_ids": [
+                    7
+                ],
+                "time_start": 1722276783.945943,
+                "time_stop": 1722276784.444797,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det_with_conf"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "e0fbb0c1-ab59-4157-b87f-6d21a68c3eeb",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "081e290f-44d5-4ebb-a141-8e8903ca8df0"
+                ],
+                "scan_ids": [
+                    8
+                ],
+                "time_start": 1722276784.4499671,
+                "time_stop": 1722276784.9466538,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "signal"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "0ea71931-c3ba-4589-9d80-04aa0c9116e8",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "bf8f850b-2302-4cbb-9751-1ab659b430be"
+                ],
+                "scan_ids": [
+                    9
+                ],
+                "time_start": 1722276784.9501922,
+                "time_stop": 1722276785.4483159,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "motor_no_pos"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "047763e0-5a74-4a7c-984a-9f4156f3ef18",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "7bc0261f-4c18-470e-82c1-b4cba05546c1"
+                ],
+                "scan_ids": [
+                    10
+                ],
+                "time_start": 1722276785.452348,
+                "time_stop": 1722276785.952163,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "pseudo3x3"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "31905ed0-835a-407c-9c7e-3ddb0753eb16",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "d895fa89-f477-4180-9094-bf13f99ad940"
+                ],
+                "scan_ids": [
+                    11
+                ],
+                "time_start": 1722276785.955349,
+                "time_stop": 1722276786.454935,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "57e90772-b4a9-4115-af56-7ff95265a1cf",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "affa4994-0f71-4bb5-872a-39ee05608cb6"
+                ],
+                "scan_ids": [
+                    12
+                ],
+                "time_start": 1722282088.6331751,
+                "time_stop": 1722282089.25177,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "scan",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "0bc1a0aa-1a04-478b-81fb-818d5382a761",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722292139.9085598,
+                "time_stop": 1722292140.208694,
+                "msg": "Plan failed: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 1068, in scan\n    raise ValueError(\"The number of points to scan must be provided \"\nValueError: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.\n"
+            }
+        },
+        {
+            "name": "scan",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "7cb3f8e3-6b6d-492f-ad64-a6fa859bcfd9",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722292343.0057778,
+                "time_stop": 1722292343.12445,
+                "msg": "Plan failed: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 1068, in scan\n    raise ValueError(\"The number of points to scan must be provided \"\nValueError: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.\n"
+            }
+        },
+        {
+            "name": "scan",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "1fdca4f5-633f-408c-93d1-0d4ff0bfa9a4",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722293372.3601868,
+                "time_stop": 1722293372.795773,
+                "msg": "Plan failed: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 1068, in scan\n    raise ValueError(\"The number of points to scan must be provided \"\nValueError: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.\n"
+            }
+        },
+        {
+            "name": "scan",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "0619a710-bd69-4db7-a75d-d83ddecd5e51",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722293430.3920588,
+                "time_stop": 1722293430.537136,
+                "msg": "Plan failed: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 1068, in scan\n    raise ValueError(\"The number of points to scan must be provided \"\nValueError: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.\n"
+            }
+        },
+        {
+            "name": "scan",
+            "kwargs": {
+                "detectors": [
+                    "det5"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "de89aa92-4cfe-4dd1-8b75-2001dee07488",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722379233.1787038,
+                "time_stop": 1722379233.417322,
+                "msg": "Plan failed: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 1068, in scan\n    raise ValueError(\"The number of points to scan must be provided \"\nValueError: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.\n"
+            }
+        },
+        {
+            "name": "rel_list_grid_scan",
+            "kwargs": {
+                "detectors": [
+                    "det5"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "42d35428-dfd7-4afe-913e-7a54bec5658a",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722454528.8340302,
+                "time_stop": 1722454529.184476,
+                "msg": "Plan failed: reduce() of empty iterable with no initial value",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 365, in rel_list_grid_scan\n    return (yield from inner_relative_list_grid_scan())\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 1203, in dec_inner\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 1163, in reset_positions_wrapper\n    return (yield from finalize_wrapper(plan_mutator(plan, insert_reads),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 173, in plan_mutator\n    raise ex\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 126, in plan_mutator\n    msg = plan_stack[-1].send(ret)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 1203, in dec_inner\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 1119, in relative_set_wrapper\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 238, in msg_mutator\n    msg = plan.send(None)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 173, in plan_mutator\n    raise ex\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 126, in plan_mutator\n    msg = plan_stack[-1].send(ret)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 362, in inner_relative_list_grid_scan\n    return (yield from list_grid_scan(detectors, *args,\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 276, in list_grid_scan\n    full_cycler = plan_patterns.outer_list_product(args, snake_axes)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plan_patterns.py\", line 356, in outer_list_product\n    return snake_cyclers(cyclers, snaking)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 618, in snake_cyclers\n    return reduce(operator.mul, cyclers)\nTypeError: reduce() of empty iterable with no initial value\n"
+            }
+        },
+        {
+            "name": "rel_list_grid_scan",
+            "kwargs": {
+                "detectors": [
+                    "det5"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "3f97b797-e788-4b8e-952e-63600389759a",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722459856.971958,
+                "time_stop": 1722459857.17078,
+                "msg": "Plan failed: reduce() of empty iterable with no initial value",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 365, in rel_list_grid_scan\n    return (yield from inner_relative_list_grid_scan())\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 1203, in dec_inner\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 1163, in reset_positions_wrapper\n    return (yield from finalize_wrapper(plan_mutator(plan, insert_reads),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 173, in plan_mutator\n    raise ex\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 126, in plan_mutator\n    msg = plan_stack[-1].send(ret)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 1203, in dec_inner\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 1119, in relative_set_wrapper\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 238, in msg_mutator\n    msg = plan.send(None)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 173, in plan_mutator\n    raise ex\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 126, in plan_mutator\n    msg = plan_stack[-1].send(ret)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 362, in inner_relative_list_grid_scan\n    return (yield from list_grid_scan(detectors, *args,\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 276, in list_grid_scan\n    full_cycler = plan_patterns.outer_list_product(args, snake_axes)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plan_patterns.py\", line 356, in outer_list_product\n    return snake_cyclers(cyclers, snaking)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 618, in snake_cyclers\n    return reduce(operator.mul, cyclers)\nTypeError: reduce() of empty iterable with no initial value\n"
+            }
+        },
+        {
+            "name": "rel_list_scan",
+            "kwargs": {
+                "detectors": [
+                    "det_with_conf"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "963a94bc-c602-48b6-824a-ef1bcee5cbb8",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722462344.691751,
+                "time_stop": 1722462345.128257,
+                "msg": "Plan failed: unsupported operand type(s) for -: 'NoneType' and 'int'",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 234, in rel_list_scan\n    return (yield from inner_relative_list_scan())\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 1203, in dec_inner\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 1163, in reset_positions_wrapper\n    return (yield from finalize_wrapper(plan_mutator(plan, insert_reads),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 173, in plan_mutator\n    raise ex\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 126, in plan_mutator\n    msg = plan_stack[-1].send(ret)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/utils/__init__.py\", line 1203, in dec_inner\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 1119, in relative_set_wrapper\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 238, in msg_mutator\n    msg = plan.send(None)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 173, in plan_mutator\n    raise ex\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 126, in plan_mutator\n    msg = plan_stack[-1].send(ret)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 232, in inner_relative_list_scan\n    return (yield from list_scan(detectors, *args, per_step=per_step,\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 152, in list_scan\n    'num_intervals': length - 1,\nTypeError: unsupported operand type(s) for -: 'NoneType' and 'int'\n"
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det5"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "586c9bc1-b21a-47d3-8136-3b0a6534984c",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "f63139c4-c0e3-41e4-b054-2577aec9f201"
+                ],
+                "scan_ids": [
+                    13
+                ],
+                "time_start": 1722542596.121071,
+                "time_stop": 1722542596.454433,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "76cf9e21-4f50-432a-8d3a-8fa97e56d060",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "dba24d18-dd6f-4e3e-a5f9-bcbfebbe564b"
+                ],
+                "scan_ids": [
+                    14
+                ],
+                "time_start": 1722542821.48771,
+                "time_stop": 1722542822.001365,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+        {
+            "name": "scan",
+            "kwargs": {
+                "detectors": [
+                    "det4"
+                ]
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "4c6ebf28-1d2b-4644-9021-ad1be3334f49",
+            "result": {
+                "exit_status": "failed",
+                "run_uids": [],
+                "scan_ids": [],
+                "time_start": 1722542822.006978,
+                "time_stop": 1722542822.503486,
+                "msg": "Plan failed: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.",
+                "traceback": "Traceback (most recent call last):\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 304, in _execute_plan\n    result = func()\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky_queueserver/manager/worker.py\", line 497, in start_plan_func\n    return self._RE(g, **plan_meta)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 903, in __call__\n    plan_return = self._resume_task(init_func=_build_task)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1042, in _resume_task\n    raise exc\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1672, in _run\n    raise err\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/run_engine.py\", line 1532, in _run\n    msg = self._plan_stack[-1].send(resp)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 408, in subs_wrapper\n    return (yield from finalize_wrapper(_inner_plan(),\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 535, in finalize_wrapper\n    ret = yield from plan\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/preprocessors.py\", line 406, in _inner_plan\n    return (yield from plan)\n  File \"/Users/seij/miniconda3/envs/queue_server/lib/python3.10/site-packages/bluesky/plans.py\", line 1068, in scan\n    raise ValueError(\"The number of points to scan must be provided \"\nValueError: The number of points to scan must be provided as the last positional argument or as keyword argument 'num'.\n"
+            }
+        },
+        {
+            "name": "count",
+            "kwargs": {
+                "detectors": [
+                    "det1",
+                    "det2"
+                ],
+                "num": 10,
+                "delay": 1
+            },
+            "item_type": "plan",
+            "user": "UNAUTHENTICATED_SINGLE_USER",
+            "user_group": "primary",
+            "item_uid": "474f4644-0475-4281-938e-a1772da79ee4",
+            "result": {
+                "exit_status": "completed",
+                "run_uids": [
+                    "cdbb23e3-9285-40ab-8f1b-d92280b6b34c"
+                ],
+                "scan_ids": [
+                    15
+                ],
+                "time_start": 1722543419.725246,
+                "time_stop": 1722543430.231056,
+                "msg": "",
+                "traceback": ""
+            }
+        },
+    ],
+    "plan_history_uid": "a87195b7-65f7-4d49-bdb2-71370691d649"
+};
+
+export const mockGetStatusResponse: GetStatusResponse = {
+    "msg": "RE Manager v0.0.19",
+    "items_in_queue": 0,
+    "items_in_history": 119,
+    "running_item_uid": null,
+    "manager_state": "idle",
+    "queue_stop_pending": false,
+    "queue_autostart_enabled": false,
+    "worker_environment_exists": false,
+    "worker_environment_state": "closed",
+    "worker_background_tasks": 0,
+    "re_state": null,
+    "ip_kernel_state": null,
+    "ip_kernel_captured": null,
+    "pause_pending": false,
+    "run_list_uid": "36e0a461-2339-4558-944f-c71f3ad4857e",
+    "plan_queue_uid": "013b92ca-6403-4764-a433-b1e1eec478a5",
+    "plan_history_uid": "a87195b7-65f7-4d49-bdb2-71370691d649",
+    "devices_existing_uid": "f2c7c412-59d0-4c45-b5c7-4576215b8010",
+    "plans_existing_uid": "c6616804-d5ef-497d-acd6-6964e45f8ddd",
+    "devices_allowed_uid": "26903d13-3553-4b2b-bccd-7a2daac22195",
+    "plans_allowed_uid": "a4136bdb-0c7b-4bff-a261-20a63f9b252d",
+    "plan_queue_mode": {
+        "loop": false,
+        "ignore_failures": false
+    },
+    "task_results_uid": "13168f35-37cf-469e-81f5-5addf5ca26da",
+    "lock_info_uid": "59e09e4b-25f4-4ba3-9543-608143815557",
+    "lock": {
+        "environment": false,
+        "queue": false
+    }
+};
+
+export const mockEnvironmentOpenResponse: PostEnvironmentOpenResponse = {
+    success: true,
+    msg: ""
+};
+
+export const mockRemoveQueueItemResponse: PostItemRemoveResponse = {
+    "success": true,
+    "msg": "",
+    "item": {
+        "name": "count",
+        "args": [
+            [
+                "det1",
+                "det2"
+            ]
+        ],
+        "item_type": "plan",
+        "user": "UNAUTHENTICATED_SINGLE_USER",
+        "user_group": "primary",
+        "item_uid": "6e447e8d-00c3-44ee-875f-ba12ccdf4ec4"
+    },
+    "qsize": 0
+}
+

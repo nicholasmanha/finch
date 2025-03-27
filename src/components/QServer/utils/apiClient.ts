@@ -1,10 +1,29 @@
 import axios from 'axios';
-import { mockDevicesAllowedResponse, mockPlansAllowedResponse, mockGetQueueItemResponse, mockDeleteQueueItemResponse, mockQueueHistoryData } from './qServerMockData';
-
-// Mock data (if needed)
-const mockQueueData = {};
-const mockStatusData = {};
-
+import {
+    mockEnvironmentOpenResponse, 
+    mockGetStatusResponse, 
+    mockGetQueueResponse, 
+    mockGetDevicesAllowedResponse, 
+    mockGetPlansAllowedResponse, 
+    mockGetQueueItemResponse, 
+    mockDeleteQueueItemResponse, 
+    mockGetHistoryResponse, 
+    mockAddItemSuccessResponse, 
+    mockExecuteItemResponse } from './qServerMockData';
+import {
+    AddQueueItemBody, 
+    GetQueueResponse, 
+    GetHistoryResponse, 
+    GetStatusResponse, 
+    GetPlansAllowedResponse, 
+    GetDevicesAllowedResponse, 
+    PostItemAddResponse, 
+    ExecuteQueueItemBody, 
+    PostItemExecuteResponse, 
+    PostEnvironmentOpenResponse, 
+    GetQueueItemResponse,
+    RemoveQueueItemBody,
+    PostItemRemoveResponse} from '../types/apiTypes';
 
 const getQServerKey = () => {
     //todo: fix this so it works for vite
@@ -33,54 +52,14 @@ const getHttpServerUrl = () => {
    const httpUrl = 'api/qserver';
     return httpUrl;
 };
+const httpServerUrl = getHttpServerUrl();
+const qServerKey = getQServerKey();
 
-/* const handleQueueDataResponse =(res, setQueueData, queueDataRef, setRunningItem, runningItemRef, setIsREToggleOn) => {
-    //checks if UI update should occur and sends data to callback
-    try {
-        if (res.success === true) {
-            if (JSON.stringify(res.items) !== JSON.stringify(queueDataRef.current)) { //we could also compare the plan_queue_uid which will change when the plan changes
-                //console.log('different queue data, updating');
-                setQueueData(res.items);
-            } else {
-                //console.log('same queue data, do nothing');
-            }
-            if (JSON.stringify(res.running_item) !== JSON.stringify(runningItemRef.current)) {
-                //console.log('different running item, updating');
-                setRunningItem(res.running_item);
-                if (Object.keys(res.running_item).length > 0) {
-                    setIsREToggleOn(true);
-                } else {
-                    setIsREToggleOn(false);
-                }
-            } else {
-                //console.log('same running item, do nothing');
-            }
-        }
-    } catch(error) {
-        console.log({error});
-    }
-} */
 
-/* const getQueue = async (setQueueData, queueDataRef, setRunningItem, runningItemRef, setIsREToggleOn, mock=false) => {
+
+const getQueue = async (cb:(data:GetQueueResponse)=>void, mock=false) => {
     if (mock) {
-        setQueueData(mockQueueData);
-        return;
-    }
-    try {
-        const response = await axios.get('http://localhost:60610/api/queue/get', 
-            {headers : {
-                'Authorization' : 'ApiKey ' + qServerKey
-            }}
-        );
-        handleQueueDataResponse(response.data, setQueueData, queueDataRef, setRunningItem, runningItemRef, setIsREToggleOn);
-    } catch (error) {
-        console.error('Error fetching queue:', error);
-    }
-}; */
-
-const getQueue = async (cb, mock=false) => {
-    if (mock) {
-        cb(mockQueueData);
+        cb(mockGetQueueResponse);
         return;
     }
     try {
@@ -95,9 +74,9 @@ const getQueue = async (cb, mock=false) => {
     }
 };
 
-const getQueueHistory = async (cb, mock=false) => {
+const getQueueHistory = async (cb:(data:GetHistoryResponse)=>void, mock=false) => {
     if (mock) {
-        cb(mockQueueHistoryData);
+        cb(mockGetHistoryResponse);
         return;
     }
     try {
@@ -113,9 +92,9 @@ const getQueueHistory = async (cb, mock=false) => {
 };
 
 
-const getStatus = async (cb, mock = false) => {
+const getStatus = async (cb:(data:GetStatusResponse)=>void, mock = false) => {
     if (mock) {
-        cb(mockStatusData);
+        cb(mockGetStatusResponse);
         return;
     }
     try {
@@ -130,9 +109,9 @@ const getStatus = async (cb, mock = false) => {
     }
 };
 
-const getPlansAllowed = async (cb, mock = false) => {
+const getPlansAllowed = async (cb:(data:GetPlansAllowedResponse)=>void, mock = false) => {
     if (mock) {
-        cb(mockPlansAllowedResponse);
+        cb(mockGetPlansAllowedResponse);
         return;
     }
     try {
@@ -147,9 +126,9 @@ const getPlansAllowed = async (cb, mock = false) => {
     }
 }
 
-const getDevicesAllowed = async (cb, mock = false) => {
+const getDevicesAllowed = async (cb:(data:GetDevicesAllowedResponse)=>void, mock = false) => {
     if (mock) {
-        cb(mockDevicesAllowedResponse);
+        cb(mockGetDevicesAllowedResponse);
         return;
     }
     try {
@@ -172,48 +151,59 @@ const startRE = async () => {
             {headers : {
                 'Authorization' : 'ApiKey ' + qServerKey
             }});
-        console.log(response.data);
-        //check if the response says it started.. if so return success, otherwise return failed
-        return 'success';
+
+            if (response.data.success === true) { 
+                return true;
+            } else {
+                return false;
+            }
     } catch (error) {
         console.error('Error starting RE:', error);
-        return 'failed';
+        return false;
     }
 };
 
-const postQueueItem = async (body={}, cb=()=>{}) => {
+const postQueueItem = async (body:AddQueueItemBody, cb:(data:PostItemAddResponse)=>void, mock=false) => {
+    if (mock) {
+        cb(mockAddItemSuccessResponse);
+        return;
+    }
     try {
         const response = await axios.post(httpServerUrl + '/api/queue/item/add', 
         body,
         {headers : {
             'Authorization' : 'ApiKey ' + qServerKey
         }});
-    console.log(response.data);
-    cb(response.data);
-    return 'success';
+        //console.log(response.data);
+        cb(response.data);
+        return 'success';
     } catch (error) {
         console.error('Error submitting plan', error);
         return 'failed';
     }
 };
 
-const executeItem = async (body={}, cb=()=>{}) => {
+const executeItem = async (body:ExecuteQueueItemBody, cb:(data:PostItemExecuteResponse)=>void, mock=false) => {
+    if (mock) {
+        cb(mockExecuteItemResponse);
+        return;
+    }
     try {
         const response = await axios.post(httpServerUrl + '/api/queue/item/execute', 
         body,
         {headers : {
             'Authorization' : 'ApiKey ' + qServerKey
         }});
-    console.log(response.data);
-    cb(response.data);
-    return 'success';
+        //console.log(response.data);
+        cb(response.data);
+        return 'success';
     } catch (error) {
         console.error('Error executing plan', error);
         return 'failed';
     }
 }
 
-const getQueueItem = async (uid='', cb=()=>{}, mock=false) => {
+const getQueueItem = async (uid='', cb:(data:GetQueueItemResponse)=>void, mock=false) => {
     if (mock) {
         cb(mockGetQueueItemResponse);
         return;
@@ -233,14 +223,18 @@ const getQueueItem = async (uid='', cb=()=>{}, mock=false) => {
     }
 };
 
-const deleteQueueItem = async (body={}, cb=()=>{}) => {
+const deleteQueueItem = async (body:RemoveQueueItemBody, cb:(data:PostItemRemoveResponse)=>void, mock=false) => {
+    if (mock) {
+        cb(mockDeleteQueueItemResponse);
+        return; 
+    }
     try {
         const response = await axios.post(httpServerUrl + '/api/queue/item/remove', 
         body,
         {headers : {
             'Authorization' : 'ApiKey ' + qServerKey
         }});
-        console.log(response.data);
+        //console.log(response.data);
         cb(response.data);
     return 'success';
     } catch (error) {
@@ -249,19 +243,26 @@ const deleteQueueItem = async (body={}, cb=()=>{}) => {
     }
 };
 
-const openWorkerEnvironment = async (cb=()=>{}) => {
+const openWorkerEnvironment = async (cb:(data:PostEnvironmentOpenResponse)=>void, mock=false) => {
+    if (mock) {
+        cb(mockEnvironmentOpenResponse);
+        return;
+    }
     try {
         const response = await axios.post(httpServerUrl + '/api/environment/open',
         {}, 
         {headers : {
             'Authorization' : 'ApiKey ' + qServerKey
         }});
-        console.log(response.data);
         cb(response.data);
-        return 'success';
+        if (response.data.success === true || response.data.msg === "RE Worker environment already exists.") {
+            return true; //if env is already open, it will return {success: false, msg:"RE Worker environment already exists."}
+        } else {
+            return false;
+        }
     } catch (error) {
         console.error('Error opening RE Worker Environment:', error);
-        return 'failed';
+        return false;
     }
 };
 
