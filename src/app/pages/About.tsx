@@ -8,6 +8,8 @@ export default function About() {
         <div className="">
             <p className="text-sky-600">About</p>
             <Button text="sample page" cb={()=> {navigate('/samplepage1')}}/>
+            <Button text="qserver" cb={()=> {navigate('/qserver')}}/>
+                
             <div>
                 <Tiled onSelectCallback={(links:any) => console.log(links)} isPopup={true} closeOnSelect={true}/>
             </div>

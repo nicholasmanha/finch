@@ -37,14 +37,11 @@ export const useQueueServer = () => {
 
     //setup polling interval for getting regular updates from the http server
     var pollingInterval:number;
-    if (process.env.REACT_APP_QSERVER_POLLING_INTERVAL) {
-        pollingInterval = parseInt(process.env.REACT_APP_QSERVER_POLLING_INTERVAL);
-    } else {
-        const oneSecond = 1000; //1 second in milliseconds
-        const tenSeconds = 10000; //10 seconds in milliseconds
-        const thirtySeconds = 30000; //30 seconds in milliseconds
-        pollingInterval = oneSecond;
-    }
+    const oneSecond = 1000; //1 second in milliseconds
+    const tenSeconds = 10000; //10 seconds in milliseconds
+    const thirtySeconds = 30000; //30 seconds in milliseconds
+
+    pollingInterval = import.meta.env.VITE_QSERVER_POLLING_INTERVAL ? parseInt(import.meta.env.VITE_QSERVER_POLLING_INTERVAL) : oneSecond;
 
     const handleQueueDataResponse = (res: GetQueueResponse) => {
         try {

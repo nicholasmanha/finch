@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import QItem from './QItem';
 import dayjs from 'dayjs';
-import '../../App.css'; //figure this out...
+import './styles/qserver.css'; //figure this out...
 
 type QSListProps = {
     queueData: any[];

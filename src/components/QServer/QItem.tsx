@@ -12,6 +12,7 @@ type QItemProps = {
 };
 export default function QItem ({ item=false, label='', text='', styles='', handleClick=()=>{}, type="current" }: QItemProps) {
 
+    if (!item) return;
     const displayKwarg = (value:[]|string|{[key:string]:any}) => {
         //value may be an Array, String, or Object
         if (Array.isArray(value)) {

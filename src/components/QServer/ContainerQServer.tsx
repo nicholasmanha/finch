@@ -15,7 +15,7 @@ import { CopiedPlan, PopupItem } from "./types/types";
 import { GetQueueItemResponse, GetStatusResponse } from "./types/apiTypes";
 
 
-export default function QueueServer() {
+export default function ContainerQServer() {
 
     const [ isQItemPopupVisible, setIsQItemPopupVisible ] = useState(false);
     const [ popupItem, setPopupItem ] = useState<PopupItem | null>(null);

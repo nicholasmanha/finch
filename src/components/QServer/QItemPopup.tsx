@@ -142,7 +142,7 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
         {
             name:'Parameters',
             icon: tailwindIcons.adjustmentsVertical,
-            content: 
+            content: popupItem.kwargs &&
                 <Fragment>
                     {Object.keys(popupItem.kwargs).map((kwarg) => printParameter(kwarg))}
                     <div className="flex justify-center py-4"><Button text='Copy Plan' cb={()=> handleCopyClick(popupItem.name, popupItem.kwargs)} styles={`m-auto ${isDeleteModeVisible ? 'opacity-0' : ''}`}/></div>
@@ -227,7 +227,7 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
     type RowProps = {
         name: string;
         icon: JSX.Element;
-        content: JSX.Element | null | string;
+        content: JSX.Element | undefined | string;
     }
     const Row = ({name, icon, content}: RowProps) => {
         if (name === 'Parameters') {
@@ -277,7 +277,7 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
                                 {results.map((item) => {
                                     return (
                                         item.content !== null ?
-                                            <Row name={item.name} icon={item.icon} content={item.content} />
+                                            <Row name={item.name} icon={item.icon} content={item.content} key={item.name}/>
                                         :
                                             ''
                                     )

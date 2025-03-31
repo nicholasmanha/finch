@@ -1,5 +1,5 @@
 import { tailwindIcons, customIcons } from "../../assets/icons";
-import '../../App.css';
+import './styles/qserver.css';
 import './RunningIcon.css';
 import React, { Fragment, Children } from "react";
 

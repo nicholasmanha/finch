@@ -29,26 +29,13 @@ const getQServerKey = () => {
     //todo: fix this so it works for vite
     var key;
     const defaultKey = 'test';
-    if (process.env.REACT_APP_QSERVER_KEY) {
-        key = process.env.REACT_APP_QSERVER_KEY;
-    } else {
-        key = defaultKey;
-    }
+    key = import.meta.env.VITE_QSERVER_KEY || defaultKey;
     return key;
 }
 
 
 const getHttpServerUrl = () => {
-    //TODO fix this so it works for vite
-/*     const currentWebsiteIP = window.location.hostname;
-    const pathname = "/";
-    const port = ":60610";
-    var httpUrl;
-    if (process.env.REACT_APP_HTTP_SERVER_URL) {
-        httpUrl = process.env.REACT_APP_HTTP_SERVER_URL;
-    } else {
-        httpUrl = "http://" + currentWebsiteIP + port + pathname;
-    } */
+
    const httpUrl = 'api/qserver';
     return httpUrl;
 };
@@ -62,10 +49,10 @@ const getQSConsoleUrl = () => {
     const port = ":8000";
     var wsUrl;
 
-    if (process.env.REACT_APP_QS_CONSOLE_URL) {
-        wsUrl = process.env.REACT_APP_QS_CONSOLE_URL; //custom
+    if (import.meta.env.VITE_QS_CONSOLE_URL) {
+        wsUrl = import.meta.env.VITE_QS_CONSOLE_URL;
     } else {
-        if (process.env.REACT_APP_PROXY_WS === 'false') {
+        if (import.meta.env.VITE_PROXY_WS === 'false') {
             wsUrl = "ws://" + currentWebsiteIP + port + pathname; //default when ran locally
         } else {
             wsUrl=`ws://${currentWebsiteIP}:${currentWebsitePort}/api/qserver/console` //reverse proxy, does not work with React live dev server
