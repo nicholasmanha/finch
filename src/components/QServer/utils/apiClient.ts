@@ -266,7 +266,7 @@ const deleteQueueItem = async (body:RemoveQueueItemBody, cb:(data:PostItemRemove
     }
 };
 
-const openWorkerEnvironment = async (cb:(data:PostEnvironmentOpenResponse)=>void, mock=false) => {
+const openWorkerEnvironment = async (cb:(data:PostEnvironmentOpenResponse)=>void=()=>{}, mock=false) => {
     if (mock) {
         cb(mockEnvironmentOpenResponse);
         return;

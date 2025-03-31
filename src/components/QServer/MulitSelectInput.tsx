@@ -1,25 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { tailwindIcons } from '../../assets/icons';
 import { Tooltip } from 'react-tooltip';
+import { AllowedDevices } from './types/types';
 
 type MultiSelectInputProps = { 
-    cb: (value: string[]) => void;
     label: string;
     isItemInArray: (item: string) => boolean;
     addItem: (item: string) => void;
     removeItem: (item: string) => void;
     selectedItems: string[];
-    allowedDevices: string[];
-    parameters: {[key: string]: any};
-    setParameters: (value: {[key: string]: any}) => void;
-    plan: {[key: string]: any};
-    description: string;
+    allowedDevices: AllowedDevices;
+    description: string | undefined;
     required: boolean;
-    inputType: string;
-    deviceList: string[];
-    styles: string;
+    styles?: string;
 };
-export default function MultiSelectInput({cb, label='', isItemInArray, addItem=()=>{}, removeItem=()=>{}, selectedItems=[], allowedDevices, parameters, setParameters=()=>{}, plan, description='', required=false, inputType='int', deviceList=[], styles=''}: MultiSelectInputProps) {
+export default function MultiSelectInput(
+    {
+        label='', 
+        isItemInArray,
+        addItem=()=>{}, 
+        removeItem=()=>{}, 
+        selectedItems=[], 
+        allowedDevices, 
+        description='', 
+        required=false, 
+        styles=''
+    }: MultiSelectInputProps) {
     const [inputValue, setInputValue] = useState('');
     const [availableItems, setAvailableItems] = useState(Object.keys(allowedDevices));
     const [dropdownVisible, setDropdownVisible] = useState(false);

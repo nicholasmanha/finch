@@ -1,10 +1,18 @@
-import { useState, Fragment } from 'react';
+import { Fragment } from 'react';
 import { tailwindIcons } from '../../assets/icons';
 import { getPlanColor } from './utils/qItemColorData';
 
-export default function QItem ({ item=false, label='', text='', styles='', clickable=true, handleClick=()=>{}, type="default" }) {
+type QItemProps = {
+    item: any;
+    label?: string;
+    text?: string;
+    styles?: string;
+    handleClick?: (arg: any) => void;
+    type: 'history' | 'current' | 'blank';
+};
+export default function QItem ({ item=false, label='', text='', styles='', handleClick=()=>{}, type="current" }: QItemProps) {
 
-    const displayKwarg = (value) => {
+    const displayKwarg = (value:[]|string|{[key:string]:any}) => {
         //value may be an Array, String, or Object
         if (Array.isArray(value)) {
             return value.toString().replaceAll(',', ', ');
@@ -24,8 +32,8 @@ export default function QItem ({ item=false, label='', text='', styles='', click
             const failed = item.result.exit_status === 'failed';
             return (
                 <div className={`${failed ? 'mt-12' : 'mt-6'} flex flex-col items-center relative h-20`}>
-                    {failed ? <div name="warning symbol" className="text-red-500 absolute left-1/2 transform -translate-x-1/2 -translate-y-full aspect-square h-6">{tailwindIcons.exclamationTriangle}</div> : ''}                    
-                    <li name="item"  className={`${commonStyles} hover:cursor-pointer border ${item.result.exit_status === 'failed' ? 'border-red-600 border-2' : 'border-slate-500'}  bg-slate-100 overflow-clip rounded-t-md h-16 ${styles}`} onClick={handleClick}>
+                    {failed ? <div className="text-red-500 absolute left-1/2 transform -translate-x-1/2 -translate-y-full aspect-square h-6">{tailwindIcons.exclamationTriangle}</div> : ''}                    
+                    <li className={`${commonStyles} hover:cursor-pointer border ${item.result.exit_status === 'failed' ? 'border-red-600 border-2' : 'border-slate-500'}  bg-slate-100 overflow-clip rounded-t-md h-16 ${styles}`} onClick={handleClick}>
                         <span className={`${getPlanColor(item.name)} flex items-center justify-around rounded-t-md opacity-80`}>
                             <p className={` text-white text-center `}>{item.name}</p>
                         </span>
@@ -70,7 +78,7 @@ export default function QItem ({ item=false, label='', text='', styles='', click
                             }
                         </div>
                     </li>
-                    <p name="bottom label" className="text-slate-700 font-bold text-xs mt-1">{label}</p>
+                    <p className="text-slate-700 font-bold text-xs mt-1">{label}</p>
                 </div>
             )
         } else {
@@ -116,7 +124,7 @@ export default function QItem ({ item=false, label='', text='', styles='', click
                                         )
                                     })
                                 :
-                                    <p>here</p>
+                                    <p>0 kwargs</p>
                             }
                         </div>
                     </li>
@@ -136,6 +144,7 @@ export default function QItem ({ item=false, label='', text='', styles='', click
             )
         }
         //empty item as visual placeholder
+        //TODO: do we need to delete this, or was it normally used at line 34 QSList.tsx?
         return (
             <li className={`${commonStyles} hover:shadow-none h-16 border border-dashed border-slate-500 min-w-32 bg-slate-400 ${styles}`}>
                 <p className="text-center text-slate-400">{text}</p>

@@ -5,26 +5,28 @@ import MainPanel from "./MainPanel";
 import SettingsContainer from "./SettingsContainer";
 import QSConsole from "./QSConsole";
 import QSAddItem from "./QSAddItem";
-import { tailwindIcons } from "../assets/icons";
+import { tailwindIcons } from "src/assets/icons";
 import QSList from "./QSList";
 import QSRunEngineWorker from "./QSRunEngineWorker";
 import { getStatus, getQueueItem, openWorkerEnvironment } from "./utils/apiClient";
 import { useState,  useEffect, } from 'react';
 import { useQueueServer } from "./hooks/useQueueServer";
+import { CopiedPlan, PopupItem } from "./types/types";
+import { GetQueueItemResponse, GetStatusResponse } from "./types/apiTypes";
 
 
 export default function QueueServer() {
 
     const [ isQItemPopupVisible, setIsQItemPopupVisible ] = useState(false);
-    const [ popupItem, setPopupItem ] = useState({});
+    const [ popupItem, setPopupItem ] = useState<PopupItem | null>(null);
     const [ isItemDeleteButtonVisible, setIsItemDeleteButtonVisible ] = useState(true);
-    const [ copiedPlan, setCopiedPlan ] = useState(false);
+    const [ copiedPlan, setCopiedPlan ] = useState<CopiedPlan | null>(null);
     const [ isSidepanelExpanded, setIsSidepanelExpanded ] = useState(false);
     const [ minimizeAllWidgets, setMinimizeAllWidgets ] = useState(false);
     
     const {
-        queueData,
-        queueHistoryData,
+        currentQueue,
+        queueHistory,
         isREToggleOn,
         runningItem,
         setIsREToggleOn,
@@ -36,12 +38,12 @@ export default function QueueServer() {
         handleGlobalMetadataCheckboxChange
     } = useQueueServer();
 
-    const handleOpenQItemPopup = (data, showDeleteButton=true) => {
+   /*  const handleOpenQItemPopup = (data:GetQueueItemResponse, showDeleteButton=true) => {
         if (data.success !== false) {
             //set popup to visible
             if (data.item) {
                 //occurs on GET request
-                setPopupItem(data.item);
+                setPopupItem(data.item); //popup item takes the raw item properties from GET request
             } else {
                 //occurs when item is sent in directly
                 setPopupItem(data);
@@ -59,19 +61,32 @@ export default function QueueServer() {
         //It is better to do a 'GET' on item UID in case the item parameters
         //have been changed by a user on another workstation and the data is stale
         if (typeof arg === 'string') {
+            //sent in a uid, do a get request
             getQueueItem(arg, handleOpenQItemPopup);
         } else {
             //entire item has been sent in
             handleOpenQItemPopup(arg, showDeleteButton);
         }
+    }; */
+
+    //create a handleCurrentQitemClick and handleHisotryQItemClick
+    const handleCurrentQItemClick = (item:PopupItem) => {
+        setPopupItem(item);
+        setIsItemDeleteButtonVisible(true);
+        setIsQItemPopupVisible(true);
     };
+
+    const handleHistoryQItemClick = (item:PopupItem) => {
+        setPopupItem(item);
+        setIsQItemPopupVisible(true);
+    }
 
     const handleQItemPopupClose = () => {
         setIsQItemPopupVisible(false);
-        setPopupItem({});
+        setPopupItem(null);
     };
 
-    const handleSidepanelExpandClick = (isSidepanelExpanded) => {
+    const handleSidepanelExpandClick = (isSidepanelExpanded:boolean) => {
         if (isSidepanelExpanded) {
             setIsSidepanelExpanded(false);
             //expand all widgets on the main panel
@@ -102,8 +117,8 @@ export default function QueueServer() {
 
     useEffect(() => {
         //check if the re worker has opened or not with GET
-        const checkWorkerEnvironment = (res) => {
-            if (res.worker_environment_exists === false || res.worker_environement_state === 'closed') {
+        const checkWorkerEnvironment = (res:GetStatusResponse) => {
+            if (res.worker_environment_exists === false || res.worker_environment_state === 'closed') {
                 console.log('RE worker environment closed, attempting to open a new worker environment');
                 openWorkerEnvironment();
             }
@@ -114,27 +129,25 @@ export default function QueueServer() {
     return (
         <main className="max-w-screen-3xl w-full min-w-[52rem] h-[calc(100vh-6rem)] min-h-[50rem]  m-auto flex rounded-md relative bg-slate-400 border ">
             {/* ITEM POPUP  */}
-            {isQItemPopupVisible ? (
+            {(isQItemPopupVisible && popupItem!==null) && (
                 <QItemPopup 
                     handleQItemPopupClose={handleQItemPopupClose} 
                     popupItem={popupItem} 
                     isItemDeleteButtonVisible={isItemDeleteButtonVisible} 
                     handleCopyItemClick={handleCopyItemClick} 
                 />
-            ) : (
-                ''
             )} 
             <div className={`${isSidepanelExpanded ? 'w-4/5' : 'w-1/5 '}  flex-shrink-0 transition-all duration-300 ease-in-out bg-slate-200 rounded-md shadow-md drop-shadow h-full`}>
                 <SidePanel 
-                    queueData={queueData}
-                    queueHistoryData={queueHistoryData} 
+                    queueData={currentQueue?.items || []}
+                    queueHistoryData={queueHistory?.items || []} 
                     isREToggleOn={isREToggleOn} 
                     handleSidepanelExpandClick={handleSidepanelExpandClick}
                     isSidepanelExpanded={isSidepanelExpanded}
                 >
-                    <QSList type="short" queueData={queueData} handleQItemClick={handleQItemClick}/>
+                    <QSList type="short" queueData={currentQueue?.items || []} handleQItemClick={handleCurrentQItemClick}/>
                     <QSRunEngineWorker runningItem={runningItem} isREToggleOn={isREToggleOn} setIsREToggleOn={setIsREToggleOn}/>
-                    <QSList type="history" queueData={queueHistoryData} handleQItemClick={handleQItemClick}/>
+                    <QSList type="history" queueData={queueHistory?.items || []} handleQItemClick={handleHistoryQItemClick}/>
                 </SidePanel>
             </div>
 

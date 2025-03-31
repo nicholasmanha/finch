@@ -67,7 +67,7 @@ export interface GetDevicesAllowedResponse {
     devices_allowed: { [key: string]: Device };
     devices_allowed_uid: string;
 }
-
+//TO DO: verify what Parameter response looks like with enums so we can enforce better automatic checks for input types that are single enums vs multiple etc
 export interface Parameter {
     name: string;
     kind: {
@@ -76,15 +76,18 @@ export interface Parameter {
     };
     description?: string;
     default?: string | string[];
+    convert_device_names?: boolean;
     default_defined_in_decorator?: boolean;
     annotation?: {
         type: string;
         devices?: { [key: string]: string[] };
+        enums?: string[];
     };
     module?: string;
     min?: string;
     max?: string;
     step?: string;
+    enums?: string[];
 }
 
 export interface Plan {
@@ -121,6 +124,12 @@ export interface QueueItem extends BaseQueueItem {
 export interface FailedQueueItem extends BaseQueueItem {   
 }
 
+export interface RunningQueueItem extends QueueItem {
+    properties: {
+        time_start: number;
+    }
+}
+
 export interface ExecuteQueueItemBody {
     item: BaseQueueItem;
 }
@@ -133,6 +142,7 @@ export interface AddQueueItemBody {
 export interface GetQueueItemResponse {
     msg: string;
     item: QueueItem;
+    success: boolean;
 }
 
 export interface GetQueueResponse {
@@ -140,7 +150,7 @@ export interface GetQueueResponse {
     msg: string;
     items: QueueItem[];
     plan_queue_uid: string;
-    running_item: {} | QueueItem; //double check this later, just guessing 
+    running_item: RunningQueueItem | {}; 
 }
 
 export interface Result {

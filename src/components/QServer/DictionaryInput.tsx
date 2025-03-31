@@ -1,30 +1,54 @@
 import { useState, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
-export default function DictionaryInput({ cb=()=>{}, dict={}, label='', required=true, description='', styles='', resetInputsTrigger=false, copiedPlan=false, isGlobalMetadataChecked=false, globalMetadata={} }) {
+import { CopiedPlan } from "./types/types";
 
-    //hardcode the number of possible key value input pairs
-    //this does not allow the user to add more, but better controls the UI
-    var inputDictDefault = {
-        input1: {
-            key: '',
-            val: '',
-            msg: ''
-        },
-        input2: {
-            key: '',
-            val: '',
-            msg: ''
-        },
-        input3: {
-            key: '',
-            val: '',
-            msg: ''
-        },
-    };
+type InputField = {
+    key: string;
+    val: string;
+    msg: string;
+};
+
+type InputDict = {
+    [key: string]: InputField;
+};
+
+type DictionaryInputProps = {
+    cb: (dict:{[key:string]: string}, deleteParam?: boolean) => void;
+    label: string;
+    required: boolean;
+    description: string | undefined;
+    styles?: string;
+    resetInputsTrigger: boolean;
+    copiedPlan: CopiedPlan | null;
+    isGlobalMetadataChecked: boolean;
+    globalMetadata: {[key: string]: any};
+};
+
+//hardcode the number of possible key value input pairs
+//this does not allow the user to add more, but better controls the UI
+var inputDictDefault = {
+    input1: {
+        key: '',
+        val: '',
+        msg: ''
+    },
+    input2: {
+        key: '',
+        val: '',
+        msg: ''
+    },
+    input3: {
+        key: '',
+        val: '',
+        msg: ''
+    },
+};
+export default function DictionaryInput({ cb, label='', required=true, description='', styles='', resetInputsTrigger=false, copiedPlan, isGlobalMetadataChecked=false, globalMetadata={} }: DictionaryInputProps) {
+
+    const [inputDict, setInputDict] = useState<InputDict>(inputDictDefault);
 
 
-
-    const copyDictionary = (dict) => {
+    const copyDictionary = (dict: {[key:string]: any}) => {
         if (JSON.stringify(dict) !== '{}') {
             var inputKeys = Object.keys(inputDictDefault);
             var i = 0;
@@ -41,13 +65,11 @@ export default function DictionaryInput({ cb=()=>{}, dict={}, label='', required
     }
 
 
-    const [inputDict, setInputDict] = useState(inputDictDefault);
-    //const [callbackData, setCallbackData] = useState(null);
 
-    const createJSON = (nestedObject) => {
+    const createJSON = (nestedObject: InputDict): Record<string, string> => {
         //transform the nested inputDict used for the form
         //into a JSON object before sending into callback
-        var JSONObject = {};
+        var JSONObject:Record<string, string> = {};
         for (const key in nestedObject) {
             if (nestedObject[key].key !== '') {
                 JSONObject[nestedObject[key].key] = nestedObject[key].val;
@@ -56,19 +78,19 @@ export default function DictionaryInput({ cb=()=>{}, dict={}, label='', required
         return JSONObject;
     };
 
-    const handleChange = (inputNum, type, newValue, state) => {
+    const handleChange = (inputNum:string, type:string, newValue:any, state:InputDict) => {
         //if key is empty but value is not, invalid object
         //console.log('handleChange')
 
-        var stateCopy = '';
+        //var stateCopy = '';
         var dictionary = {};
         var deleteParam = false;
 
         //remove the nested cb inside the setState function
-        stateCopy = JSON.parse(JSON.stringify(state));
+        var stateCopy = JSON.parse(JSON.stringify(state));
             
         stateCopy[inputNum][type] = newValue;
-        if (stateCopy[inputNum].key === '' & stateCopy[inputNum].val !== '') {
+        if (stateCopy[inputNum].key === '' && stateCopy[inputNum].val !== '') {
             //warn that we need a key entered for the value.
             stateCopy[inputNum].msg = 'Provide a key';
             //wipe the value in the parameter state with callback to prevent submission of invalid JSON
@@ -78,7 +100,7 @@ export default function DictionaryInput({ cb=()=>{}, dict={}, label='', required
             dictionary = createJSON(wipedDictionary);
         } else {
             stateCopy[inputNum].msg = '';
-            var dictionary = createJSON(stateCopy);
+            dictionary = createJSON(stateCopy);
             deleteParam = JSON.stringify(dictionary) === '{}'; //delete the param from the parameter state if it's empty
         }
         cb(dictionary, deleteParam);
@@ -101,7 +123,7 @@ export default function DictionaryInput({ cb=()=>{}, dict={}, label='', required
     }, [copiedPlan]);
 
     useEffect(() => {
-        var inputDictionary = {};
+        var inputDictionary:Record<string, string> = {};
         //loop through inputs and add anything that's valid JSON
         for (var key in inputDict) {
             if (inputDict[key].key !== '') {
@@ -121,7 +143,7 @@ export default function DictionaryInput({ cb=()=>{}, dict={}, label='', required
     return (
         <div className={`border-2 border-slate-300 rounded-lg w-11/12 max-w-96 min-w-72 mt-2 h-fit ${styles}`}>
             <p id={label+'ParamInputTooltip'} className="text-sm pl-4 text-gray-500 border-b border-dashed border-slate-300">{`${label} ${required ? '(required)' : '(optional)'}`}</p>
-            <Tooltip anchorSelect={'#' + label + 'ParamInputTooltip'} children={<p className="whitespace-pre-wrap">{description}</p>} place="top" variant="info" style={{'maxWidth' : "500px", 'height': 'fit-content'}} delayShow='400'/>
+            <Tooltip anchorSelect={'#' + label + 'ParamInputTooltip'} children={<p className="whitespace-pre-wrap">{description}</p>} place="top" variant="info" style={{'maxWidth' : "500px", 'height': 'fit-content'}} delayShow={400}/>
             <div className="">
                 <ul className="w-full">
                     <li className="flex text-center items-center">

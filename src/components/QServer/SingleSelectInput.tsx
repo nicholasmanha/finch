@@ -2,19 +2,42 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { tailwindIcons } from '../../assets/icons';
 import { Tooltip } from 'react-tooltip';
+import { ParameterInput, AllowedDevices } from './types/types';
 
-export default function SingleSelectInput({cb=()=>{}, label='', isItemInArray=()=>{}, addItem=()=>{}, clearItem=()=>{}, allowedDevices=[], parameters={}, plan={plan}, description='', required=false, styles=''}) {
+type SingleSelectInputProps = {
+    label: string;
+    isItemInArray: (item: string) => boolean;
+    addItem: (item: string) => void;
+    clearItem: () => void;
+    allowedDevices: AllowedDevices;
+    description?: string;
+    required: boolean;
+    styles?: string;
+    value: string;
+};
+export default function SingleSelectInput(
+    {
+        label='', 
+        isItemInArray, 
+        addItem=()=>{}, 
+        clearItem=()=>{}, 
+        allowedDevices, 
+        description='', 
+        required=false, 
+        styles='', 
+        value
+    }: SingleSelectInputProps) {
     const [inputValue, setInputValue] = useState('');
     const [availableItems, setAvailableItems] = useState(Object.keys(allowedDevices));
     const [dropdownVisible, setDropdownVisible] = useState(false);
 
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     const handleInputClick = () => {
         setDropdownVisible(!dropdownVisible);
     };
 
-    const handleItemClick = (item) => {
+    const handleItemClick = (item:string) => {
         //refactor this to take an arg that does not close dropdown if we came from an 'enter' key
 
         if (!isItemInArray(item)) { 
@@ -28,7 +51,7 @@ export default function SingleSelectInput({cb=()=>{}, label='', isItemInArray=()
 
 
     //only used for optional, not yet implemented
-    const handleDeleteClick = (e) => {
+    const handleDeleteClick = (e:MouseEvent) => {
         console.log({e})
         e.preventDefault();
         clearItem();
@@ -37,8 +60,8 @@ export default function SingleSelectInput({cb=()=>{}, label='', isItemInArray=()
 
 
 
-    const handleClickOutside = (event) => {
-        if (containerRef.current && !containerRef.current.contains(event.target)) {
+    const handleClickOutside = (event:MouseEvent) => {
+        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
             setDropdownVisible(false);
         }
     };
@@ -54,10 +77,10 @@ export default function SingleSelectInput({cb=()=>{}, label='', isItemInArray=()
     return (
         <div ref={containerRef} className="relative w-5/12 max-w-96 border-2 border-slate-300 rounded-lg mt-2 h-fit">
             <p id={label+'ParamInputTooltip'} className="text-sm pl-4 text-gray-500 border-b border-dashed border-slate-300">{`${label} ${required ? '(required)' : '(optional)'}`}</p>
-            <Tooltip anchorSelect={'#' + label + 'ParamInputTooltip'} children={<p className="whitespace-pre-wrap">{description}</p>} place="top" variant="info" style={{'maxWidth' : "500px", 'height': 'fit-content'}} delayShow='400'/> 
+            <Tooltip anchorSelect={'#' + label + 'ParamInputTooltip'} children={<p className="whitespace-pre-wrap">{description}</p>} place="top" variant="info" style={{'maxWidth' : "500px", 'height': 'fit-content'}} delayShow={400}/> 
             <div className={` flex rounded p-2 hover:cursor-pointer`} onClick={handleInputClick}>
                 <div className="w-10/12 flex justify-center">
-                    <p className={`${parameters[label].value.length === 0 ? '' : 'px-2 py-1'} w-fit bg-[#DCEAF1] text-sky-900 rounded`}>{parameters[label].value}</p>
+                    <p className={`${value.length === 0 ? '' : 'px-2 py-1'} w-fit bg-[#DCEAF1] text-sky-900 rounded`}>{value}</p>
                 </div>
                 <div className="w-2/12">{dropdownVisible ? tailwindIcons.chevronUp : tailwindIcons.chevronDown}</div>
 

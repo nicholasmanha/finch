@@ -1,19 +1,28 @@
 import { useState, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
+import { CopiedPlan } from "./types/types";
 
 type TextInputProps = {
     cb: (value: string | number ) => void;
     value?: string | number;
     label: string;
-    description: string;
+    description?: string;
     required?: boolean;
-    inputType?: string;
-    deviceList?: string[];
     styles?: string;
     resetInputsTrigger?: boolean;
-    copiedPlan?: boolean;
+    copiedPlan?: CopiedPlan | null;
 };
-export default function TextInput( {cb, value='', label='', description='', required=false, inputType='int', deviceList=[], styles='', resetInputsTrigger=false, copiedPlan=false}:TextInputProps ) {
+export default function TextInput( 
+    {
+        cb, 
+        value='', 
+        label='', 
+        description='', 
+        required=false, 
+        styles='', 
+        resetInputsTrigger=false, 
+        copiedPlan=null
+    }:TextInputProps ) {
     const [inputValue, setInputValue] = useState(value);
 
     const intTypeList = ['num'];

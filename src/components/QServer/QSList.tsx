@@ -1,11 +1,16 @@
 import { useEffect, useRef } from 'react';
 import QItem from './QItem';
 import dayjs from 'dayjs';
-import '../../App.css';
+import '../../App.css'; //figure this out...
 
-export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='default' }) {
+type QSListProps = {
+    queueData: any[];
+    handleQItemClick: (arg: any, showDeleteButton: boolean) => void;
+    type: 'default' | 'history' | 'short';
+};
+export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='default' }: QSListProps) {
 
-    const listRef = useRef(null);
+    const listRef = useRef<HTMLUListElement | null>(null);
 
     useEffect(() => {
         const scrollToTop = () => {
@@ -25,8 +30,8 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
             <section className="">
                 <h2 className="text-white text-xl text-center">Queue Items</h2>
                 <ul className="flex flex-row-reverse mt-2 justify-evenly overflow-auto scrollbar-always-visible">
-                    {queueData.map((item, index) => <QItem type="default" item={item} label={index} key={item.item_uid} handleClick={()=>handleQItemClick(item, true)}/>)}
-                    {queueData.length < 6 ? [...new Array(6 - queueData.length)].map((item, index) => <QItem item={item} index={index} key={index}/>) : '' }
+                    {queueData.map((item, index) => <QItem type="current" item={item} label={index.toString()} key={item.item_uid} handleClick={()=>handleQItemClick(item, true)}/>)}
+                    {queueData.length < 6 ? [...new Array(6 - queueData.length)].map((item, index) => <QItem type='blank' item={item} key={index}/>) : '' }
                 </ul>
             </section>
         );
@@ -43,9 +48,9 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
         return (
             <section className="w-full">
                 <ul className="flex flex-wrap-reverse justify-center items-end">
-                    {queueData.map((item, index) => <QItem type="default" item={item} label={index} key={item.item_uid} handleClick={()=>handleQItemClick(item, true)}/>)}
-                    {queueData.length < 0 ? [...new Array(0 - queueData.length)].map((item, index) => <QItem type="blank" item={item} index={index} key={index}/>) : '' }
-                    <QItem type="blank"/>
+                    {queueData.map((item, index) => <QItem type="current" item={item} label={index.toString()} key={item.item_uid} handleClick={()=>handleQItemClick(item, true)}/>)}
+                    {queueData.length < 0 ? [...new Array(0 - queueData.length)].map((item, index) => <QItem type="blank" item={item} key={index}/>) : '' }
+                    <QItem type="blank" item={false}/>
                 </ul>
             </section>
         );

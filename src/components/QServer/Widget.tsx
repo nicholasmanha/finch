@@ -3,7 +3,7 @@ import { tailwindIcons } from "../../assets/icons";
 
 export type WidgetStyleProps = {
     title?: string;
-    icon?: string;
+    icon?: JSX.Element;
     expandedHeight?: string;
     defaultHeight?: string;
     maxHeight?: string;
@@ -17,7 +17,7 @@ type WidgetProps = WidgetStyleProps & {
 export default function Widget({
     children, 
     title='', 
-    icon='', 
+    icon, 
     expandedHeight="h-fit", 
     defaultHeight='h-1/4', 
     maxHeight='max-h-3/4', 

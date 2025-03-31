@@ -1,25 +1,29 @@
 // hooks/useQueueServer.js
 import { useState, useEffect, useRef } from 'react';
 import { getQueue, getQueueHistory, getQueueItem } from "../utils/apiClient";
+import { GetHistoryResponse, GetQueueResponse, RunningQueueItem } from '../types/apiTypes';
+import { GlobalMetadata, PlanInput } from '../types/types';
 
 export const useQueueServer = () => {
-    const [queueData, setQueueData] = useState([]);
-    const queueDataRef = useRef(queueData);
-    const [queueHistoryData, setQueueHistoryData] = useState([]);
-    const queueHistoryDataRef = useRef(queueHistoryData);
-    const planHistoryUidRef = useRef('');
-    const [runningItem, setRunningItem] = useState({});
-    const runningItemRef = useRef(runningItem);
+    const [ currentQueue, setCurrentQueue ] = useState<GetQueueResponse | null>(null);
+    const [ queueHistory, setQueueHistory ] = useState<GetHistoryResponse | null>(null);
+    //const [queueData, setQueueData] = useState([]);
+    //const queueDataRef = useRef(queueData);
+    //const [queueHistoryData, setQueueHistoryData] = useState([]);
+    //const queueHistoryDataRef = useRef(queueHistoryData);
+    //const planHistoryUidRef = useRef('');
+    const [runningItem, setRunningItem] = useState<RunningQueueItem | null>(null);
+    //const runningItemRef = useRef(runningItem);
     const [isREToggleOn, setIsREToggleOn] = useState(false);
     const runEngineToggleRef = useRef(isREToggleOn);
-    const [ globalMetadata, setGlobalMetadata ] = useState({});
+    const [ globalMetadata, setGlobalMetadata ] = useState<GlobalMetadata>({});
     const [ isGlobalMetadataChecked, setIsGlobalMetadataChecked ] = useState(true);
 
-    useEffect(() => {
+/*     useEffect(() => {
         queueDataRef.current = queueData;
-    }, [queueData]);
+    }, [queueData]); */
 
-    useEffect(() => {
+/*     useEffect(() => {
         runningItemRef.current = runningItem;
     }, [runningItem]);
 
@@ -29,12 +33,12 @@ export const useQueueServer = () => {
 
     useEffect(() => {
         queueHistoryDataRef.current = queueHistoryData;
-    }, [queueHistoryData]);
+    }, [queueHistoryData]); */
 
     //setup polling interval for getting regular updates from the http server
-    var pollingInterval;
+    var pollingInterval:number;
     if (process.env.REACT_APP_QSERVER_POLLING_INTERVAL) {
-        pollingInterval = process.env.REACT_APP_QSERVER_POLLING_INTERVAL;
+        pollingInterval = parseInt(process.env.REACT_APP_QSERVER_POLLING_INTERVAL);
     } else {
         const oneSecond = 1000; //1 second in milliseconds
         const tenSeconds = 10000; //10 seconds in milliseconds
@@ -42,26 +46,70 @@ export const useQueueServer = () => {
         pollingInterval = oneSecond;
     }
 
-    const handleQueueDataResponse = (res) => {
+    const handleQueueDataResponse = (res: GetQueueResponse) => {
         try {
             if (res.success === true) {
-                if (JSON.stringify(res.items) !== JSON.stringify(queueDataRef.current)) {
+                setCurrentQueue((prevState) => {
+                    //only update state if the queue uid changed to prevent unneeded dom updates
+                    if (prevState && prevState.plan_queue_uid === res.plan_queue_uid) {
+                        return prevState;
+                    } else {
+                        return res;
+                    }
+                });
+
+/*                 if (JSON.stringify(res.items) !== JSON.stringify(queueDataRef.current)) {
                     setQueueData(res.items);
+                } */
+               setRunningItem((prevState) => {
+                const isItemRunning = Object.keys(res.running_item).length > 0;
+                //no running item before, and nothing running now:
+                if (prevState === null && !isItemRunning ) {
+                    //still not active item
+                    return prevState;
                 }
+
+                //no running item before, but there is now:
+                if (prevState === null && isItemRunning && 'item_uid' in res.running_item) {
+                    return res.running_item;
+                }
+
+                //item running before, different item running now:
+                if ((isItemRunning && 'item_uid' in res.running_item) && (prevState !== null) && (prevState.item_uid !== res.running_item.item_uid)) {
+                    return res.running_item;
+                }
+
+                return prevState;
+                
+
+               })
+
+                setIsREToggleOn(Object.keys(res.running_item).length > 0);
+
+/* 
                 if (JSON.stringify(res.running_item) !== JSON.stringify(runningItemRef.current)) {
                     setRunningItem(res.running_item);
                     setIsREToggleOn(Object.keys(res.running_item).length > 0);
                 } else if (Object.keys(res.running_item).length === 0) {
                     setIsREToggleOn(false);
-                }
+                } */
             }
         } catch(error) {
             console.log({error});
         }
     };
 
-    const handleQueueHistoryResponse = (res) => {
+    const handleQueueHistoryResponse = (res: GetHistoryResponse) => {
         if (res.success === true) {
+            setQueueHistory((prevState) => {
+                //only update the state if the plan history uid changed
+                if (prevState && prevState.plan_history_uid === res.plan_history_uid) {
+                    return prevState;
+                } else {
+                    return res;
+                }
+            });
+            /* 
             try {
                 if (res.plan_history_uid !== planHistoryUidRef.current) {
                     setQueueHistoryData(res.items);
@@ -69,14 +117,13 @@ export const useQueueServer = () => {
                 }
             } catch(e) {
                 console.log(e);
-            }
+            } */
         } else {
-            console.log('Error retrieving queue history');
-            console.log({res});
+            console.log('Error retrieving queue history: ', res);
         }
     };
 
-    const processConsoleMessage = (msg) => {
+    const processConsoleMessage = (msg:string) => {
         //using the console log to trigger get requests has some issues with stale state, even with useRef
         //This can be further evaluated, but we should potentially get rid of the ref for the toggle button which had issues.
         //The get/status api endpoint seems to not provide the most recent running status when called immediately after the console triggers it
@@ -125,17 +172,17 @@ export const useQueueServer = () => {
         }
     };
 
-    const updateGlobalMetadata = (dict) => {
+    const updateGlobalMetadata = (dict:GlobalMetadata) => {
         setGlobalMetadata(dict);
     };
 
-    const removeDuplicateMetadata = (plan) => {
+    const removeDuplicateMetadata = (plan: PlanInput) => {
         //removes any duplicate between copied plan and global md
         //prevents user from seeing duplicated key/value in md parameter input
 
         if ('md' in plan.parameters) {
-            for (var key in globalMetadata) {
-                console.log({key});
+            for (const key in globalMetadata) {
+                //console.log({key});
                 if (key in plan.parameters.md) {
                     delete plan.parameters.md[key];
                 }
@@ -144,7 +191,7 @@ export const useQueueServer = () => {
         return plan;
     };
 
-    const handleGlobalMetadataCheckboxChange = (isChecked) => {
+    const handleGlobalMetadataCheckboxChange = (isChecked: boolean) => {
         setIsGlobalMetadataChecked(isChecked);
     };
 
@@ -162,8 +209,8 @@ export const useQueueServer = () => {
     }, [pollingInterval]);
 
     return {
-        queueData,
-        queueHistoryData,
+        currentQueue,
+        queueHistory,
         isREToggleOn,
         runningItem,
         runEngineToggleRef,

@@ -1,8 +1,13 @@
 import { useState, Fragment } from 'react';
 import { tailwindIcons } from "../../assets/icons";
-import Button from '../library/Button';
+//import Button from '../library/Button';
+import Button from '../Button';
 
-export default function SubmissionResultPopup( {isVisible=false, cb=()=>{}, response={} }) {
+type SubmissionResultPopupProps = {
+    cb: (success:boolean) => void;
+    response: any;
+};
+export default function SubmissionResultPopup( { cb=()=>{}, response={} }: SubmissionResultPopupProps) {
     const [isTextCopied, setIsTextCopied] = useState(false);
 
     const closePopup = (success=true) => {
