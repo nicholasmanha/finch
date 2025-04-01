@@ -73,7 +73,7 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
         return (
             <div ref={listRef} className="flex-grow overflow-auto scrollbar-always-visible mx-1 mb-1">
                 <section className="w-full flex flex-col ">
-                    <ul  className="flex flex-wrap-reverse justify-center border border-red-500">
+                    <ul  className="flex flex-wrap-reverse justify-center">
                         {queueData.slice(queueData.length-visibleItems).map((item, index) => 
                             <QItem type="history" item={item} label={dayjs(item.result.time_stop * 1000).format('MM/DD hh:mm a')} key={item.item_uid} handleClick={()=>handleQItemClick(item, showDeleteButton)}/>
                         )}

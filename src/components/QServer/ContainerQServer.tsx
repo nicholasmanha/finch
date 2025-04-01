@@ -99,7 +99,7 @@ export default function ContainerQServer() {
     }, [])
 
     return (
-        <main className="max-w-screen-3xl w-full min-w-[52rem] h-[calc(100vh-6rem)] min-h-[50rem]  m-auto flex rounded-md relative bg-slate-400 border ">
+        <main className="max-w-screen-3xl w-full min-w-[52rem] h-screen min-h-[50rem] m-auto flex rounded-md relative bg-slate-400 border ">
             {/* ITEM POPUP  */}
             {(isQItemPopupVisible && popupItem!==null) && (
                 <QItemPopup 
