@@ -9,11 +9,13 @@ type QSListProps = {
     type: 'default' | 'history' | 'short';
 };
 export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='default' }: QSListProps) {
-    const [visibleItems, setVisibleItems] = useState(4); // Start with 10 items
-    const listRef = useRef<HTMLUListElement | null>(null);
+    const defaultVisibleHistoryItems = 20;
+    const [visibleItems, setVisibleItems] = useState(defaultVisibleHistoryItems); // Start with 10 items
+    const [ listWidth, setListWidth ] = useState<number>(0);
+    const listRef = useRef<HTMLDivElement | null>(null);
 
     const loadMoreItems = () => {
-        setVisibleItems((prev) => prev + 10); // Load 10 more items
+        setVisibleItems((prev) => prev + defaultVisibleHistoryItems);
     };
 
     const handleScroll = () => {
@@ -21,8 +23,8 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
         if (listRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listRef.current;
             console.log({scrollTop, scrollHeight, clientHeight})
-            if (scrollTop + clientHeight >= scrollHeight - 2) {
-                loadMoreItems(); // Load more items when the user scrolls to the bottom
+            if (scrollTop + clientHeight >= scrollHeight - 20) {
+                loadMoreItems();
             }
         }
     };
@@ -45,7 +47,6 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
     useEffect(() => {
         if (type === 'history') {
             if (listRef.current) {
-                console.log('adding scroll event listener')
                 listRef.current.addEventListener('scroll', handleScroll);
             }
         }
@@ -70,13 +71,15 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
     } else if (type === 'history') {
         const showDeleteButton = false;
         return (
-            <section className="w-full flex flex-col ">
-                <ul ref={listRef} className="flex flex-wrap-reverse justify-center border border-red-500">
-                    {queueData.slice(0, visibleItems).map((item, index) => 
-                        <QItem type="history" item={item} label={dayjs(item.result.time_stop * 1000).format('MM/DD hh:mm a')} key={item.item_uid} handleClick={()=>handleQItemClick(item, showDeleteButton)}/>
-                    )}
-                </ul>
-            </section>
+            <div ref={listRef} className="flex-grow overflow-auto scrollbar-always-visible mx-1 mb-1">
+                <section className="w-full flex flex-col ">
+                    <ul  className="flex flex-wrap-reverse justify-center border border-red-500">
+                        {queueData.slice(queueData.length-visibleItems).map((item, index) => 
+                            <QItem type="history" item={item} label={dayjs(item.result.time_stop * 1000).format('MM/DD hh:mm a')} key={item.item_uid} handleClick={()=>handleQItemClick(item, showDeleteButton)}/>
+                        )}
+                    </ul>
+                </section>
+            </div>
         )
     } else if (type === 'short') {
         return (

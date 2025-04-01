@@ -70,7 +70,7 @@ export default function SidePanel({
                         <p className="text-xl font-semibold text-center text-sky-950">Run Engine</p>
                     </span>
                     <div className="max-w-72 flex justify-center w-full items-center">
-                    {childrenArray[1] ? childrenArray[1] : null}
+                        {childrenArray[1] ? childrenArray[1] : null}
                     </div>
                 </div>
                 <div className="bg-slate-600/50 h-1 w-3/5"></div>
@@ -86,9 +86,7 @@ export default function SidePanel({
                     <p className="text-xl font-semibold text-center text-sky-950">History</p>
                     <BlurryBar />
                 </span>
-                <div className=" flex-grow overflow-auto scrollbar-always-visible mx-1 mb-1">
-                    {childrenArray[2] ? childrenArray[2] : null}
-                </div>
+                {childrenArray[2] ? childrenArray[2] : null}
             </div>
         </aside>
     )
