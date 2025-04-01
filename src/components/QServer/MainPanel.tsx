@@ -4,13 +4,11 @@ import { Children, isValidElement } from "react";
 type MainPanelProps = {
     minimizeAllWidgets?: boolean;
     expandPanel: (bool:boolean) => void;
-    isSidePanelExpanded: boolean;
     children: React.ReactNode;
 };
 export default function MainPanel({
     minimizeAllWidgets=false,
     expandPanel=()=>{},
-    isSidePanelExpanded=false,
     children
 }: MainPanelProps) {
     return (
@@ -27,7 +25,6 @@ export default function MainPanel({
                             expandedHeight={childProps.expandedHeight} 
                             defaultHeight={childProps.defaultHeight} 
                             maxHeight={childProps.maxHeight} 
-                            isSidePanelExpanded={isSidePanelExpanded} 
                             minimizeAllWidgets={minimizeAllWidgets} 
                             expandPanel={expandPanel}
                         >

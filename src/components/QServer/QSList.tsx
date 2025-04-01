@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import QItem from './QItem';
 import dayjs from 'dayjs';
-import './styles/qserver.css'; //figure this out...
+import './styles/qserver.css'; 
 
 type QSListProps = {
     queueData: any[];
@@ -9,8 +9,23 @@ type QSListProps = {
     type: 'default' | 'history' | 'short';
 };
 export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='default' }: QSListProps) {
-
+    const [visibleItems, setVisibleItems] = useState(4); // Start with 10 items
     const listRef = useRef<HTMLUListElement | null>(null);
+
+    const loadMoreItems = () => {
+        setVisibleItems((prev) => prev + 10); // Load 10 more items
+    };
+
+    const handleScroll = () => {
+        console.log('scroll')
+        if (listRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+            console.log({scrollTop, scrollHeight, clientHeight})
+            if (scrollTop + clientHeight >= scrollHeight - 2) {
+                loadMoreItems(); // Load more items when the user scrolls to the bottom
+            }
+        }
+    };
 
     useEffect(() => {
         const scrollToTop = () => {
@@ -22,8 +37,25 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
         // Using setTimeout to ensure the DOM has fully rendered
         const timeoutId = setTimeout(scrollToTop, 0);
 
-        return () => clearTimeout(timeoutId);
+        return () => {
+            clearTimeout(timeoutId);
+        };
     }, [queueData]);
+
+    useEffect(() => {
+        if (type === 'history') {
+            if (listRef.current) {
+                console.log('adding scroll event listener')
+                listRef.current.addEventListener('scroll', handleScroll);
+            }
+        }
+        return () => {
+            if (listRef.current) {
+                console.log('removing scroll event listener')
+                listRef.current.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [])
 
     if (type === 'default') {
         return (
@@ -39,8 +71,10 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
         const showDeleteButton = false;
         return (
             <section className="w-full flex flex-col ">
-                <ul ref={listRef} className="flex flex-wrap-reverse justify-center">
-                    {queueData.map((item, index) => <QItem type="history" item={item} label={dayjs(item.result.time_stop * 1000).format('MM/DD hh:mm a')} key={item.item_uid} handleClick={()=>handleQItemClick(item, showDeleteButton)}/>)}
+                <ul ref={listRef} className="flex flex-wrap-reverse justify-center border border-red-500">
+                    {queueData.slice(0, visibleItems).map((item, index) => 
+                        <QItem type="history" item={item} label={dayjs(item.result.time_stop * 1000).format('MM/DD hh:mm a')} key={item.item_uid} handleClick={()=>handleQItemClick(item, showDeleteButton)}/>
+                    )}
                 </ul>
             </section>
         )

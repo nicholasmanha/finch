@@ -367,13 +367,14 @@ export default function QSAddItem({copiedPlan=null, isGlobalMetadataChecked=fals
                     <h1 className="pl-3">PLAN</h1>
                     <div className={`${activePlan ? 'opacity-100 hover:cursor-pointer hover:text-slate-600' : 'opacity-0'} pr-2`} onClick={() => setActivePlan(null)}>{arrowLongLeft}</div>
                 </div>
-                <ul className={`${activePlan ? '' : ''} flex-grow duration-[1100ms] overflow-auto overflow-y-auto transition-all ease-in`}>
+                <ul className={`${activePlan ? '' : ''} flex-grow duration-[1100ms] overflow-auto overflow-y-auto transition-all ease-in relative`}>
+                    {!activePlan && <div className="absolute top-0 left-0 w-2/12 h-full border-r border-slate-300 pointer-events-none"></div>}
                     {Object.keys(allowedPlans).map((plan) => {
                         return (
                             <li key={plan} 
                                 className={`${activePlan === plan ? 'bg-indigo-200' : ''} hover:cursor-pointer group leading-tight flex`} 
                                 onClick={() => handlePlanSelect(plan)}>
-                                    <p className={`${activePlan ? 'w-full': 'w-2/12 border-r-2 border-slate-300'} group-hover:bg-indigo-300 px-2 py-1`}>{plan.replaceAll('_', ' ')}</p>
+                                    <p className={`${activePlan ? 'w-full': 'w-2/12 '} group-hover:bg-indigo-300 px-2 py-1`}>{plan.replaceAll('_', ' ')}</p>
                                     <p className={`${activePlan ? 'hidden w-0' : 'w-10/12 pl-4 group-hover:bg-indigo-50'} py-1`}>{allowedPlans[plan].description}</p>
                             </li>
                         )

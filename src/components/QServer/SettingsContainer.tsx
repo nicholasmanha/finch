@@ -8,16 +8,15 @@ import { WidgetStyleProps } from './Widget';
 type SettingsContainerProps = WidgetStyleProps & {
   isGlobalMetadataChecked: boolean;
   handleGlobalMetadataCheckboxChange: (isChecked:boolean) => void;
-  globalMetadata: any;
   updateGlobalMetadata: (newGlobalMetadata: any) => void;
 };
-export default function SettingsContainer({isGlobalMetadataChecked=false, handleGlobalMetadataCheckboxChange=()=>{}, globalMetadata={}, updateGlobalMetadata=()=>{}}: SettingsContainerProps) {
+export default function SettingsContainer({isGlobalMetadataChecked=false, handleGlobalMetadataCheckboxChange=()=>{}, updateGlobalMetadata=()=>{}}: SettingsContainerProps) {
   const [selectedSetting, setSelectedSetting] = useState('Metadata');
 
   const renderSettingContent = () => {
     switch (selectedSetting) {
       case 'Metadata':
-        return <SettingsMetadata isGlobalMetadataChecked={isGlobalMetadataChecked} handleGlobalMetadataCheckboxChange={handleGlobalMetadataCheckboxChange} globalMetadata={globalMetadata} updateGlobalMetadata={updateGlobalMetadata}/>;
+        return <SettingsMetadata isGlobalMetadataChecked={isGlobalMetadataChecked} handleGlobalMetadataCheckboxChange={handleGlobalMetadataCheckboxChange} updateGlobalMetadata={updateGlobalMetadata}/>;
       case 'Authentication':
         return <SettingsAuthentication />;
       case 'Audio Alerts':

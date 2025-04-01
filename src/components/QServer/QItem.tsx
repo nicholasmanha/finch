@@ -11,8 +11,20 @@ type QItemProps = {
     type: 'history' | 'current' | 'blank';
 };
 export default function QItem ({ item=false, label='', text='', styles='', handleClick=()=>{}, type="current" }: QItemProps) {
+    const commonStyles = 'w-32 rounded-md mx-2  hover:shadow-lg hover:shadow-gray-500 list-none overflow-auto';
 
-    if (!item) return;
+    if (!item) {
+        if (type==="blank") {
+            return (
+                <div className="flex flex-col items-center pb-2">
+                    <li className={`${commonStyles} hover:shadow-none h-16 border border-dashed border-slate-500 min-w-32 bg-slate-400 ${styles}`}>
+                        <p className="text-center text-slate-400">{text}</p>
+                    </li>
+                </div>
+            )
+        }
+    }
+    
     const displayKwarg = (value:[]|string|{[key:string]:any}) => {
         //value may be an Array, String, or Object
         if (Array.isArray(value)) {
@@ -24,10 +36,9 @@ export default function QItem ({ item=false, label='', text='', styles='', handl
         }
     };
     
-    const commonStyles = 'w-32 rounded-md mx-2  hover:shadow-lg hover:shadow-gray-500 list-none overflow-auto';
 
     //todo: refactor this to remove the redundant jsx, create components for the md text, kwarg text, and item body
-    if (item!== false && Object.keys(item).length > 0 ) {
+    if (item!== null && Object.keys(item).length > 0 ) {
         if (type === 'history') {
             //Queue History
             const failed = item.result.exit_status === 'failed';
@@ -135,7 +146,8 @@ export default function QItem ({ item=false, label='', text='', styles='', handl
         }
 
     } else {
-        if (type==="blank") {
+/*         if (type==="blank") {
+            console.log('blank')
             return (
                 <div className="flex flex-col items-center pb-2">
                     <li className={`${commonStyles} hover:shadow-none h-16 border border-dashed border-slate-500 min-w-32 bg-slate-400 ${styles}`}>
@@ -150,6 +162,6 @@ export default function QItem ({ item=false, label='', text='', styles='', handl
             <li className={`${commonStyles} hover:shadow-none h-16 border border-dashed border-slate-500 min-w-32 bg-slate-400 ${styles}`}>
                 <p className="text-center text-slate-400">{text}</p>
             </li>
-        )
+        ) */
     }
 }

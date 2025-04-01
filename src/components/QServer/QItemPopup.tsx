@@ -13,25 +13,6 @@ import { PostItemRemoveResponse } from "./types/apiTypes";
 
 import dayjs from "dayjs";
 
-const mockDeleteQueueItemResponse = {
-    "success": true,
-    "msg": "",
-    "item": {
-      "name": "count",
-      "kwargs": {
-        "detectors": [
-          "ab_det",
-          "custom_test_flyer"
-        ],
-        "num": 10
-      },
-      "item_type": "plan",
-      "user": "UNAUTHENTICATED_SINGLE_USER",
-      "user_group": "primary",
-      "item_uid": "1c5e0e17-5452-426c-9959-aa3e51f0e1d8"
-    },
-    "qsize": 0
-};
 
 type QItemPopupProps = {
     popupItem: PopupItem;
@@ -92,9 +73,13 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
             });
     };
 
-    const handleCopyClick = (name:string, kwargs: { [key: string]: any }) => {
+    const handleCopyClick = (name:string, kwargs: { [key: string]: any } | undefined) => {
         //close the popup after the item is copied so user can immediately see the plan below the popup
-        handleCopyItemClick(name, kwargs);
+        if (kwargs) {
+            handleCopyItemClick(name, kwargs);
+        } else {
+            handleCopyItemClick(name, {}); //we only copy kwargs, not args (positional arguments). Users need to be using kwargs for their plans...
+        }
         handleQItemPopupClose();
     }
 
@@ -112,6 +97,7 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
 
     //to do - revise this for a single return with conditional rendering onthe div / p tag for content
     const printParameter = (kwarg:string) => {
+        if (popupItem.kwargs === undefined) return;
         if (Array.isArray(popupItem.kwargs[kwarg])) {
             return (
             <span className="flex" key={kwarg}>
@@ -144,7 +130,7 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
             icon: tailwindIcons.adjustmentsVertical,
             content: popupItem.kwargs &&
                 <Fragment>
-                    {Object.keys(popupItem.kwargs).map((kwarg) => printParameter(kwarg))}
+                    {popupItem.kwargs && Object.keys(popupItem.kwargs).map((kwarg) => printParameter(kwarg))}
                     <div className="flex justify-center py-4"><Button text='Copy Plan' cb={()=> handleCopyClick(popupItem.name, popupItem.kwargs)} styles={`m-auto ${isDeleteModeVisible ? 'opacity-0' : ''}`}/></div>
                 </Fragment>
         },
@@ -200,7 +186,7 @@ export default function QItemPopup( {popupItem, handleQItemPopupClose=()=>{}, is
                 icon: tailwindIcons.chatBubbleOvalEllipsisLeft,
                 content:
                     (result.msg.length > 0) ?
-                        <p>{result.msg}</p>
+                        <p className="pt-2">{result.msg}</p>
                     :
                         null
             },

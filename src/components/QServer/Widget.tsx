@@ -12,7 +12,6 @@ type WidgetProps = WidgetStyleProps & {
     children: React.ReactNode;
     minimizeAllWidgets?: boolean;
     expandPanel: (bool:boolean) => void;
-    isSidePanelExpanded: boolean;
 };
 export default function Widget({
     children, 
@@ -23,7 +22,6 @@ export default function Widget({
     maxHeight='max-h-3/4', 
     minimizeAllWidgets=false,
     expandPanel=()=>{},
-    isSidePanelExpanded=false
 }: WidgetProps) {
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -53,7 +51,7 @@ export default function Widget({
 
 
     return (
-        <div onClick={minimizeAllWidgets ? ()=>expandPanel(false) : ()=>{}} className={`${hideContent || minimizeAllWidgets ? 'h-fit hover:cursor-pointer' : (isExpanded ? expandedHeight : defaultHeight)} ${maxHeight} rounded-md border border-slate-600 flex-shrink-0`}>
+        <div onClick={minimizeAllWidgets ? ()=>expandPanel(true) : ()=>{}} className={`${hideContent || minimizeAllWidgets ? 'h-fit hover:cursor-pointer' : (isExpanded ? expandedHeight : defaultHeight)} ${maxHeight} rounded-md border border-slate-600 flex-shrink-0`}>
             <div className={`w-full h-10 flex items-center bg-[#213149] rounded-t-md flex-shrink-0 ${hideContent || minimizeAllWidgets ? 'rounded-b-md hover:bg-[#2131498f]' : ''}`} onClick={()=>handleHeaderClick(hideContent)}>
                 <p className="h-5/6 aspect-square flex-shrink-0 text-white ml-2">{icon}</p>
                 <p className="flex-grow text-white ml-4 text-xl truncate">{title}</p>

@@ -7,41 +7,21 @@ import { GlobalMetadata, PlanInput } from '../types/types';
 export const useQueueServer = () => {
     const [ currentQueue, setCurrentQueue ] = useState<GetQueueResponse | null>(null);
     const [ queueHistory, setQueueHistory ] = useState<GetHistoryResponse | null>(null);
-    //const [queueData, setQueueData] = useState([]);
-    //const queueDataRef = useRef(queueData);
-    //const [queueHistoryData, setQueueHistoryData] = useState([]);
-    //const queueHistoryDataRef = useRef(queueHistoryData);
-    //const planHistoryUidRef = useRef('');
     const [runningItem, setRunningItem] = useState<RunningQueueItem | null>(null);
-    //const runningItemRef = useRef(runningItem);
     const [isREToggleOn, setIsREToggleOn] = useState(false);
     const runEngineToggleRef = useRef(isREToggleOn);
     const [ globalMetadata, setGlobalMetadata ] = useState<GlobalMetadata>({});
     const [ isGlobalMetadataChecked, setIsGlobalMetadataChecked ] = useState(true);
 
-/*     useEffect(() => {
-        queueDataRef.current = queueData;
-    }, [queueData]); */
-
-/*     useEffect(() => {
-        runningItemRef.current = runningItem;
-    }, [runningItem]);
-
-    useEffect(() => {
-        runEngineToggleRef.current = isREToggleOn;
-    }, [isREToggleOn]);
-
-    useEffect(() => {
-        queueHistoryDataRef.current = queueHistoryData;
-    }, [queueHistoryData]); */
 
     //setup polling interval for getting regular updates from the http server
     var pollingInterval:number;
     const oneSecond = 1000; //1 second in milliseconds
+    const twoSeconds = 2000; //2 seconds in milliseconds
     const tenSeconds = 10000; //10 seconds in milliseconds
     const thirtySeconds = 30000; //30 seconds in milliseconds
 
-    pollingInterval = import.meta.env.VITE_QSERVER_POLLING_INTERVAL ? parseInt(import.meta.env.VITE_QSERVER_POLLING_INTERVAL) : oneSecond;
+    pollingInterval = import.meta.env.VITE_QSERVER_POLLING_INTERVAL ? parseInt(import.meta.env.VITE_QSERVER_POLLING_INTERVAL) : twoSeconds;
 
     const handleQueueDataResponse = (res: GetQueueResponse) => {
         try {
@@ -74,6 +54,11 @@ export const useQueueServer = () => {
                 //item running before, different item running now:
                 if ((isItemRunning && 'item_uid' in res.running_item) && (prevState !== null) && (prevState.item_uid !== res.running_item.item_uid)) {
                     return res.running_item;
+                }
+
+                //item running before, no item running now:
+                if (!isItemRunning && prevState !== null) {
+                    return null;
                 }
 
                 return prevState;
