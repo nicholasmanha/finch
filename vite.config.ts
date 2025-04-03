@@ -17,6 +17,16 @@ export default defineConfig(() => ({
       include: ['src/components/'],
     }),
   ],
+  server: {
+    proxy: {
+        // Proxy requests starting with "api/qserver" to the bluesky http server
+        '/api/qserver': {
+            target: 'http://localhost:60610', // Backend server URL
+            changeOrigin: true, // Needed for virtual hosted sites
+            rewrite: (path) => path.replace(/^\/api\/qserver/, ''), // Remove "/api/qserver" from the path
+        },
+    },
+},
   build: {
     lib: {
       entry: resolve('src', 'components/index.ts'),
