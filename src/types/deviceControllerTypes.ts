@@ -8,6 +8,8 @@ export interface Device {
     connected: boolean;
     locked: boolean;
     timestamp: number;
+    expanded: boolean;
+    units?: string;
 };
 
 export interface Devices {

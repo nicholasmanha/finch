@@ -10,6 +10,7 @@ import {
 export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) {
     const [devices, setDevices] = useState<Devices>({});
     const wsRef = useRef<WebSocket | null>(null);
+    console.log('running hook')
 
     // Toggle device lock
     const toggleDeviceLock = useCallback((deviceName: string) => {
@@ -34,8 +35,20 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
         }
     }, []);
 
+    const toggleExpand = useCallback((deviceName: string, locked: boolean) => {
+        setDevices((prevDevices) => ({
+            ...prevDevices,
+            [deviceName]: {
+                ...prevDevices[deviceName],
+                expanded: !prevDevices[deviceName].expanded,
+                locked: locked,
+            },
+        }));
+    }, []);
+
     // Initialize devices state
     useEffect(() => {
+        console.log('initializing devices state');
         const initialDevices: Devices = {};
         deviceNameList.forEach((deviceName) => {
             initialDevices[deviceName] = {
@@ -44,6 +57,7 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
                 connected: false,
                 locked: false,
                 timestamp: 0,
+                expanded: false,
             };
         });
         setDevices(initialDevices);
@@ -51,6 +65,7 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
 
     // Initialize WebSocket connection
     useEffect(() => {
+        console.log('initializing WebSocket connection');
         const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
 
@@ -125,5 +140,6 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
         devices,
         toggleDeviceLock,
         handleSetValueRequest,
+        toggleExpand,
     };
 }

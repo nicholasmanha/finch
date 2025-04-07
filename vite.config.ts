@@ -1,3 +1,4 @@
+import path from "path"
 import { resolve } from 'node:path'
 
 import react from '@vitejs/plugin-react'
@@ -17,6 +18,11 @@ export default defineConfig(() => ({
       include: ['src/components/'],
     }),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   server: {
     proxy: {
         // Proxy requests starting with "api/qserver" to the bluesky http server
