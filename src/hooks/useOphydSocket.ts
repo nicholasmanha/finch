@@ -35,13 +35,12 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
         }
     }, []);
 
-    const toggleExpand = useCallback((deviceName: string, locked: boolean) => {
+    const toggleExpand = useCallback((deviceName: string) => {
         setDevices((prevDevices) => ({
             ...prevDevices,
             [deviceName]: {
                 ...prevDevices[deviceName],
                 expanded: !prevDevices[deviceName].expanded,
-                locked: locked,
             },
         }));
     }, []);

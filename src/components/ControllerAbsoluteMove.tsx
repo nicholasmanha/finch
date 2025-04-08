@@ -9,12 +9,19 @@ type ControllerAbsoluteMoveProps = {
     inputLabel?: string;
     inputClassName?: string;
     className?: string;
+    locked?: boolean;
 }
 
-export default function ControllerAbsoluteMove({handleEnter, inputLabel, inputClassName, className}: ControllerAbsoluteMoveProps) {
+export default function ControllerAbsoluteMove({handleEnter, inputLabel, inputClassName, className, locked}: ControllerAbsoluteMoveProps) {
     const [ inputValue, setInputValue ] = useState<number | null>(null);
 return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div 
+        className={cn(
+            "flex items-center space-x-2",
+            locked ? "pointer-events-none opacity-50 hover:cursor-not-allowed" : "",
+            className
+        )}
+    >
         <InputNumber label={inputLabel} labelPosition='right' className={`w-32 ${inputClassName}`} handleEnter={handleEnter} onChange={(input) => setInputValue(input)} inputClassName="text-right"/>
         <ArrowCircleRight size={24} className="hover:text-sky-500 hover:cursor-pointer" onClick={()=>handleEnter && handleEnter(inputValue)}/>
     </div>

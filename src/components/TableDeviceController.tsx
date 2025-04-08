@@ -4,12 +4,17 @@ import useOphydSocket from "@/hooks/useOphydSocket";
 import { Table, TableHeader, TableHead, TableCaption, TableBody, TableRow, TableCell } from "./ui/table";
 import ControllerAbsoluteMove from "./ControllerAbsoluteMove";
 import ControllerRelativeMove from "./ControllerRelativeMove";
+import { Devices } from "@/types/deviceControllerTypes";
 
-export default function TableDeviceController() {
-    const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
-    const deviceNameList = useMemo(()=>['IOC:m1', 'IOC:m2', 'IOC:m3'], []);
+type TableDeviceControllerProps = {
+    devices: Devices;
+    handleSetValueRequest: (deviceName: string, value: number) => void;
+    toggleDeviceLock: (deviceName: string, locked: boolean) => void;
+    toggleExpand: (deviceName: string) => void;
+}
 
-    const { devices, handleSetValueRequest, toggleDeviceLock, toggleExpand } = useOphydSocket(wsUrl, deviceNameList);
+export default function TableDeviceController({devices, handleSetValueRequest, toggleDeviceLock, toggleExpand}: TableDeviceControllerProps) {
+
 
     // State to track flashing rows
     const [flashingRows, setFlashingRows] = useState<Record<string, boolean>>({});
@@ -36,12 +41,12 @@ export default function TableDeviceController() {
         setFlashingRows(updatedFlashingRows);
     }, [devices]);
     return (
-        <Table className="max-w-[1000px] m-auto bg-neutral-50 border border-neutral-200" >
+        <Table className="max-w-[900px] m-auto bg-neutral-50 border border-neutral-200" >
         <TableCaption>Ophyd Devices.</TableCaption>
         <TableHeader>
             <TableRow>
-            <TableHead className="w-64">Device Name</TableHead>
-            <TableHead className="text-center">Current Value</TableHead>
+            <TableHead className="w-48">Device Name</TableHead>
+            <TableHead className="text-center pr-8">Current Value</TableHead>
             <TableHead className="text-left">Absolute Move</TableHead>
             <TableHead className="text-center">Relative Move</TableHead>
             </TableRow>
@@ -54,7 +59,7 @@ export default function TableDeviceController() {
                             <TableRow key={deviceName} className={`${flashingRows[deviceName] ? 'animate-flash1' : ''}`}>
                                 <TableCell 
                                     className="hover:cursor-pointer py-5" 
-                                    onClick={()=>toggleExpand(deviceName, device.locked)}
+                                    onClick={()=>toggleExpand(deviceName)}
                                 >
                                     <>
                                         <p>{deviceName}</p>
@@ -62,7 +67,7 @@ export default function TableDeviceController() {
                                     </>
                                 </TableCell>
                                 <TableCell className="text-center text-md">
-                                    {`${device.value} ${device.units ? device.units.slice(0, 3) : 'n/a'}`}
+                                    {`${typeof device.value === 'number' ? device.value.toPrecision(4) : device.value} ${device.units ? device.units.slice(0, 3) : 'n/a'}`}
                                 </TableCell>
                                 <TableCell className="">
                                     <ControllerAbsoluteMove 
