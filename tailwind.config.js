@@ -15,7 +15,17 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		colors: {}
+  		colors: {},
+		keyframes: {
+			flash: {
+				'0%, 100%': { backgroundColor: 'transparent' },
+				'50%': { backgroundColor: '#fef08a' }, // Yellow flash
+			},
+		},
+		animation: {
+			flash1: 'flash 0.5s ease-in-out', // 1-second flash animation
+			flash2: 'flash 0.5s ease-in-out', // 1-second flash animation
+		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

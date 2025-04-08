@@ -20,11 +20,11 @@ export default function ControllerRelativeMove({handleEnter, inputLabel, inputCl
 
     return (
         <div className={cn("flex items-center space-x-2", className)}>
-            <p className="font-extralight w-12 text-right">{subtractionText}</p>
+            <p className="font-extralight w-16 text-right">{subtractionText}</p>
             <ArrowCircleLeft size={24} className="hover:text-sky-500 hover:cursor-pointer" onClick={()=>handleEnter && handleEnter(resultantSubtraction)} />
             <InputNumber className={`w-24 text-center ${inputClassName}`} onChange={(input) => setInputValue(input)} inputClassName="text-center"/>
             <ArrowCircleRight size={24} className="hover:text-sky-500 hover:cursor-pointer" onClick={()=>handleEnter && handleEnter(resultantAddition)}/>
-            <p className="font-extralight w-12 text-left">{additionText}</p>
+            <p className="font-extralight w-16 text-left">{additionText}</p>
         </div>
     )
 }
