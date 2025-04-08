@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from "react";
 
-import { ArrowCircleRight } from "@phosphor-icons/react";
+import { ArrowCircleRight, ArrowCircleLeft } from "@phosphor-icons/react";
 import Button from "../../components/Button";
 import Tiled from "../../components/Tiled/Tiled";
 import { useNavigate } from "react-router";
 import { Table, TableCaption, TableBody, TableCell, TableRow, TableHead, TableHeader } from "@/components/ui/table"
 import InputNumber from "@/components/InputNumber";
+import ControllerAbsoluteMove from "@/components/ControllerAbsoluteMove";
+import ControllerRelativeMove from "@/components/ControllerRelativeMove";
 import useOphydSocket from "@/hooks/useOphydSocket";
 
 export default function About() {
@@ -19,14 +21,14 @@ export default function About() {
             <p className="text-sky-600">About</p>
             <Button text="sample page" cb={()=> {navigate('/samplepage1')}}/>
             <Button text="qserver" cb={()=> {navigate('/qserver')}}/>
-            <Table className="max-w-[900px] m-auto bg-neutral-50 border border-neutral-200" >
+            <Table className="max-w-[1000px] m-auto bg-neutral-50 border border-neutral-200" >
                 <TableCaption>Ophyd Devices.</TableCaption>
                 <TableHeader>
                     <TableRow>
                     <TableHead className="w-64">Device Name</TableHead>
                     <TableHead className="text-center">Current Value</TableHead>
-                    <TableHead>Absolute Move</TableHead>
-                    <TableHead className="">Relative Move</TableHead>
+                    <TableHead className="text-left">Absolute Move</TableHead>
+                    <TableHead className="text-center">Relative Move</TableHead>
                     </TableRow>
                 </TableHeader>
                     <TableBody>
@@ -44,15 +46,21 @@ export default function About() {
                                                 {device.expanded && <pre className="text-xs">{JSON.stringify(device, null, 2)}</pre>}
                                             </>
                                         </TableCell>
-                                        <TableCell className="text-center">{`${device.value} ${device.units ? device.units.slice(0, 3) : 'n/a'}`}</TableCell>
-                                        <TableCell>
-                                            <div className="flex items-center space-x-2">
-                                                <InputNumber label={device.units && device.units.slice(0,3)} labelPosition='right' className="w-32" handleEnter={(input)=>input!==null && handleSetValueRequest(deviceName, input)}/>
-                                                <ArrowCircleRight size={24} className="hover:text-sky-500 hover:cursor-pointer" />
-                                            </div>
+                                        <TableCell className="text-center text-md">
+                                            {`${device.value} ${device.units ? device.units.slice(0, 3) : 'n/a'}`}
                                         </TableCell>
                                         <TableCell className="">
-                                            <InputNumber label='mm' labelPosition='right' className="w-40"/>
+                                            <ControllerAbsoluteMove 
+                                                handleEnter={(input)=>input!==null && handleSetValueRequest(deviceName, input)} 
+                                                inputLabel={device.units && device.units.slice(0,3)}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="flex justify-center items-center">
+                                            <ControllerRelativeMove 
+                                                handleEnter={(input)=>input!==null && handleSetValueRequest(deviceName, input)} 
+                                                inputLabel={device.units && device.units.slice(0,3)} 
+                                                currentValue={typeof device.value === 'number' ? device.value : null}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 )
