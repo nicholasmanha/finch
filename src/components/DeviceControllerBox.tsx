@@ -12,6 +12,7 @@ type DeviceControllerBoxProps = {
 }
 
 export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, handleMinimizeClick }: DeviceControllerBoxProps) {
+    if (!device) return;
     const backgroundColorClass = device.locked ? 'bg-slate-400' : 'bg-slate-100';
     return (
         <article className={`w-96 border border-slate-300 rounded-xl flex flex-col ${backgroundColorClass} ${device.locked && 'opacity-60'}`}>
