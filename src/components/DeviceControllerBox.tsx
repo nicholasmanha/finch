@@ -32,7 +32,7 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                 <p className="text-xl">{`${typeof device.value === 'number' ? device.value.toPrecision(4) : device.value} ${device.units?.slice(0,3)}`}</p>
             </div>
             <div className="flex flex-col justify-center items-center py-8 ">
-                <p>Jog</p>
+                <p>Relative Move</p>
                 <ControllerRelativeMove
                     className="justify-center" 
                     handleEnter={(input)=>input!==null && handleSetValueRequest(device.name, input)} 

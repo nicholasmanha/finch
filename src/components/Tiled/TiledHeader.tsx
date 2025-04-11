@@ -1,5 +1,7 @@
 import { Breadcrumb } from "./types";
 import { getDefaultTiledUrl } from "./apiClient";
+//import blueskyLogo from "../../assets/bluesky-logo.png";
+import blueskyLogo from "./bluesky_logo.png"
 
 
 const chevronLeft = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="">
@@ -26,7 +28,7 @@ export default function TiledHeader({
     onLeftArrowClick,
     onRightArrowClick,
     onHomeClick,
-    imageUrl="/images/bluesky_logo.png",
+    imageUrl=blueskyLogo,
     title="Tiled",
     secondaryTitle=defaultUrl,
     ...props
