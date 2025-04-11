@@ -15,7 +15,7 @@ export default defineConfig(() => ({
     react(),
     tsConfigPaths(),
     dts({
-      include: ['src/components/'],
+      include: ['src/components/', 'src/vite-env.d.ts'],
     }),
   ],
   resolve: {
