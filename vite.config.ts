@@ -31,6 +31,13 @@ export default defineConfig(() => ({
             changeOrigin: true, // Needed for virtual hosted sites
             rewrite: (path) => path.replace(/^\/api\/qserver/, ''), // Remove "/api/qserver" from the path
         },
+        '/api/qserver/console': {
+        target: 'ws://localhost:8000/queue_server',
+        ws: true, 
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/qserver\/console/, ''), // Remove "/api/qserver" from the path
+        // No rewrite needed unless your backend expects a different path
+      },
     },
 },
   build: {

@@ -19,7 +19,6 @@ export default function QSList({ queueData=[], handleQItemClick=()=>{}, type='de
     };
 
     const handleScroll = () => {
-        console.log('scroll')
         if (listRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listRef.current;
             console.log({scrollTop, scrollHeight, clientHeight})
