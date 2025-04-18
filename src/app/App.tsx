@@ -12,7 +12,7 @@ function App() {
       <Route path="/" element={<About />} />
       <Route path="/samplepage1" element={<SamplePage1 />} />
       <Route path="/qserver" element={<QServer />} />
-      <Route path="/tiled" element={<Tiled />} />
+      <Route path="/tiled" element={<Tiled/>} />
     </Routes>
   )
 }
