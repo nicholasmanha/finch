@@ -20,6 +20,7 @@ type useTiledProps = {
 }
 type Url = string;
 export const useTiled = (url?:Url) => {
+    console.log('url', url)
     //console.log('run useTiled.ts')
 
     const [ columns, setColumns ] = useState<TiledSearchResult[]>([]);
@@ -173,7 +174,7 @@ export const useTiled = (url?:Url) => {
 
     const initializeData = async () => {
         //attempt to get data from base Tiled Url. Display error on UI if no data comes back
-        const response = await getSearchResults('', ()=>{});
+        const response = await getSearchResults('', ()=>{}, url);
         if (typeof response !== 'string' && 'data' in response) {
             setColumns([response]);
         }
@@ -183,7 +184,6 @@ export const useTiled = (url?:Url) => {
     useEffect(() => {
         //get first set of results from root
         try{
-            //getSearchResults('', (res:TiledSearchResult) => setColumns([res]), url);
             initializeData();
 
         } catch (e) {

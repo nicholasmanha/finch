@@ -32,26 +32,11 @@ export default function Tiled({
     const [ showStartupScreen, setShowStartupScreen ] = useState<boolean>(true);
     const [ url, setUrl ] = useState<undefined | string>(tiledBaseUrl);
 
-/*     const { 
-        columns, 
-        breadcrumbs,
-        previewItem,
-        previewSize,
-        handleColumnItemClick,
-        handleLeftArrowClick, 
-        handleRightArrowClick,
-        resetAllData,
-    } = useTiled(url);
-    
-    const handleSelectClick = (item:TiledSearchItem<TiledStructures>) => {
-        const links = generateLinksForCallback(item, url); //wont work due to stale state of url
-        onSelectCallback && onSelectCallback(links);
-        closeOnSelect && setIsClosed(true);
-    }; */
 
     const handleStartupScreenSubmit = () => {
         setShowStartupScreen(false);
     }
+
 
     if (!isClosed) {
         return (
@@ -62,14 +47,6 @@ export default function Tiled({
                             <StartupScreen url={url} handleUrlChange={setUrl} handleSubmit={handleStartupScreenSubmit}/>
                         :
                         <TiledContainer setIsClosed={setIsClosed} url={url} closeOnSelect={closeOnSelect} onSelectCallback={onSelectCallback}/>
-/*                         <>
-                            <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick} onRightArrowClick={handleRightArrowClick} onHomeClick={resetAllData} secondaryTitle={url}/>
-                            <TiledBody>
-                                <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick} handleSelectClick={handleSelectClick}/>
-                                {previewItem && <TiledPreview previewItem={previewItem} previewSize={previewSize} handleSelectClick={handleSelectClick} url={url}/>}
-                            </TiledBody>
-                            <TiledFooter breadcrumbs={breadcrumbs}/>
-                        </> */
                     }
                 </div>
             </div>
