@@ -110,27 +110,27 @@ const deviceIcons = {
 }
 
 const controllerIcons = {
-    leftArrowMinus: <svg  viewBox="0 0 43 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+    leftArrowMinus: <svg  viewBox="0 0 43 45" fill="none" xmlns="http://www.w3.org/2000/svg" >
         <g filter="url(#filter0_d_67_13)">
-        <path d="M4 19.5L33.25 2.6125L33.25 36.3875L4 19.5Z" fill="white"/>
+            <path d="M4 19.5L33.25 2.6125L33.25 36.3875L4 19.5Z" fill="currentColor"/>
         </g>
         <path d="M25.4489 19.0881V20.1818H20.9943V19.0881H25.4489Z" fill="#CFCFCF"/>
         <defs>
-        <filter id="filter0_d_67_13" x="0" y="2.6123" width="37.25" height="41.7754" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        <feOffset dy="4"/>
-        <feGaussianBlur stdDeviation="2"/>
-        <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_67_13"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_67_13" result="shape"/>
-        </filter>
+            <filter id="filter0_d_67_13" x="0" y="2.6123" width="37.25" height="41.7754" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                <feOffset dy="4"/>
+                <feGaussianBlur stdDeviation="2"/>
+                <feComposite in2="hardAlpha" operator="out"/>
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_67_13"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_67_13" result="shape"/>
+            </filter>
         </defs>
         </svg>,
-    rightArrowPlus: <svg  viewBox="0 0 43 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+    rightArrowPlus: <svg  viewBox="0 0 43 45" fill="currentColor" xmlns="http://www.w3.org/2000/svg" >
         <g filter="url(#filter0_d_67_14)">
-        <path d="M39 19.5L9.75 36.3875L9.75 2.6125L39 19.5Z" fill="white"/>
+        <path d="M39 19.5L9.75 36.3875L9.75 2.6125L39 19.5Z" fill="currentColor"/>
         </g>
         <path d="M19.0568 23.304V16.7415H20.1705V23.304H19.0568ZM16.3324 20.5795V19.4659H22.8949V20.5795H16.3324Z" fill="#CFCFCF"/>
         <defs>

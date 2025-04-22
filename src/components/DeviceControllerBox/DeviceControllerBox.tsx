@@ -85,7 +85,7 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
             </div>
             <div className="bg-[#A4CEF8] py-4 flex justify-center rounded-b-xl space-x-6">
                 <div 
-                    className={`h-16 aspect-square ${device.locked ? 'hover:cursor-not-allowed': 'hover:cursor-pointer'}`}
+                    className={`h-16 aspect-square text-white hover:text-slate-100  ${device.locked ? 'hover:cursor-not-allowed': 'hover:cursor-pointer'}`}
                     onClick={!device.locked ? handleDecrementClick : ()=>{}}
                 >
                     {controllerIcons.leftArrowMinus}
@@ -100,7 +100,7 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                     <p className="text-slate-700">{formattedCurrentValue}</p>
                 </div>
                 <div 
-                    className={`h-16 aspect-square ${device.locked ? 'hover:cursor-not-allowed': 'hover:cursor-pointer'}`}
+                    className={`h-16 aspect-square text-white hover:text-slate-100  ${device.locked ? 'hover:cursor-not-allowed': 'hover:cursor-pointer'}`}
                     onClick = {!device.locked ? handleIncrementClick : ()=>{}}
                 >
                     {controllerIcons.rightArrowPlus}
