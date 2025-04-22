@@ -12,15 +12,15 @@ type DeviceControllerBoxProps = {
     device: Device;
     handleSetValueRequest: (deviceName: string, value: number) => void;
     handleLockClick: (deviceName: string) => void;
-    handleMinimizeClick: (deviceName: string) => void;
     svgIcon?: React.ReactNode;
 }
 
-export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, handleMinimizeClick, svgIcon }: DeviceControllerBoxProps) {
+export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, svgIcon }: DeviceControllerBoxProps) {
     if (!device) return;
     const backgroundColorClass = device.locked ? 'bg-slate-400' : 'bg-slate-100';
     const [ absoluteMoveValue, setAbsoluteMoveValue ] = useState<number | null>(null);
     const [ relativeMoveIncrement, setRelativeMoveIncrement ] = useState<number | null>(null);
+    const [ isExpanded, setIsExpanded ] = useState(false);
 
     const formattedCurrentValue = `${typeof device.value === 'number' ? device.value.toPrecision(4) : device.value} ${device.units?.slice(0,3)}`;
     const handleIncrementClick = () => {
@@ -33,38 +33,52 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
             handleSetValueRequest(device.name, device.value - relativeMoveIncrement);
         }
     };
+
+    const handleQuestionMarkClick = () => {
+        setIsExpanded(!isExpanded);
+    }
     return (
-        <article className={`w-96 border border-slate-300 rounded-xl flex flex-col ${backgroundColorClass} ${device.locked && 'opacity-60'}`}>
+        <article className={`w-96 border border-slate-300 rounded-xl flex flex-col relative ${backgroundColorClass} ${device.locked && 'opacity-60'}`}>
+            {/*Row -Icons */}
             <div className="flex justify-between px-2 py-2 flex-shrink-0">
-                <div className="h-12 aspect-square bg-white rounded-full border border-slate-500 flex justify-center items-center">
+                <div 
+                    className="h-12 aspect-square bg-white rounded-full hover:cursor-pointer border border-slate-500 flex justify-center items-center text-slate-500 hover:text-slate-800"
+                    onClick={()=>handleLockClick(device.name)}
+                >
                     {device.locked 
                         ? 
                             <Lock 
                                 size={24} 
-                                className="text-slate-900 hover:text-green-900 hover:cursor-pointer" 
-                                onClick={()=>handleLockClick(device.name)}
+                                className="" 
+                                
                             /> 
                         : 
                             <LockOpen 
                                 size={24} 
-                                className="text-slate-500 hover:text-red-900 hover:cursor-pointer" 
-                                onClick={()=>handleLockClick(device.name)}
+                                className="" 
+                               
                             />
                     }
                 </div>
                 <div className="aspect-square h-12 text-slate-600">
                     {svgIcon && svgIcon}
                 </div>
-                <div className="h-12 aspect-square bg-white rounded-full border border-slate-500 flex justify-center items-center">
-                    <QuestionMark size={24} className="text-slate-500" onClick={() => handleMinimizeClick(device.name)} />
+                <div 
+                    className="h-12 aspect-square bg-white rounded-full border border-slate-500 flex justify-center items-center hover:cursor-pointer text-slate-500 hover:text-slate-900"
+                    onClick={handleQuestionMarkClick}
+                >
+                    <QuestionMark size={24} className=""  />
                 </div>
             </div>
+            {/* Row - Device Name */}
             <div className="flex justify-center items-center">
                 <p className="text-3xl text-slate-800">{device.name}</p>
             </div>
+            {/* Row - Current Device Value */}
             <div className="flex justify-center items-center ">
                 <p className="text-5xl py-4">{formattedCurrentValue}</p>
             </div>
+            {/* Row - Absolute move */}
             <div className="flex justify-center items-center py-8 space-x-4">
                 <InputNumber 
                     label={device.units && device.units.slice(0,3)}
@@ -83,6 +97,7 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                 />
 
             </div>
+            {/* Row - Relative Move */}
             <div className="bg-[#A4CEF8] py-4 flex justify-center rounded-b-xl space-x-6">
                 <div 
                     className={`h-16 aspect-square text-white hover:text-slate-100  ${device.locked ? 'hover:cursor-not-allowed': 'hover:cursor-pointer'}`}
@@ -105,8 +120,26 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                 >
                     {controllerIcons.rightArrowPlus}
                 </div>
-
             </div>
+
+            {/* Popup (Absolute Positioned) on Question Click */}
+            {
+                isExpanded &&
+                <div className="absolute top-0 left-0 w-full h-full z-30 bg-slate-100 flex flex-col p-2 rounded-xl">
+                    <div className="flex justify-between w-full flex-shrink-0">
+                        <p className="h-full flex items-center ml-8 text-slate-600 text-lg">{device.name} - {formattedCurrentValue}</p>
+                        <div 
+                            className="h-12 aspect-square bg-white rounded-full border border-slate-500 flex justify-center items-center hover:cursor-pointer text-slate-500 hover:text-slate-900"
+                            onClick={handleQuestionMarkClick}
+                        >
+                            <QuestionMark size={24} className=""  />
+                        </div>
+                    </div>
+                    <div className="flex-grow w-full overflow-auto mt-4 pl-8">
+                        <pre className="text-xs">{JSON.stringify(device, null, 2)}</pre>
+                    </div>                 
+                </div>
+            }
         </article>
     )
 }
