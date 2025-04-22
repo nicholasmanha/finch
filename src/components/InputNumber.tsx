@@ -12,9 +12,10 @@ type InputNumberProps = {
     handleEnter?: (input: number | null) => void;
     className?: string;
     inputClassName?: string;
+    disabled?: boolean;
 };
 
-export default function InputNumber({ label, onChange, warningMessage, isWarningVisible, min, max, handleEnter, labelPosition='left', className, inputClassName }: InputNumberProps) {
+export default function InputNumber({ label, onChange, warningMessage, isWarningVisible, min, max, handleEnter, labelPosition='left', className, inputClassName, disabled=false }: InputNumberProps) {
     const [value, setValue] = useState<number | null>(null);
     const [isValueInBounds, setIsValueInBounds] = useState(true);
 
@@ -42,11 +43,16 @@ export default function InputNumber({ label, onChange, warningMessage, isWarning
             <input
                 type="number" 
                 value={value === null ? '' : value}
-                className={cn(`w-full max-w-96 border pl-2 min-h-6 ${
-                    isWarningVisible ? 'border-red-500' : 'border-slate-300'
-                }`, inputClassName)}
+                className={
+                    cn(
+                        `w-full max-w-96 border pl-2 min-h-6 
+                        ${isWarningVisible ? 'border-red-500' : 'border-slate-300'}
+                        ${disabled && 'hover:cursor-not-allowed'}
+                        `,
+                         inputClassName)}
                 onChange={handleChange}
                 onKeyDown={handleEnterKey}
+                disabled={disabled}
             />
             {isWarningVisible && (
                 <p className="absolute left-0 -bottom-4 text-xs text-red-500">{warningMessage}</p>

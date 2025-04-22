@@ -98,5 +98,55 @@ const phosphorIcons = {
    chartPolar: <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 256 256"><path fill="currentColor" d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm87.63,96H191.48A64.1,64.1,0,0,0,136,64.52V40.37A88.13,88.13,0,0,1,215.63,120ZM120,120H80.68A48.09,48.09,0,0,1,120,80.68Zm0,16v39.32A48.09,48.09,0,0,1,80.68,136Zm16,0h39.32A48.09,48.09,0,0,1,136,175.32Zm0-16V80.68A48.09,48.09,0,0,1,175.32,120ZM120,40.37V64.52A64.1,64.1,0,0,0,64.52,120H40.37A88.13,88.13,0,0,1,120,40.37ZM40.37,136H64.52A64.1,64.1,0,0,0,120,191.48v24.15A88.13,88.13,0,0,1,40.37,136ZM136,215.63V191.48A64.1,64.1,0,0,0,191.48,136h24.15A88.13,88.13,0,0,1,136,215.63Z"></path></svg>,
 }
 
+const deviceIcons = {
+    linearStage: <svg width="38" height="25" viewBox="0 0 38 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 11.5L17.5 19.5M1 11.5L21.5 3.5L34.5 8.95161M1 11.5V15.5L17.5 24M17.5 19.5L37 10M17.5 19.5V24M37 10V13L17.5 24M37 10L34.5 8.95161M26.5 5.59677V2.5M26.5 2.5L31.5 4.5M26.5 2.5L30.5 1L34.5 3M31.5 4.5V7.69355M31.5 4.5L34.5 3M34.5 3V8.95161" stroke="black"/>
+        <path d="M25.4797 8.14108C25.5576 7.87616 25.406 7.59824 25.1411 7.52032L20.8239 6.25057C20.559 6.17265 20.2811 6.32425 20.2032 6.58917C20.1253 6.85409 20.2769 7.13202 20.5418 7.20993L24.3792 8.3386L23.2506 12.1761C23.1727 12.441 23.3242 12.7189 23.5892 12.7968C23.8541 12.8747 24.132 12.7231 24.2099 12.4582L25.4797 8.14108ZM13.5203 13.8589C13.4424 14.1238 13.594 14.4018 13.8589 14.4797L18.1761 15.7494C18.441 15.8273 18.7189 15.6758 18.7968 15.4108C18.8747 15.1459 18.7231 14.868 18.4582 14.7901L14.6208 13.6614L15.7494 9.82394C15.8273 9.55902 15.6758 9.28109 15.4108 9.20317C15.1459 9.12525 14.868 9.27685 14.7901 9.54177L13.5203 13.8589ZM25 8L24.7606 7.56105L13.7606 13.5611L14 14L14.2394 14.4389L25.2394 8.43895L25 8Z" fill="black"/>
+        </svg>,
+    stepperMotor: <svg viewBox="0 0 31 30" fill="none" strokeWidth={1} stroke="currentColor" className="" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 29.5H30V18.5M30 18.5H1M30 18.5L28 7.5H18M1 18.5L3.5 7.5H13M1 18.5V30M13 7.5V3M13 7.5V10.5C13 10.5 14.4485 11.5 15.5 11.5C16.5515 11.5 18 10.5 18 10.5V7.5M13 3C13 3 14.4485 4 15.5 4C16.5515 4 18 3 18 3M13 3C13 3 14.2497 0.999849 15.5 1C17 1.00018 18 3 18 3M18 3V7.5" stroke="black"/>
+        <path d="M6.5 11C6.5 11 11.571 15.4306 15.5 15.5C19.3456 15.5679 24.5 11.5 24.5 11.5M24.5 11.5L20.5 11M24.5 11.5V15.5" stroke="black"/>
+        </svg>,
+}
 
-export {tailwindIcons, phosphorIcons, customIcons};
+const controllerIcons = {
+    leftArrowMinus: <svg  viewBox="0 0 43 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_d_67_13)">
+        <path d="M4 19.5L33.25 2.6125L33.25 36.3875L4 19.5Z" fill="white"/>
+        </g>
+        <path d="M25.4489 19.0881V20.1818H20.9943V19.0881H25.4489Z" fill="#CFCFCF"/>
+        <defs>
+        <filter id="filter0_d_67_13" x="0" y="2.6123" width="37.25" height="41.7754" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="4"/>
+        <feGaussianBlur stdDeviation="2"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_67_13"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_67_13" result="shape"/>
+        </filter>
+        </defs>
+        </svg>,
+    rightArrowPlus: <svg  viewBox="0 0 43 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_d_67_14)">
+        <path d="M39 19.5L9.75 36.3875L9.75 2.6125L39 19.5Z" fill="white"/>
+        </g>
+        <path d="M19.0568 23.304V16.7415H20.1705V23.304H19.0568ZM16.3324 20.5795V19.4659H22.8949V20.5795H16.3324Z" fill="#CFCFCF"/>
+        <defs>
+        <filter id="filter0_d_67_14" x="5.75" y="2.6123" width="37.25" height="41.7754" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="4"/>
+        <feGaussianBlur stdDeviation="2"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_67_14"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_67_14" result="shape"/>
+        </filter>
+        </defs>
+        </svg>,
+}
+
+
+export {tailwindIcons, phosphorIcons, customIcons, deviceIcons, controllerIcons};

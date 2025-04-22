@@ -4,14 +4,14 @@ import { Device } from "@/types/deviceControllerTypes"
 import ControllerAbsoluteMove from "./ControllerAbsoluteMove";
 import ControllerRelativeMove from "./ControllerRelativeMove";
 
-type DeviceControllerBoxProps = {
+type DeviceControllerBoxSimpleProps = {
     device: Device;
     handleSetValueRequest: (deviceName: string, value: number) => void;
     handleLockClick: (deviceName: string) => void;
     handleMinimizeClick: (deviceName: string) => void;
 }
 
-export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, handleMinimizeClick }: DeviceControllerBoxProps) {
+export default function DeviceControllerBoxSimple({ device, handleSetValueRequest, handleLockClick, handleMinimizeClick }: DeviceControllerBoxSimpleProps) {
     if (!device) return;
     const backgroundColorClass = device.locked ? 'bg-slate-400' : 'bg-slate-100';
     return (

@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import Tiled from "../../components/Tiled/Tiled";
 import { useNavigate } from "react-router";
 import TableDeviceController from "@/components/TableDeviceController";
-import DeviceControllerBox from "@/components/DeviceControllerBox";
+import DeviceControllerBox from "@/components/DeviceControllerBox/DeviceControllerBox";
 
 import useOphydSocket from "@/hooks/useOphydSocket";
 

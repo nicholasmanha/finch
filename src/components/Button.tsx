@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 export type ButtonProps = {
     /** callback function on click */
     cb?: Function;
@@ -55,13 +57,16 @@ export default function Button({
     return (
         <button 
         disabled={disabled} 
-        className={`
-            ${isSecondary ? `${secondaryBgColor} ${secondaryTextColor} border` : `${bgColor} ${textColor}`}
-            ${disabled ? '' : (isSecondary ? secondaryHoverBgColor : hoverBgColor)} 
-            ${textSizes[size]} 
-            ${paddingSizes[size]} 
-            rounded-xl hover:cursor-pointer font-medium w-fit
-            ${styles}`} 
+        className={
+            `
+                rounded-xl  font-medium w-fit
+                ${isSecondary ? `${secondaryBgColor} ${secondaryTextColor} border` : `${bgColor} ${textColor}`}
+                ${disabled ? 'hover:cursor-not-allowed' : `${(isSecondary ? `secondaryHoverBgColor` : hoverBgColor)} hover:cursor-pointer`} 
+                ${textSizes[size]} 
+                ${paddingSizes[size]} 
+                ${styles}
+            `
+        } 
         onClick={e => handleClick(e)}
         {...props}>
                 <p>{text}</p>
