@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
 
-import DeviceControllerBox from "@/components/DeviceControllerBox/DeviceControllerBox";
+import DeviceControllerBox from "@/components/DeviceControllerBox";
 import { deviceIcons } from "@/assets/icons";
 
 export default function Devices() {

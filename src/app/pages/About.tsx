@@ -5,7 +5,7 @@ import Button from "../../components/Button";
 import Tiled from "../../components/Tiled/Tiled";
 import { useNavigate } from "react-router";
 import TableDeviceController from "@/components/TableDeviceController";
-import DeviceControllerBox from "@/components/DeviceControllerBox/DeviceControllerBox";
+import DeviceControllerBox from "@/components/DeviceControllerBox";
 
 import useOphydSocket from "@/hooks/useOphydSocket";
 
@@ -24,7 +24,7 @@ export default function About() {
             <Button text="qserver" cb={()=> {navigate('/qserver')}}/>
             <TableDeviceController devices={devices} handleSetValueRequest={handleSetValueRequest} toggleDeviceLock={toggleDeviceLock} toggleExpand={toggleExpand}/>
             <div className="w-full flex justify-center items-center py-12">
-                <DeviceControllerBox device={devices['IOC:m1']} handleSetValueRequest={handleSetValueRequest} handleLockClick={toggleDeviceLock} handleMinimizeClick={toggleExpand}/>
+                <DeviceControllerBox device={devices['IOC:m1']} handleSetValueRequest={handleSetValueRequest} handleLockClick={toggleDeviceLock}/>
             </div>
             {/* <div>
                 <Tiled onSelectCallback={(links:any) => console.log(links)} isPopup={true} closeOnSelect={true}/>

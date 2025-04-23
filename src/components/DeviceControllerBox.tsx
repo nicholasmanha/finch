@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Lock, LockOpen, ArrowsInSimple, QuestionMark } from "@phosphor-icons/react";
-
+import { cn } from "@/lib/utils";
+import { Lock, LockOpen, QuestionMark } from "@phosphor-icons/react";
 import { Device } from "@/types/deviceControllerTypes";
-import ControllerAbsoluteMove from "../ControllerAbsoluteMove";
-import ControllerRelativeMove from "../ControllerRelativeMove";
-import InputNumber from "../InputNumber";
-import Button from "../Button";
+import ControllerAbsoluteMove from "./ControllerAbsoluteMove";
+import ControllerRelativeMove from "./ControllerRelativeMove";
+import InputNumber from "./InputNumber";
+import Button from "./Button";
 import { controllerIcons } from "@/assets/icons";
 
 type DeviceControllerBoxProps = {
@@ -13,9 +13,10 @@ type DeviceControllerBoxProps = {
     handleSetValueRequest: (deviceName: string, value: number) => void;
     handleLockClick: (deviceName: string) => void;
     svgIcon?: React.ReactNode;
+    className?: string;
 }
 
-export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, svgIcon }: DeviceControllerBoxProps) {
+export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, svgIcon, className }: DeviceControllerBoxProps) {
     if (!device) return;
     const backgroundColorClass = device.locked ? 'bg-slate-400' : 'bg-slate-100';
     const [ absoluteMoveValue, setAbsoluteMoveValue ] = useState<number | null>(null);
@@ -38,7 +39,7 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
         setIsExpanded(!isExpanded);
     }
     return (
-        <article className={`w-96 border border-slate-300 rounded-xl flex flex-col relative ${backgroundColorClass} ${device.locked && 'opacity-60'}`}>
+        <article className={cn(`w-96 border border-slate-300 rounded-xl flex flex-col relative ${backgroundColorClass} ${device.locked && 'opacity-60'}`, className)}>
             {/*Row -Icons */}
             <div className="flex justify-between px-2 py-2 flex-shrink-0">
                 <div 
@@ -127,9 +128,9 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                 isExpanded &&
                 <div className="absolute top-0 left-0 w-full h-full z-30 bg-slate-100 flex flex-col p-2 rounded-xl">
                     <div className="flex justify-between w-full flex-shrink-0">
-                        <p className="h-full flex items-center ml-8 text-slate-600 text-lg">{device.name} - {formattedCurrentValue}</p>
+                        <p className=" h-full flex items-center ml-8 text-slate-600 text-lg text-clip">{device.name} | {formattedCurrentValue}</p>
                         <div 
-                            className="h-12 aspect-square bg-white rounded-full border border-slate-500 flex justify-center items-center hover:cursor-pointer text-slate-500 hover:text-slate-900"
+                            className="flex-shrink-0 h-12 aspect-square bg-white rounded-full border border-slate-500 flex justify-center items-center hover:cursor-pointer text-slate-500 hover:text-slate-900"
                             onClick={handleQuestionMarkClick}
                         >
                             <QuestionMark size={24} className=""  />
