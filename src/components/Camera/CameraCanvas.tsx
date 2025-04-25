@@ -1,7 +1,6 @@
-import { useState, useRef } from 'react';
-import { phosphorIcons } from "../../assets/icons";
-import { getCameraUrl } from '../../utilities/connectionHelper';
-
+import { useState, useRef, useEffect } from 'react';
+import { phosphorIcons } from "@/assets/icons";
+import { getDefaultCameraUrl } from './utils/apiClient';
 
 export default function CameraCanvas(
     {
@@ -11,17 +10,16 @@ export default function CameraCanvas(
         prefix=''
     }) 
     {
-        console.log('render canvas')
+        //console.log('render canvas')
 
-    const canvasRef = useRef(null);
-    const [fps, setFps] = useState(0);
+    const canvasRef = useRef<null | HTMLCanvasElement>(null);
+    const [fps, setFps] = useState<string>('0');
     const [socketStatus, setSocketStatus] = useState('closed');
-    const ws = useRef(null);
-    const frameCount = useRef(null);
-    const startTime = useRef(null);
-    const [src, setSrc] = useState('');
+    const ws = useRef<null | WebSocket>(null);
+    const frameCount = useRef<null | number>(null);
+    const startTime = useRef<null | Date>(null);
 
-    const sizeDict = {
+    const sizeDict: {[key:string]: number} = {
         small: 256,
         medium: 512,
         large: 1024,
@@ -30,7 +28,7 @@ export default function CameraCanvas(
 
     const defaultImageSuffix = 'image1:ArrayData';
     const defaultImagePV = '13SIM1:image1:ArrayData';
-    const defaultSizeSuffixes = {
+    const defaultSizeSuffixes:{[key:string]: string} = {
         startX: "cam1:MinX",
         startY: "cam1:MinY",
         sizeX: "cam1:SizeX",
@@ -63,7 +61,7 @@ export default function CameraCanvas(
         }
     };
 
-    const doesObjectStructureMatch = (obj1, obj2) => {
+    const doesObjectStructureMatch = (obj1:{[key:string]: any}, obj2:{[key:string]: any}) => {
         if (typeof obj1 !== "object" || typeof obj2 !== "object") return false;
         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
         try {
@@ -88,7 +86,7 @@ export default function CameraCanvas(
         } else {
             //Return object with concatenated values with user provided prefix and default suffixes
             if (prefix.length > 0 ) {
-                var tempSizePVs = {}
+                var tempSizePVs:{[key:string]: string} = {}
                 for (const key in defaultSizeSuffixes) {
                     let concatenatedPV = prefix + ':' + defaultSizeSuffixes[key];
                     tempSizePVs[key] = concatenatedPV;
@@ -101,15 +99,20 @@ export default function CameraCanvas(
     }
 
     const startWebSocket = () => {
+        if (canvasRef.current === null) return;
+        if (ws.current !== null) {
+            ws.current.close();
+        }
+       
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
 
         let isFrameReady = false;
-        let nextFrame = null;
+        let nextFrame:null | ImageBitmap = null;
     
 
         try {
-            var wsUrl = getCameraUrl();
+            var wsUrl = getDefaultCameraUrl();
             //ws.current = new WebSocket('ws://localhost:8000/pvws/pv');
             //ws.current = new WebSocket('ws://localhost/api/camera');
             ws.current = new WebSocket(wsUrl);
@@ -118,12 +121,13 @@ export default function CameraCanvas(
             return;
         }
         ws.current.onopen = (event) => {
+            if (ws.current === null) return;
             setSocketStatus('Open');
             frameCount.current = 0;
             startTime.current = new Date();
             //send message to websocket containing the pvs for the image and pixel size 
-            console.log('here')
-            console.log(getImageArrayPV())           
+            //console.log('here')
+            //console.log(getImageArrayPV())           
             let wsMessage = {imageArray_PV: getImageArrayPV(), ...getSizePVs()}
             ws.current.send(JSON.stringify(wsMessage));
         }
@@ -144,11 +148,12 @@ export default function CameraCanvas(
         }; */
 
         ws.current.onmessage = async function (event) {
+            if (canvasRef.current === null) return;
             if (typeof event.data === "string") {
                 if (canvasSize === 'automatic') {
                     // Resize canvas when size is set to automatic and ws sends string msg of dim changes
                     const dimensions = JSON.parse(event.data);
-                    console.log("Received dimensions:", dimensions);
+                    //console.log("Received dimensions:", dimensions);
                     canvasRef.current.width = dimensions.x;
                     canvasRef.current.height = dimensions.y;
                 }
@@ -159,10 +164,17 @@ export default function CameraCanvas(
                     const imageBitmap = await createImageBitmap(blob);
                     nextFrame = imageBitmap;
                     isFrameReady = true;  // Mark frame as ready
-                    let currentTime = new Date();
-                    var totalDurationSeconds = currentTime.getTime()/1000 - startTime.current.getTime()/1000;
-                    setFps(((frameCount.current + 1) / totalDurationSeconds).toPrecision(3));
-                    frameCount.current = frameCount.current + 1;
+                    if (startTime.current !== null && frameCount.current !== null) {
+                        let currentTime = new Date();
+                        var totalDurationSeconds = startTime.current && currentTime.getTime()/1000 - startTime.current.getTime()/1000;
+                        if (totalDurationSeconds > 5) {
+                            //reset the total duration so we can get an accurate fps.
+                            startTime.current = new Date();
+                            frameCount.current = 0;                            totalDurationSeconds = startTime.current && currentTime.getTime()/1000 - startTime.current.getTime()/1000;
+                        }
+                        setFps(((frameCount.current + 1) / totalDurationSeconds).toPrecision(3));
+                        frameCount.current = frameCount.current + 1;
+                    }
                 } catch (e) {
                     console.log('Error decoding/displaying camera frame: ' + e);
                 }
@@ -171,7 +183,7 @@ export default function CameraCanvas(
     
         // Rendering loop with requestAnimationFrame
         const render= () => {
-            if (isFrameReady) {
+            if (isFrameReady && context && nextFrame) {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.drawImage(nextFrame, 0, 0, canvas.width, canvas.height);
                 isFrameReady = false;
@@ -188,23 +200,35 @@ export default function CameraCanvas(
 
         ws.current.onclose = () => {
             setSocketStatus('closed');
+            frameCount.current = 0;
             console.log("Camera Web Socket closed");
         }
     }
 
     const closeWebSocket = () => {
-        try {
-            ws.current.close();
-        } catch (error) {
-            console.log({error});
-            return;
+        if (ws.current) {
+            try {
+                ws.current.close();
+            } catch (error) {
+                console.log({error});
+                return;
+            }
         }
         setSocketStatus('closed');
         frameCount.current = 0;
-        setFps(0);
+        setFps('0');
     };
 
-
+    useEffect(() => {
+        if (socketStatus === 'closed') {
+            startWebSocket();
+        }
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, [])
 
     return (
         <div className={`${canvasSize === 'small' ? 'max-w-[256px]' : ''} bg-slate-300 relative`}>

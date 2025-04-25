@@ -57,6 +57,9 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
                 locked: false,
                 timestamp: 0,
                 expanded: false,
+                pv: deviceName,
+                read_access: false,
+                write_access: false,
             };
         });
         setDevices(initialDevices);
@@ -91,10 +94,12 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
                         ...prevDevices,
                         [message.pv]: {
                             ...prevDevices[message.pv],
-                            connected: message.connected,
-                            units: message.units,
+                            ...message,
+                            //connected: message.connected,
+                            //units: message.units,
                             min: message.lower_ctrl_limit,
                             max: message.upper_ctrl_limit,
+                            
                         },
                     }));
                 } else if ('pv' in message) {

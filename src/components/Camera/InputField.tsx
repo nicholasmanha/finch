@@ -5,12 +5,13 @@ import InputInteger from "./InputInteger";
 import InputString from "./InputString";
 
 import { DetectorInput, CameraSettingsState } from "./types/cameraTypes";
+import { Devices } from "@/types/deviceControllerTypes";
 
 type InputFieldProps = {
     onSubmit: (pv: string, value: string | number | boolean) => void;
     pv: string;
     input: DetectorInput;
-    cameraSettingsPVs: CameraSettingsState;
+    cameraSettingsPVs: Devices;
 };
 export default function InputField ({onSubmit=()=>{}, pv='', input={suffix: "Example", label: "Example", type: 'integer', min:0, max:5}, cameraSettingsPVs}: InputFieldProps) {
     const exampleEnumInput = {
@@ -36,7 +37,7 @@ export default function InputField ({onSubmit=()=>{}, pv='', input={suffix: "Exa
         onSubmit(pv, newValue); //this will need to possibly take both number, string, and boolean
     };
 
-    const isPVConnected = pv in cameraSettingsPVs ? cameraSettingsPVs[pv].isConnected : false;
+    const isPVConnected = pv in cameraSettingsPVs ? cameraSettingsPVs[pv].connected : false;
 
     const renderInput = () => {
         switch (input.type) {
@@ -54,11 +55,22 @@ export default function InputField ({onSubmit=()=>{}, pv='', input={suffix: "Exa
         }
     };
     
+    let currentValueText = '';
+    //handle conversion of enum value (which is a number) to a corresponding human readable string (stored in the enum_strs property from pyepics).
+    if (isPVConnected && 'enum_strs' in cameraSettingsPVs[pv] && cameraSettingsPVs[pv].enum_strs && typeof cameraSettingsPVs[pv].value === 'number') {
+            currentValueText = cameraSettingsPVs[pv].enum_strs[cameraSettingsPVs[pv].value];
+    } else {
+        if (isPVConnected) {
+            currentValueText = cameraSettingsPVs[pv].value as string;
+        } else {
+            currentValueText = 'Not Connected';
+        }
+    }
 
     return (
         <li className="flex">
             {renderInput()}
-            <p className={`${isPVConnected ? 'text-sky-800' : 'text-red-400'} ml-6 overflow-auto text-nowrap`}>{isPVConnected ? ( 'text' in cameraSettingsPVs[pv] ? cameraSettingsPVs[pv].text : cameraSettingsPVs[pv].value) : `${pv} disconnected`}</p>
+            <p className={`${isPVConnected ? 'text-sky-800' : 'text-red-400'} ml-6 overflow-auto text-nowrap`}>{currentValueText}</p>
         </li>
     )
 }

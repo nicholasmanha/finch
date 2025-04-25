@@ -1,11 +1,10 @@
 //Everything related to EPICS / OPHYD device
+import {ValueUpdateResponse, MetaUpdateResponseBase } from "./ophydSocketTypes";
 
-export interface Device {
+export interface Device extends ValueUpdateResponse, Partial<MetaUpdateResponseBase> {
     min?: number | null;
     max?: number | null;
     name: string;
-    value: string | number | boolean;
-    connected: boolean;
     locked: boolean;
     timestamp: number;
     expanded: boolean;

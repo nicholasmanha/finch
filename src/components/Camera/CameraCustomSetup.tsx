@@ -1,24 +1,28 @@
 import { useState } from "react";
 import CameraContainer from "./CameraContainer";
-import Button from "../library/Button";
-import InputStringBoxRounded from "../library/InputStringBoxRounded";
-import InputEnumBoxRounded from "../library/InputEnumBoxRounded";
-import InputCheckbox from "../library/InputCheckBox";
+import Button from "@/components/Button";
+import InputStringBoxRounded from "@/components/InputStringBoxRounded";
+import InputEnumBoxRounded from "@/components/InputEnumBoxRounded";
+import InputCheckbox from "@/components/InputCheckBox";
 import { cameraDeviceData } from "./utils/cameraDeviceData";
+import { C } from "react-router/dist/development/route-data-aSUFWnQ6";
 
-const sizeMap = {
+const sizeMap:{[key:string]: string} = {
     small: 'Sm (256 x 256)',
     medium: 'Md (512 x 512)',
     large: 'Lg (1024 x 1024)',
     automatic: 'Auto (match detector size)'
 }
-export default function CameraCustomSetup() {
+
+type CameraCustomSetupProps = {
+}
+export default function CameraCustomSetup({}:CameraCustomSetupProps) {
     const [isSetupComplete, setIsSetupComplete] = useState(false);
     const [ warningMessage, setWarningMessage ] = useState('');
     const [ prefix, setPrefix ] = useState('');
     const [ showWarningGlobal, setShowWarningGlobal ] = useState(false);
     const [ detectorType, setDetectorType ] = useState(Object.keys(cameraDeviceData)[0]);
-    const [ canvasSize, setCanvasSize ] = useState('medium');
+    const [ canvasSize, setCanvasSize ] = useState<string>('medium');
     const [ enableControlPanel, setEnableControlPanel ] = useState(true);
     const [ enableSettings, setEnableSettings ] = useState(true);
 

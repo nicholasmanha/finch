@@ -1,9 +1,20 @@
 import { useState } from "react";
-
+import { DetectorInput } from "./types/cameraTypes";
 import InputField from "./InputField";
-import { tailwindIcons } from '../../assets/icons';
-
-export default function InputGroup({settingsGroup={}, prefix='13SIM1', cameraSettingsPVs={}, showTitleBar=true, onSubmit={onSubmit}}) {
+import { tailwindIcons} from '@/assets/icons';
+import { Devices } from "@/types/deviceControllerTypes";
+type InputGroupProps = {
+    settingsGroup: {
+        title: string;
+        prefix: string | null;
+        inputs: DetectorInput[]
+    },
+    prefix: string,
+    cameraSettingsPVs: Devices,
+    showTitleBar?: boolean,
+    onSubmit: (pv:string, value:string | boolean | number) => void
+}
+export default function InputGroup({settingsGroup, prefix='13SIM1', cameraSettingsPVs, showTitleBar=true, onSubmit}: InputGroupProps) {
     const [ isExpanded, setIsExpanded ] = useState(true);
 
     const handleHeadingClick = () => {
@@ -22,7 +33,6 @@ export default function InputGroup({settingsGroup={}, prefix='13SIM1', cameraSet
                         key={input.suffix} 
                         input={input}
                         cameraSettingsPVs={cameraSettingsPVs}
-                        prefix={prefix}
                         onSubmit={onSubmit}
                     />
                 )}

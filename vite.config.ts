@@ -25,18 +25,22 @@ export default defineConfig(() => ({
   },
   server: {
     proxy: {
-        // Proxy requests starting with "api/qserver" to the bluesky http server
         '/api/qserver': {
-            target: 'http://localhost:60610', // Backend server URL
-            changeOrigin: true, // Needed for virtual hosted sites
+            target: 'http://localhost:60610', 
+            changeOrigin: true, 
             rewrite: (path) => path.replace(/^\/api\/qserver/, ''), // Remove "/api/qserver" from the path
         },
         '/api/qserver/console': {
         target: 'ws://localhost:8000/queue_server',
         ws: true, 
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/qserver\/console/, ''), // Remove "/api/qserver" from the path
-        // No rewrite needed unless your backend expects a different path
+        rewrite: (path) => path.replace(/^\/api\/qserver\/console/, ''), // Remove "/api/qserver/console" from the path
+      },
+      '/api/camera': {
+        target: 'ws://localhost:8000/pvcamera',
+        ws: true, 
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/camera/, ''), // Remove "/api/camera" from the path
       },
     },
 },

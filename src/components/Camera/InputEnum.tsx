@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { tailwindIcons } from '../../assets/icons';
+import { tailwindIcons } from '@/assets/icons';
 
 type InputEnumProps = {
     label?: string;

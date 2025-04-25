@@ -1,5 +1,7 @@
-import { useState, useRef, useEffect } from "react";
-import { closeWebSocket, getPVWSUrl } from "../../../utilities/connectionHelper";
+import { useState, useRef, useEffect, useMemo } from "react";
+//import { closeWebSocket, getPVWSUrl } from "../../../utilities/connectionHelper";
+import useOphydSocket from "@/hooks/useOphydSocket";
+import { DetectorSetting } from "../types/cameraTypes";
 import dayjs from "dayjs";
 
 /**
@@ -24,19 +26,26 @@ import dayjs from "dayjs";
  * - **startAcquire**: Function to start acquiring images by writing a `1` to the control PV.
  * - **stopAcquire**: Function to stop acquiring images by writing a `0` to the control PV.
  */
-export const useCamera = ({prefix='', settings=[], enableControlPanel=true, enableSettings=true}) => {
+type CameraHookProps = {
+    prefix?: string;
+    settings: DetectorSetting[];
+    enableControlPanel?: boolean;
+    enableSettings?: boolean;
+}
+export const useCamera = ({prefix='', settings, enableControlPanel=true, enableSettings=true}: CameraHookProps) => {
+    const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
+    const deviceNameList = useMemo(()=>['IOC:m1', 'IOC:m2', 'IOC:m3'], []);
+    const { devices, handleSetValueRequest, toggleDeviceLock, toggleExpand } = useOphydSocket(wsUrl, deviceNameList);
 
     const [ cameraControlPV, setCameraControlPV ] = useState({});
-    const [ cameraSettingsPVs, setCameraSettingsPVs ] = useState({});
+    const [ cameraSettingsPVs, setCameraSettingsPVs ] = useState<{}>({});
 
     const connectionControl = useRef(null);
     const connectionSettings = useRef(null);
 
-    const wsUrl = getPVWSUrl();
-
 
     //helper function to return prefix with no whitespace or trailing ':'
-    const sanitizeInputPrefix = (prefix) => {
+    const sanitizeInputPrefix = (prefix:string) => {
         var santizedPrefix = '';
         if (prefix.trim().slice(-1) === ':') {
             santizedPrefix = prefix.trim().substring(0, prefix.length -1)
@@ -75,13 +84,13 @@ export const useCamera = ({prefix='', settings=[], enableControlPanel=true, enab
     };
 
     //creates and returns an array of PVs for the settings
-    const createSettingsPVArray = (settings=[], prefix='') => {
+    const createSettingsPVArray = (settings:DetectorSetting[], prefix:string) => {
         //settings is an array of objects, grouped by setting type
         //ex) a single pv suffix is at settings[0].inputs[0].suffix
 
         var sanitizedPrefix = sanitizeInputPrefix(prefix);
 
-        var pvArray = [];
+        var pvArray:string[] = [];
         settings.forEach((group) => {
             group.inputs.forEach((input) => {
                 //console.log(group.prefix)
@@ -92,9 +101,9 @@ export const useCamera = ({prefix='', settings=[], enableControlPanel=true, enab
         return pvArray;
     };
 
-    const initializeCameraSettingsPVState = (pvArray) => {
+    const initializeCameraSettingsPVState = (pvArray:string[]) => {
         //creates the object structure
-        var tempSettingsObject = {};
+        var tempSettingsObject:{[key:string]: any} = {};
         pvArray.forEach((pv) => {
             tempSettingsObject[pv] = {
                 value: null,
@@ -166,6 +175,7 @@ export const useCamera = ({prefix='', settings=[], enableControlPanel=true, enab
     };
 
     const updateSettingsPVs = (e) => {
+        //these examples are for PVWS, need to redo for Ophyd Socket
         const exampleSuccessMessage = {
             "pv": "13SIM1:cam1:Acquire",
             "readonly": true, //true when readonly, false when you can write to PV

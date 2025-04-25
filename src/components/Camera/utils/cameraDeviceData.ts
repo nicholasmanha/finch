@@ -1,3 +1,6 @@
+import { DetectorSetting } from "../types/cameraTypes";
+
+
 const type = {
     enum: "enum",
     float: "float",
@@ -9,7 +12,7 @@ const type = {
 //Define custom area detector settings here. The suffix should not include the initial prefix
 // ex) For 13sim1:cam1:DataType, the prefix would be "13sim1:cam1:" and the suffix added to this
 // form would just be "DataType." This allows users to provide unique device prefixes 
-const adSimDetector = [
+const adSimDetector: DetectorSetting[] = [
     {
         title: "Acquisition Settings",
         icon: null,
@@ -18,55 +21,55 @@ const adSimDetector = [
             {
                 suffix:"AcquireTime",
                 label: "Exposure Time",
-                type: type.float,
+                type: 'float',
                 min: 0.00001,
                 max: 10
             },
             {
                 suffix:"AcquirePeriod",
                 label: "Acquire Period",
-                type: type.float,
+                type: 'float',
                 min: 0.01,
                 max: 10
             },
             {
                 suffix: "NumImages",
                 label: "Num Images",
-                type: type.integer,
+                type: 'integer',
                 min: 1,
                 max: 100
             },
             {
                 suffix: "ColorMode",
                 label: "Color Mode",
-                type: type.enum,
+                type: 'enum',
                 enums: ["Mono", "RGB1", "RGB2", "RGB3"]
             },
             {
                 suffix: "GainRed",
                 label: "Gain Red",
-                type: type.float,
+                type: 'float',
                 min: 0,
                 max: 100
             },
             {
                 suffix: "GainGreen",
                 label: "Gain Green",
-                type: type.float,
+                type: 'float',
                 min: 0,
                 max: 100
             },
             {
                 suffix: "GainBlue",
                 label: "Gain Blue",
-                type: type.float,
+                type: 'float',
                 min: 0,
                 max: 100
             },
             {
                 suffix: "DataType",
                 label: "Data Type",
-                type: type.enum,
+                type: 'enum',
                 enums: ["Int8", "UInt8","Int16", "UInt16"]
             },
         ],
@@ -79,28 +82,28 @@ const adSimDetector = [
             {
                 suffix: "MinX",
                 label: "start X",
-                type: type.integer,
+                type: 'integer',
                 min: 0,
                 max: 1024
             },
             {
                 suffix: "MinY",
                 label: "start Y",
-                type: type.integer,
+                type: 'integer',
                 min: 0,
                 max: 1024
             },
             {
                 suffix: "SizeX",
                 label: "Size X",
-                type: type.integer,
+                type: 'integer',
                 min: 1,
                 max: 1024
             },
             {
                 suffix: "SizeY",
                 label: "Size Y",
-                type: type.integer,
+                type: 'integer',
                 min: 1,
                 max: 1024
             },
@@ -109,19 +112,19 @@ const adSimDetector = [
     {
         title: "Plugins",
         icon: null,
-        prefix: null,
+        prefix: null, //TO DO: check if we could make this an empty string and therefore remove null from prefix type
         inputs: [
             {
                 suffix: "image1:EnableCallbacks",
                 label: "ND Array Port",
-                type: type.enum,
+                type: 'enum',
                 enums: ['Enable', 'Disable']
             },
         ]
     }
 ];
 
-const basler = [
+const basler:DetectorSetting[] = [
     {
         title: "Acquisition Settings",
         icon: null,
@@ -130,55 +133,55 @@ const basler = [
             {
                 suffix:"AcquireTime",
                 label: "Exposure Time",
-                type: type.float,
+                type: 'float',
                 min: 0.00001,
                 max: 10
             },
             {
                 suffix:"AcquirePeriod",
                 label: "Acquire Period",
-                type: type.float,
+                type: 'float',
                 min: 0.01,
                 max: 10
             },
             {
                 suffix: "NumImages",
                 label: "Num Images",
-                type: type.integer,
+                type: 'integer',
                 min: 1,
                 max: 100
             },
             {
                 suffix: "ColorMode",
                 label: "Color Mode",
-                type: type.enum,
+                type: 'enum',
                 enums: ["Mono", "RGB1", "RGB2", "RGB3"]
             },
             {
                 suffix: "GainRed",
                 label: "Gain Red",
-                type: type.float,
+                type: 'float',
                 min: 0,
                 max: 100
             },
             {
                 suffix: "GainGreen",
                 label: "Gain Green",
-                type: type.float,
+                type: 'float',
                 min: 0,
                 max: 100
             },
             {
                 suffix: "GainBlue",
                 label: "Gain Blue",
-                type: type.float,
+                type: 'float',
                 min: 0,
                 max: 100
             },
             {
                 suffix: "DataType",
                 label: "Data Type",
-                type: type.enum,
+                type: 'enum',
                 enums: ["Int8", "UInt8","Int16", "UInt16"]
             },
         ],
@@ -191,28 +194,28 @@ const basler = [
             {
                 suffix: "MinX",
                 label: "start X",
-                type: type.integer,
+                type: 'integer',
                 min: 0,
                 max: 1024
             },
             {
                 suffix: "MinY",
                 label: "start Y",
-                type: type.integer,
+                type: 'integer',
                 min: 0,
                 max: 1024
             },
             {
                 suffix: "SizeX",
                 label: "Size X",
-                type: type.integer,
+                type: 'integer',
                 min: 1,
                 max: 1024
             },
             {
                 suffix: "SizeY",
                 label: "Size Y",
-                type: type.integer,
+                type: 'integer',
                 min: 1,
                 max: 1024
             },
@@ -226,7 +229,7 @@ const basler = [
             {
                 suffix: "image1:EnableCallbacks",
                 label: "ND Array Port",
-                type: type.enum,
+                type: 'enum',
                 enums: ['Enable', 'Disable']
             },
         ]
@@ -235,7 +238,7 @@ const basler = [
 
 
 // Add new camera IOCs to cameraDeviceData to be discoverable in the app
-const cameraDeviceData = {
+const cameraDeviceData:{[key:string]: DetectorSetting[]} = {
     ADSimDetector: adSimDetector,
     basler: basler
 }

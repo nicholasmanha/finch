@@ -1,7 +1,10 @@
+import { ValueUpdateResponse, MetaUpdateResponse } from "@/types/ophydSocketTypes";
+
+
 export interface DetectorSetting {
     title: string;
     icon: null | JSX.Element;
-    prefix: string;
+    prefix: string | null;
     inputs: DetectorInput[];
 }
 
@@ -15,6 +18,7 @@ export interface DetectorInput {
     max?: number;
     enums?: string[];
 }
+
 
 export interface EnumProperties {
     enums: string[];
@@ -36,9 +40,22 @@ export type DetectorProperties = EnumProperties | NumberProperties | IntegerProp
 
 export interface CameraSettingsState {
     [key: string]: {
-        value: string | number | boolean | null;
+        value: string | number | boolean | null; //number for both enums and intengers/float
         lastUpdated: number;
         pv: string;
-        isConnected: boolean;
+        connected: boolean;
+        text?: string; //only exists for enums
     };
+}
+
+export interface CameraControlPV {
+    pv: string;
+    readonly: string;
+    type: string;
+    seconds: number;
+    nanos: number;
+    value?: string | number | boolean | null;
+    vtype?: string;
+    labels?: string[];
+    severity?: string;
 }

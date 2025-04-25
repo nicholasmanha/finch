@@ -19,7 +19,7 @@ export interface ValueUpdateResponse {
     write_access: boolean;
 }
 
-export interface MetaUpdateResponse extends ValueUpdateResponse {
+export interface MetaUpdateResponseBase {
     status: number;
     severity: number;
     precision: number;
@@ -32,6 +32,9 @@ export interface MetaUpdateResponse extends ValueUpdateResponse {
     enum_strs: null | string[];
     setpoint_precision: null | number;
     sub_type: 'meta';
+}
+//split up to make device types more flexible when they aren't connected
+export interface MetaUpdateResponse extends MetaUpdateResponseBase, ValueUpdateResponse {
 }
 
 //Requests
