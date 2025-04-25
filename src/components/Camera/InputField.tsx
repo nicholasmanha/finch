@@ -14,30 +14,25 @@ type InputFieldProps = {
     cameraSettingsPVs: Devices;
 };
 export default function InputField ({onSubmit=()=>{}, pv='', input={suffix: "Example", label: "Example", type: 'integer', min:0, max:5}, cameraSettingsPVs}: InputFieldProps) {
-    const exampleEnumInput = {
-        suffix: "DataType",
-        label: "Data Type",
-        type: type.enum,
-        enums: ["Int8", "UInt8","Int16", "UInt16"]
-    };
 
-    const exampleIntegerInput = {
-        suffix: "NumImages",
-        label: "Num Images",
-        type: type.integer,
-        min: 1,
-        max: 100
-    };
+    //check if the input is an enum..
+    let isEnum = false;
     
     //create custom wrapper around submit function so we can correctly pass in the pv.
     //pv is determined in this component but not passed to children as a direct prop
     //This decouples the child component from needing the PV
-    const handleSubmitWithPV = (newValue: string | number | boolean) => {
-        console.log('submit with PV: ' + pv + 'and new value: ' + newValue)
-        onSubmit(pv, newValue); //this will need to possibly take both number, string, and boolean
-    };
-
+    
     const isPVConnected = pv in cameraSettingsPVs ? cameraSettingsPVs[pv].connected : false;
+    if (isPVConnected && 'enum_strs' in cameraSettingsPVs[pv] && cameraSettingsPVs[pv].enum_strs && typeof cameraSettingsPVs[pv].value === 'number') {
+        isEnum = true;
+    }
+    
+    const handleSubmitWithPV = (newValue: string | number | boolean) => {
+        if (isPVConnected && 'enum_strs' in cameraSettingsPVs[pv] && cameraSettingsPVs[pv].enum_strs && typeof cameraSettingsPVs[pv].value === 'number') {
+            onSubmit(pv, cameraSettingsPVs[pv].enum_strs.indexOf(newValue as string));
+        }
+        onSubmit(pv, newValue); //needs a new function for handling enums
+    };
 
     const renderInput = () => {
         switch (input.type) {
