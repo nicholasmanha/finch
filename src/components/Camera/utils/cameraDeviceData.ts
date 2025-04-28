@@ -19,6 +19,12 @@ const adSimDetector: DetectorSetting[] = [
         prefix: 'cam1',
         inputs: [
             {
+                suffix:"ImageMode",
+                label: "Capture Mode",
+                type: 'enum',
+                enums: ['Single', 'Multiple', 'Continuous']
+            },
+            {
                 suffix:"AcquireTime",
                 label: "Exposure Time",
                 type: 'float',
@@ -46,6 +52,25 @@ const adSimDetector: DetectorSetting[] = [
                 enums: ["Mono", "RGB1", "RGB2", "RGB3"]
             },
             {
+                suffix: "DataType",
+                label: "Data Type",
+                type: 'enum',
+                enums: ["Int8", "UInt8","Int16", "UInt16"]
+            },
+        ],
+    },
+    {
+        title: "Simulation Settings",
+        icon: null,
+        prefix: 'cam1',
+        inputs: [
+            {
+                suffix: "SimMode",
+                label: "Sim Mode",
+                type: 'enum',
+                enums: ["LinearRamp", "Peaks","Sine", "Offset&Noise"]
+            },
+            {
                 suffix: "GainRed",
                 label: "Gain Red",
                 type: 'float',
@@ -67,32 +92,37 @@ const adSimDetector: DetectorSetting[] = [
                 max: 100
             },
             {
-                suffix: "DataType",
-                label: "Data Type",
-                type: 'enum',
-                enums: ["Int8", "UInt8","Int16", "UInt16"]
+                suffix: "Noise",
+                label: "Noise",
+                type: 'float',
+                min: 0,
+                max: 100
             },
-        ],
+
+        ]
     },
     {
         title: "Size Settings",
         icon: null,
         prefix: 'cam1',
         inputs: [
-            {
-                suffix: "MinX",
-                label: "start X",
-                type: 'integer',
-                min: 0,
-                max: 1024
-            },
-            {
-                suffix: "MinY",
-                label: "start Y",
-                type: 'integer',
-                min: 0,
-                max: 1024
-            },
+            //Removed these settings for now, the backend tries to re size an image based on minX/Y 
+            //but it seems the img always starts from 0,0.
+            //There is probably a plugin that is used for MinX/Y, figure out later.
+            // {
+            //     suffix: "MinX",
+            //     label: "start X",
+            //     type: 'integer',
+            //     min: 0,
+            //     max: 1024
+            // },
+            // {
+            //     suffix: "MinY",
+            //     label: "start Y",
+            //     type: 'integer',
+            //     min: 0,
+            //     max: 1024
+            // },
             {
                 suffix: "SizeX",
                 label: "Size X",
