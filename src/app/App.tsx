@@ -20,7 +20,7 @@ function App() {
     {element:<About />, path: "/", label: "Home", icon: <House size={32} />},
     {element:<BoltControl/>, path: "/control", label: "Control", icon: <Joystick size={32} />},
     {element:<QServer />, path: "/qserver", label: "Q Server", icon: <StackPlus size={32} />},
-    {element:<Tiled />, path: "/tiled", label: "Tiled", icon: <ImageSquare size={32} />},
+    {element:<Tiled />, path: "/data", label: "Data", icon: <ImageSquare size={32} />},
   ]
   return (
     <HubAppLayout routes={routes}/>

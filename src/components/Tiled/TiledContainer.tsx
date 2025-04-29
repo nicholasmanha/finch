@@ -44,12 +44,12 @@ export default function TiledContainer({
 
     return (
         <>
-        <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick} onRightArrowClick={handleRightArrowClick} onHomeClick={resetAllData} secondaryTitle={url}/>
-        <TiledBody>
-            <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick} handleSelectClick={handleSelectClick}/>
-            {previewItem && <TiledPreview previewItem={previewItem} previewSize={previewSize} handleSelectClick={handleSelectClick} url={url}/>}
-        </TiledBody>
-        <TiledFooter breadcrumbs={breadcrumbs}/>
-    </>
+            <TiledHeader breadcrumbs={breadcrumbs} onLeftArrowClick={handleLeftArrowClick} onRightArrowClick={handleRightArrowClick} onHomeClick={resetAllData} secondaryTitle={url}/>
+            <TiledBody>
+                <TiledColumns columns={columns} breadcrumbs={breadcrumbs} onItemClick={handleColumnItemClick} handleSelectClick={handleSelectClick}/>
+                {previewItem && <TiledPreview previewItem={previewItem} previewSize={previewSize} handleSelectClick={handleSelectClick} url={url}/>}
+            </TiledBody>
+            <TiledFooter breadcrumbs={breadcrumbs}/>
+        </>
     )
 }
