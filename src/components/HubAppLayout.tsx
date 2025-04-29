@@ -17,12 +17,12 @@ export default function HubAppLayout ( {
 
 return (
     <div className="grid grid-cols-[6rem_1fr] grid-rows-[auto_1fr] h-screen">
-        {/* Sidebar extends vertically the full height of the page */}
         <HubSidebar routes={routes} />
-        {/* Header is to the right of the sidebar, extends to the right end of the page */}
         <HubHeader title={headerTitle} logoUrl={headerLogoUrl}/>
-        {/* Main fills out the bottom right area remaining on the page */}
-        <HubMainContent routes={routes} />
+        <HubMainContent 
+            routes={routes}
+            className="h-[calc(100vh-4rem)]" 
+        />
     </div>
 )
   }

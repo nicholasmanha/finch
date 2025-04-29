@@ -1,21 +1,29 @@
-//import QItemPopup from "./QItemPopup";
+import { useState,  useEffect, } from 'react';
+
 import QItemPopup from "./QItemPopup";
 import SidePanel from "./SidePanel";
 import MainPanel from "./MainPanel";
 import SettingsContainer from "./SettingsContainer";
 import QSConsole from "./QSConsole";
 import QSAddItem from "./QSAddItem";
-import { tailwindIcons } from "src/assets/icons";
 import QSList from "./QSList";
 import QSRunEngineWorker from "./QSRunEngineWorker";
+
+import { tailwindIcons } from "src/assets/icons";
+
 import { getStatus, getQueueItem, openWorkerEnvironment } from "./utils/apiClient";
-import { useState,  useEffect, } from 'react';
+
 import { useQueueServer } from "./hooks/useQueueServer";
+
 import { CopiedPlan, ParameterInput, PopupItem } from "./types/types";
 import { GetStatusResponse } from "./types/apiTypes";
 
+import { cn } from '@/lib/utils';
 
-export default function ContainerQServer() {
+export type ContainerQServerProps = {
+    className?: string;
+}
+export default function ContainerQServer({className}:ContainerQServerProps) {
 
     const [ isQItemPopupVisible, setIsQItemPopupVisible ] = useState(false);
     const [ popupItem, setPopupItem ] = useState<PopupItem | null>(null);
@@ -99,7 +107,7 @@ export default function ContainerQServer() {
     }, [])
 
     return (
-        <main className="max-w-screen-3xl w-full min-w-[52rem] h-screen min-h-[50rem] m-auto flex rounded-md relative bg-slate-400 border ">
+        <main className={cn("max-w-screen-3xl w-full min-w-[52rem] h-full min-h-[50rem] m-auto flex rounded-md relative bg-slate-400 border border-slate-400", className)}>
             {/* ITEM POPUP  */}
             {(isQItemPopupVisible && popupItem!==null) && (
                 <QItemPopup 
@@ -123,7 +131,7 @@ export default function ContainerQServer() {
                 </SidePanel>
             </div>
 
-            <div className="flex-grow bg-slate-400 rounded-md">
+            <div className="flex-grow  rounded-md">
                 <MainPanel minimizeAllWidgets={minimizeAllWidgets} expandPanel={handleSidepanelExpandClick}>
                     <SettingsContainer 
                         title="Settings" 

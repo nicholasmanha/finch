@@ -1,13 +1,15 @@
 import { Routes, Route } from "react-router";
+import { cn } from "@/lib/utils";
 
 import { RouteItem } from "@/types/navigationRouterTypes";
 
 type HubMainContentProps = {
     routes: RouteItem[];
+    className?: string;
 }
-export default function HubMainContent({routes}: HubMainContentProps) {
+export default function HubMainContent({routes, className}: HubMainContentProps) {
     return (
-        <main className="bg-sky-900">
+        <main className={cn("bg-sky-900 h-full w-full", className)}>
             <Routes>
                 {routes.map((route) => (
                     <Route
