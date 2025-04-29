@@ -7,8 +7,24 @@ import Tiled from '../components/Tiled/Tiled';
 import Devices from './pages/Devices';
 import Bolt from './pages/Bolt';
 import Camera from './pages/Camera';
+import HubAppLayout from '@/components/HubAppLayout';
+import BoltControl from '@/features/bolt/BoltControl';
+import ContainerQServer from '@/components/QServer/ContainerQServer';
+
+import { RouteItem } from '@/types/navigationRouterTypes';
+
+import { House, Joystick, StackPlus, ImageSquare  } from "@phosphor-icons/react";
 
 function App() {
+  const routes:RouteItem[] = [
+    {element:<About />, path: "/", label: "Home", icon: <House size={32} />},
+    {element:<BoltControl/>, path: "/control", label: "Control", icon: <Joystick size={32} />},
+    {element:<QServer />, path: "/qserver", label: "Q Server", icon: <StackPlus size={32} />},
+    {element:<Tiled />, path: "/tiled", label: "Tiled", icon: <ImageSquare size={32} />},
+  ]
+  return (
+    <HubAppLayout routes={routes}/>
+  )
 
   return (
     <Routes>
