@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 import { RouteItem } from "@/types/navigationRouterTypes";
 
-type HubMainContentProps = {
+export type HubMainContentProps = {
     routes: RouteItem[];
     className?: string;
 }

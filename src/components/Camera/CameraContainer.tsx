@@ -10,14 +10,14 @@ import useOphydSocket from "@/hooks/useOphydSocket";
 import { DetectorSetting } from "./types/cameraTypes";
 
 //"13SIM1:image1:ArrayData"
-type CameraContainerProps = {
+export type CameraContainerProps = {
     prefix: string;
     customSetup?: boolean;
     imageArrayPV?: string;
     settings?: DetectorSetting[];
     enableControlPanel?: boolean;
     enableSettings?: boolean;
-    canvasSize?: string;
+    canvasSize?: 'small' | 'medium' | 'large' | 'automatic';
     sizePVs?: {
         startX_pv: string;
         startY_pv: string;

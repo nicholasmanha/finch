@@ -8,7 +8,7 @@ import InputNumber from "./InputNumber";
 import Button from "./Button";
 import { controllerIcons } from "@/assets/icons";
 
-type DeviceControllerBoxProps = {
+export type DeviceControllerBoxProps = {
     device: Device;
     handleSetValueRequest: (deviceName: string, value: number) => void;
     handleLockClick: (deviceName: string) => void;

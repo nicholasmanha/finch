@@ -24,6 +24,23 @@ function App() {
 
 You will only need to import 'bluesky-web/style.css' once, so long as it is imported inside a component that is high enough in the React tree to include all bluesky-web components.
 
+To use the `HubAppLayout` component, the entire app should be wrapped in a react-router component. This code example assumes react-router version 7, older version may need to import from react-router-dom.
+
+```js
+//main.tsx
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router'
+import './app/index.css'
+import App from './app/App'
+
+createRoot(document.getElementById('root')!).render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+)
+
+```
+
 Hint: To quickly check the props that a component takes on typescript apps, press 'ctrl+space' when clicked inside a component.
 
 # Installation - Developer

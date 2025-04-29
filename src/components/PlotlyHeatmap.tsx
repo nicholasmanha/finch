@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
-type PlotlyHeatMapProps = {
+export type PlotlyHeatmapProps = {
     /** A nested array displayed top-down */
     array: number[][],
     /** The plot title */
@@ -31,7 +31,7 @@ type PlotlyHeatMapProps = {
 }
 
 //TODO: there are some issues with the display when zooming out
-export default function PlotlyHeatMap({
+export default function PlotlyHeatmap({
     array, //2d array [[1, 2, 3], [2, 2 1]]
     title = '',
     xAxisTitle = '',
@@ -45,7 +45,7 @@ export default function PlotlyHeatMap({
     showScale = true,
     lockPlotHeightToParent=false, //locks the height of the plot to the height of the container, should not be set to True if lockPlotWidthHeightToInputArray is on
     lockPlotWidthHeightToInputArray=false, //restricts the maximum view of the plot so that it never exceeds a 1 pixel to 1 array element density
-}: PlotlyHeatMapProps) {
+}: PlotlyHeatmapProps) {
     const plotContainer = useRef(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 }); //applied to plot, not the container
 

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type PaperProps = {
+export type PaperProps = {
     size?: 'small' | 'medium' | 'large',
     rounded?: 'none' | 'small' | 'medium' | 'large',
     title?: string,

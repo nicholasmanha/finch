@@ -2,13 +2,19 @@ import { useState, useRef, useEffect } from 'react';
 import { phosphorIcons } from "@/assets/icons";
 import { getDefaultCameraUrl } from './utils/apiClient';
 
+export type CameraCanvasProps = {
+    imageArrayPV?: string;
+    sizePVs?: {[key:string]: string};
+    canvasSize?: 'small' | 'medium' | 'large' | 'automatic';
+    prefix?: string;
+}
 export default function CameraCanvas(
     {
         imageArrayPV='', 
         sizePVs={}, 
         canvasSize='medium',
         prefix=''
-    }) 
+    }: CameraCanvasProps) 
     {
         //console.log('render canvas')
 

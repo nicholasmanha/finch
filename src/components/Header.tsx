@@ -1,5 +1,5 @@
 //const als_logo = "/images/als_logo_wheel.png";
-type HeaderProps = {
+export type HeaderProps = {
     /** The title */
     title?: string;
     /** Tailwind ClassName */

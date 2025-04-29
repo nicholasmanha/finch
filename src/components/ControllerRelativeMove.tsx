@@ -3,7 +3,7 @@ import { useState} from "react";
 import InputNumber from "./InputNumber";
 import { cn } from "@/lib/utils";
 import { ArrowCircleRight, ArrowCircleLeft } from "@phosphor-icons/react";
-type ControllerRelativeMoveProps = {
+export type ControllerRelativeMoveProps = {
     handleEnter?: (input: number | null) => void;
     inputLabel?: string;
     inputClassName?: string;

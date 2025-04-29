@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import Plot, { PlotParams } from 'react-plotly.js';
 
-type PlotlyScatterProps = {
+export type PlotlyScatterProps = {
   data: PlotParams['data'];
   title?: string;
   xAxisTitle?: string;

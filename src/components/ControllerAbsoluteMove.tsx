@@ -4,7 +4,7 @@ import { ArrowCircleRight } from "@phosphor-icons/react";
 import InputNumber from "./InputNumber";
 import { cn } from "@/lib/utils";
 
-type ControllerAbsoluteMoveProps = {
+export type ControllerAbsoluteMoveProps = {
     handleEnter?: (input: number | null) => void;
     inputLabel?: string;
     inputClassName?: string;

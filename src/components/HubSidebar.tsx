@@ -2,7 +2,8 @@ import { NavLink } from "react-router";
 import { cn } from "@/lib/utils";
 
 import { RouteItem } from "@/types/navigationRouterTypes";
-type HubSidebarProps = {
+
+export type HubSidebarProps = {
     routes: RouteItem[];
 }
 export default function HubSidebar({routes}: HubSidebarProps) {

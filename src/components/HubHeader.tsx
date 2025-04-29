@@ -1,7 +1,7 @@
 import alsLogo from '@/assets/alsLogo.png';
 
 
-type HubHeaderProps = {
+export type HubHeaderProps = {
     title?: string;
     logoUrl?: string;
 }
