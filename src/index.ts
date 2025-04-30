@@ -1,4 +1,3 @@
-//STYLE
 import './components/style.css';
 
 //COMPONENTS
