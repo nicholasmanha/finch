@@ -13,10 +13,8 @@ type InputEnumBoxRoundedProps = {
     styles?: string;
     width?: string;
 };
-export default function InputEnumBoxRounded({cb=()=>{}, label='', value='', enums=[], description='', required=false, styles='', width=''}: InputEnumBoxRoundedProps) {
-    //
-    //const [inputValue, setInputValue] = useState(value);
-    //const [availableItems, setAvailableItems] = useState(enums);
+export default function InputEnumBoxRounded({cb, label='', value='', enums=[], description='', required=false, styles='', width=''}: InputEnumBoxRoundedProps) {
+
     const availableItems = enums;
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const sanitizedId = label.replaceAll(' ', '');
@@ -27,7 +25,6 @@ export default function InputEnumBoxRounded({cb=()=>{}, label='', value='', enum
         setDropdownVisible(!dropdownVisible);
     };
 
-    //refactor this. its off
     const handleItemClick = (item:string) => {
         if (item !== value) { 
             setDropdownVisible(false);

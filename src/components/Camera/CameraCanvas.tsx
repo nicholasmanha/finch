@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import { phosphorIcons } from "@/assets/icons";
 import { getDefaultCameraUrl } from './utils/apiClient';
 
+export type CanvasSizes = 'small' | 'medium' | 'large' | 'automatic';
 export type CameraCanvasProps = {
     imageArrayPV?: string;
     sizePVs?: {[key:string]: string};
-    canvasSize?: 'small' | 'medium' | 'large' | 'automatic';
+    canvasSize?: CanvasSizes;
     prefix?: string;
 }
 export default function CameraCanvas(
@@ -131,27 +132,11 @@ export default function CameraCanvas(
             setSocketStatus('Open');
             frameCount.current = 0;
             startTime.current = new Date();
-            //send message to websocket containing the pvs for the image and pixel size 
-            //console.log('here')
-            //console.log(getImageArrayPV())           
+            //send message to websocket containing the pvs for the image and pixel size          
             let wsMessage = {imageArray_PV: getImageArrayPV(), ...getSizePVs()}
             ws.current.send(JSON.stringify(wsMessage));
         }
     
-/*         ws.current.onmessage = function (event) {
-            const image = new Image();
-            image.onload = function () {
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-
-                let currentTime = new Date();
-                var totalDurationSeconds = currentTime.getTime()/1000 - startTime.current.getTime()/1000;
-                setFps(((frameCount.current + 1) / totalDurationSeconds).toPrecision(3));
-                frameCount.current = frameCount.current + 1;
-            };
-            image.src = 'data:image/jpeg;base64,' + event.data;
-        }; */
 
         ws.current.onmessage = async function (event) {
             if (canvasRef.current === null) return;
@@ -159,7 +144,6 @@ export default function CameraCanvas(
                 if (canvasSize === 'automatic') {
                     // Resize canvas when size is set to automatic and ws sends string msg of dim changes
                     const dimensions = JSON.parse(event.data);
-                    //console.log("Received dimensions:", dimensions);
                     canvasRef.current.width = dimensions.x;
                     canvasRef.current.height = dimensions.y;
                 }

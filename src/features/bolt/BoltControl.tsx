@@ -30,7 +30,7 @@ export default function BoltControl() {
                 />
             </div>
             <Paper size='large' title="Camera" className='h-full flex-grow'>
-                <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium"/>
+                <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={true}/>
             </Paper>
         </div>
     )

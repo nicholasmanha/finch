@@ -15,7 +15,6 @@ export default function Devices() {
                 device={devices['IOC:m1']} 
                 handleSetValueRequest={handleSetValueRequest} 
                 handleLockClick={toggleDeviceLock} 
-                handleMinimizeClick={toggleExpand}
                 svgIcon={deviceIcons.stepperMotor}
             />
         </div>
