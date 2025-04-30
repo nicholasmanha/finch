@@ -1,5 +1,7 @@
+//STYLE
 import './components/style.css';
 
+//COMPONENTS
 export { default as Button } from './components/Button';
 export type { ButtonProps } from './components/Button';
 
@@ -44,4 +46,16 @@ export type { PlotlyHeatmapProps } from './components/PlotlyHeatmap';
 export { default as PlotlyScatter } from './components/PlotlyScatter';
 export type { PlotlyScatterProps } from './components/PlotlyScatter';
 
+export { default as DeviceControllerBox } from './components/DeviceControllerBox';
+export type { DeviceControllerBoxProps } from './components/DeviceControllerBox';
+
+export { default as Paper } from './components/Paper';
+export type { PaperProps } from './components/Paper';
+
+
+//HOOKS
 export { default as useOphydSocket } from './hooks/useOphydSocket';
+
+//TYPES
+export type { RouteItem } from './types/navigationRouterTypes';
+export type {Device, Devices } from './types/deviceControllerTypes';
