@@ -15,7 +15,7 @@ export default function HubSidebar({routes}: HubSidebarProps) {
                     <NavLink 
                         to={item.path}
                         className={({isActive}) =>
-                            isActive ? cn(navStyles, "bg-sky-300") : navStyles
+                            isActive ? cn(navStyles, "bg-sky-300 text-black") : navStyles
                         }
                     >
                         {item.icon}
