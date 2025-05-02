@@ -51,6 +51,9 @@ export type { DeviceControllerBoxProps } from './DeviceControllerBox';
 export { default as Paper } from './Paper';
 export type { PaperProps } from './Paper';
 
+export { default as Bento } from './Bento';
+export type { BentoProps } from './Bento';
+
 
 //HOOKS
 export { default as useOphydSocket } from '../hooks/useOphydSocket';

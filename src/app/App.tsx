@@ -1,12 +1,7 @@
 import './App.css';
-import { Routes, Route } from 'react-router';
 import About from './pages/About';
-import SamplePage1 from './pages/SamplePage1';
 import ContainerQServer from '@/components/QServer/ContainerQServer';
 import Tiled from '../components/Tiled/Tiled';
-import Devices from './pages/Devices';
-import Bolt from './pages/Bolt';
-import Camera from './pages/Camera';
 import HubAppLayout from '@/components/HubAppLayout';
 import BoltControl from '@/features/bolt/BoltControl';
 

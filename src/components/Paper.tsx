@@ -2,17 +2,19 @@ import { cn } from "@/lib/utils";
 import '@/components/style.css'
 
 export type PaperProps = {
-    size?: 'small' | 'medium' | 'large',
-    rounded?: 'none' | 'small' | 'medium' | 'large',
+    size?: 'small' | 'medium' | 'large' | 'full' | 'grow',
+    rounded?: 'none' | 'small' | 'medium' | 'large' ,
     title?: string,
     className?: string,
     children?: React.ReactNode,
 }
-export default function Paper({size="medium", rounded="medium", title, className, children }: PaperProps) {
+export default function Paper({size="full", rounded="medium", title, className, children }: PaperProps) {
     const sizeClassMap = {
-        small: 'w-32 h-32',
-        medium: 'w-64 h-64',
-        large: 'w-96 h-96'
+        small: 'w-[400px] h-[400px]',
+        medium: 'w-[800px] h-[800px]',
+        large: 'w-[1200px] h-[800px]',
+        full: 'w-full h-full',
+        grow: 'w-fit flex-grow h-full'
     };
     const roundedEdgeClassMap = {
         none: 'rounded-none',
