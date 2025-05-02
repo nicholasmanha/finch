@@ -9,7 +9,7 @@ export type HubMainContentProps = {
 }
 export default function HubMainContent({routes, className}: HubMainContentProps) {
     return (
-        <main className={cn("bg-sky-900 h-full w-full", className)}>
+        <main className={cn("bg-sky-900 h-full w-full p-8", className)}>
             <Routes>
                 {routes.map((route) => (
                     <Route

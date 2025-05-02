@@ -5,11 +5,12 @@ import { RouteItem } from "@/types/navigationRouterTypes";
 
 export type HubSidebarProps = {
     routes: RouteItem[];
+    className?: string;
 }
-export default function HubSidebar({routes}: HubSidebarProps) {
+export default function HubSidebar({routes, className}: HubSidebarProps) {
     const navStyles = 'flex flex-col items-center justify-center h-20 aspect-square rounded-lg text-white hover:bg-sky-800 cursor-pointer';
     return (
-        <aside className="row-span-2 bg-sky-950 flex flex-col py-4">
+        <aside className={cn("row-span-2 bg-sky-950 flex flex-col py-4", className)}>
             {routes.map((item, index) => 
                 <div key={index} className="flex flex-col items-center">
                     <NavLink 
