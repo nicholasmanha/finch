@@ -1,13 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
 import Plot, { PlotParams } from 'react-plotly.js';
+import { cn } from '@/lib/utils';
 
 export type PlotlyScatterProps = {
   data: PlotParams['data'];
   title?: string;
   xAxisTitle?: string;
   yAxisTitle?: string;
-  height?: `h-${string}`,
-  width?: `w-${string}`
+  xAxisRange?: [number, number];
+  yAxisRange?: [number, number];
+  className?: string;
 };
 
 const sampleData: PlotParams['data'] = [
@@ -17,7 +19,6 @@ const sampleData: PlotParams['data'] = [
     type: 'scatter',
     mode: 'lines+markers',
     marker: { color: 'red' },
-
   },
 ];
 
@@ -26,8 +27,9 @@ export default function PlotlyScatter({
   title,
   xAxisTitle,
   yAxisTitle,
-  height = 'h-full',
-  width = 'w-full',
+  xAxisRange,
+  yAxisRange,
+  className,
 }: PlotlyScatterProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -47,13 +49,19 @@ export default function PlotlyScatter({
   }, []);
 
   return (
-    <div className={`${height} ${width} pb-4`} ref={plotContainer}>
+    <div className={cn(`pb-4`, className)} ref={plotContainer}>
       <Plot
         data={data}
         layout={{
           title: title,
-          xaxis: { title: xAxisTitle },
-          yaxis: { title: yAxisTitle },
+          xaxis: { 
+            title: xAxisTitle,
+            range: xAxisRange ? xAxisRange : undefined,
+          },
+          yaxis: { 
+            title: yAxisTitle,
+            range: yAxisRange ? yAxisRange : undefined, 
+          },
           autosize: true,
           width: dimensions.width,
           height: dimensions.height,
