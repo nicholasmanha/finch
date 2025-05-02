@@ -19,12 +19,14 @@
      "declarationMap": true,
     "baseUrl": ".",
      "paths": {
-      "react-vite-library": [ "src/components/index.ts" ],
+      //"react-vite-library": [ "src/components/index.ts" ],
+      "react-vite-library": [ "src/index.ts" ],
       "@/*": ["./src/*"]
     },
     "typeRoots": [
       "node_modules/@types",
-      "src/component/index.d.ts"
+      //"src/component/index.d.ts"
+      "src/index.d.ts"
     ]
   },
   "include": ["src"],
