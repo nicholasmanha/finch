@@ -46,7 +46,8 @@ export default defineConfig(() => ({
 },
   build: {
     lib: {
-      entry: resolve('src', 'components/index.ts'),
+      //entry: resolve('src', 'components/index.ts'),
+      entry: resolve('src', 'index.ts'),
       name: 'BlueskyWeb',
       formats: ['es', 'umd'],
       fileName: (format) => `bluesky-web.${format}.js`,
