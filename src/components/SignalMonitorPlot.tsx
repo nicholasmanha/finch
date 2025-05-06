@@ -4,50 +4,33 @@ import useOphydSocket from "@/hooks/useOphydSocket";
 import PlotlyScatter from "./PlotlyScatter";
 import { PlotlyScatterData } from "@/types/plotTypes";
 import { Datum } from "plotly.js";
-import { i } from "react-router/dist/development/route-data-aSUFWnQ6";
-
-const generateSampleData = (numPoints: number): PlotlyScatterData => {
-    const now = Date.now(); // Current timestamp in milliseconds
-    const interval = 1000; // 1 second interval between points
-    const x = Array.from({ length: numPoints }, (_, i) => new Date(now - (numPoints - i) * interval).toISOString());
-    const y = Array.from({ length: numPoints }, () => Math.random() * 100); 
-    return {
-        x,
-        y,
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker: { color: 'red' },
-    };
-};
-
-const blankData: PlotlyScatterData = {
-        x: [],
-        y: [],
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker: { color: 'red', size: [] },
-};
+import { generateSampleData, blankScatterData } from "@/utils/plotGenerators";
 
 //const sampleData: PlotlyScatterData = generateSampleData(30) // 30 points of sample data
 export type SignalMonitorPlotProps = {
     className?: string;
     numVisiblePoints?: number;
-    pollingInterval?: number;
+    pollingIntervalMilliseconds?: number;
     demo?: boolean;
+    tickTextIntervalSeconds?: number;
+    
 }
 export default function SignalMonitorPlot({
     className,
     numVisiblePoints = 30,
-    pollingInterval = 1000,
+    pollingIntervalMilliseconds = 1000,
     demo=false,
+    tickTextIntervalSeconds=10
 }: SignalMonitorPlotProps) {
     const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
     const deviceNameList = useMemo(()=>['IOC:m1'], []);
     const { devices } = useOphydSocket(wsUrl, deviceNameList);  //todo: create an optional callback arg that sends update messages into fn
-    const [data, setData] = useState<PlotlyScatterData>(demo ? generateSampleData(numVisiblePoints) : blankData);
+    const [data, setData] = useState<PlotlyScatterData>(demo ? generateSampleData(numVisiblePoints) : blankScatterData);
+    const [ xLayout, setXLayout] = useState<{tickvals:string[], ticktext:string[]}>({tickvals: [], ticktext: []});
+
     const addSinglePoint = useCallback(()=>{
         setData((prevData) => {
-            const newXValue = new Date().toISOString();
+            const newXValue = new Date().toLocaleTimeString('en-US', { hour12: false });
             const newYValue = Math.random() * 100;
             const newX: Datum[] = [...(prevData.x as Datum[]), newXValue];
             const newY: Datum[] = [...(prevData.y as Datum[]), newYValue];
@@ -63,13 +46,39 @@ export default function SignalMonitorPlot({
         });
     }, []);
 
+    const addTickValue = useCallback((newXValue: string) => {
+        //update xLayout with tickvals and ticktext based on spacing
+        setXLayout((prevLayout) => {
+        const previousLabel: string = prevLayout.tickvals[prevLayout.tickvals.length - 1];
+        if (!previousLabel || previousLabel.length === 0) {
+            //if there are no previous labels, just add the new one
+            return {ticktext: [newXValue], tickvals: [newXValue]};
+        }
+        const previousLabelNumber = previousLabel.replaceAll(":", "");
+        const currentLabelNumber = newXValue.replaceAll(":", "");
+        if (parseInt(currentLabelNumber) >= (parseInt(previousLabelNumber) + tickTextIntervalSeconds) ) {
+            //update to include this new label
+            const newTickvals = [...prevLayout.tickvals, newXValue];
+            const newTicktext = [...prevLayout.ticktext, newXValue];
+            if (newTickvals.length > numVisiblePoints) {
+                newTickvals.shift();
+                newTicktext.shift();
+            }
+            return {ticktext: newTicktext, tickvals: newTickvals};
+        } else {
+            return prevLayout;
+        }
+    })
+}, [numVisiblePoints]);
+    
+
     useEffect(() => {
         if (demo) {
             //simulate a new random number every second
             const interval = setInterval(() => {
                 addSinglePoint();
             }
-            , pollingInterval); // Update every second
+            , pollingIntervalMilliseconds); // Update every second
             return () => clearInterval(interval);
         } else {
             //get live value from EPICS
@@ -79,8 +88,8 @@ export default function SignalMonitorPlot({
                 //record the current value immediately to the chart
                 let currentValue = devices['IOC:m1'].value;
                 if (typeof currentValue !== 'number') return;
+                const newXValue = new Date().toLocaleTimeString('en-US', { hour12: false });
                 setData((prevData) => {
-                    const newXValue = new Date().toISOString();
                     const newYValue = currentValue;
                     const newX: Datum[] = [...(prevData.x as Datum[]), newXValue];
                     const newY: Datum[] = [...(prevData.y as Datum[]), newYValue];
@@ -98,12 +107,14 @@ export default function SignalMonitorPlot({
                     };
                 });
 
-                //record the current value at 1 second internval to the chart until the next time it changes
+                addTickValue(newXValue);
+ 
+
                 const interval = setInterval(() => {
                     let currentValue = devices['IOC:m1'].value;
                     if (typeof currentValue !== 'number') return;
+                    const newXValue = new Date().toLocaleTimeString('en-US', { hour12: false });
                     setData((prevData) => {
-                        const newXValue = new Date().toISOString();
                         const newYValue = currentValue;
                         const newX: Datum[] = [...(prevData.x as Datum[]), newXValue];
                         const newY: Datum[] = [...(prevData.y as Datum[]), newYValue];
@@ -120,8 +131,9 @@ export default function SignalMonitorPlot({
                                 marker: {...(prevData.marker), size: newMarkerSize},
                         };
                     });
+                    addTickValue(newXValue);
                 }
-                ,pollingInterval); // Update every second
+                ,pollingIntervalMilliseconds); 
                 return () => clearInterval(interval);
             }
         }
@@ -129,48 +141,15 @@ export default function SignalMonitorPlot({
     , [addSinglePoint, devices]);
 
     useEffect(()=> {
-        console.log('devices changed');
+        //console.log('devices changed');
     }, [devices]);
 
-    // useEffect(() => {
-    //     return () => {
-    //         //cleanup
-    //         console.log('SignalMonitorPlot unmounted');
-    //         setData({x:[], y:[], type: 'scatter', mode: 'lines+markers', marker: { color: 'red' }});
-    //     }
-    // }
-    // , []);
-
-
-
-    // useEffect(() => {
-    //     //update the plot data with any new values from EPICS
-    //     if (!devices || !devices['IOC:m2']) {
-    //         return;
-    //     }
-    //     let newValue = devices['IOC:m2'].value;
-    //     setData((prevData) => {
-    //         const newXValue = devices['IOC:m2'].value;
-    //         const newYValue = devices['IOC:m2'].value;
-    //         if (typeof newXValue !== 'number' || typeof newYValue !== 'number') {
-    //             return prevData;
-    //         }
-    //         const newX: Datum[] = [...(prevData.x as Datum[]), newXValue];
-    //         const newY: Datum[] = [...(prevData.y as Datum[]), newYValue];
-    //         if (newX.length > numVisiblePoints) {
-    //             newX.shift();
-    //             newY.shift();
-    //         }
-    //         return {
-    //                 ...prevData,
-    //                 x: newX,
-    //                 y: newY,
-    //         };
-    //     });
-    //     // setData((prevData) => prevData)
-    // }, [devices]);
 
     return (
-        <PlotlyScatter data={[data]} className={className}/>
+        <PlotlyScatter 
+            data={[data]} 
+            className={className} 
+            xAxisLayout={xLayout}
+        />
     )
 }

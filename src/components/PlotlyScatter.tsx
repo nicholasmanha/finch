@@ -9,6 +9,8 @@ export type PlotlyScatterProps = {
   yAxisTitle?: string;
   xAxisRange?: [number, number];
   yAxisRange?: [number, number];
+  xAxisLayout?: {[key: string]: any};
+  yAxisLayout?: {[key: string]: any};
   className?: string;
 };
 
@@ -29,6 +31,8 @@ export default function PlotlyScatter({
   yAxisTitle,
   xAxisRange,
   yAxisRange,
+  xAxisLayout,
+  yAxisLayout,
   className,
 }: PlotlyScatterProps) {
   const plotContainer = useRef<HTMLDivElement>(null);
@@ -57,10 +61,12 @@ export default function PlotlyScatter({
           xaxis: { 
             title: xAxisTitle,
             range: xAxisRange ? xAxisRange : undefined,
+            ...xAxisLayout,
           },
           yaxis: { 
             title: yAxisTitle,
             range: yAxisRange ? yAxisRange : undefined, 
+            ...yAxisLayout,
           },
           autosize: true,
           width: dimensions.width,

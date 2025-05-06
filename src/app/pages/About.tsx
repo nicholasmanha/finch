@@ -23,8 +23,8 @@ export default function About() {
                 
                 <p className="text-lg text-center mt-4">A testing page for new components</p>
                 {/* <PlotlyScatter data={data} className="h-4/5 w-4/5 m-auto" xAxisRange={[0, 100]}/> */}
-                <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={100} pollingInterval={500}/>
-                <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={50} pollingInterval={2000}/>
+                <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={100} pollingIntervalMilliseconds={500} tickTextIntervalSeconds={20}/>
+                <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={50} pollingIntervalMilliseconds={2000} tickTextIntervalSeconds={2}/>
 
             </Paper>
 
