@@ -103,33 +103,7 @@ export default function CameraContainer(
         return controlPV;
     };
 
-    var deviceNames = useMemo(()=>createDeviceNameArray(settings, prefix), []);
-    const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
 
-
-    //we need a ws just for the control PV, since a user may only want that one
-    //we need another ws just for the settings PVs, in case the user wants those options.
-    //or can we just combine them into one?
-
-    const {
-        handleSetValueRequest,
-        devices,
-        toggleExpand,
-        toggleDeviceLock
-    } = useOphydSocket(wsUrl, deviceNames);
-
-    const startAcquire = useCallback( () => {
-        handleSetValueRequest(`${prefix}:cam1:Acquire`, 1);
-    }, [])
-
-    const stopAcquire = useCallback( () => {
-        handleSetValueRequest(`${prefix}:cam1:Acquire`, 0);
-    }, [])
-
-    const onSubmitSettings = useCallback(handleSetValueRequest, []);
-    console.log({devices})
-
-    const cameraControlPV = devices[`${prefix}:cam1:Acquire`];
 
 
 
@@ -140,6 +114,34 @@ export default function CameraContainer(
             </div>
         )
     } else {
+        var deviceNames = useMemo(()=>createDeviceNameArray(settings, prefix), []);
+        const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
+    
+    
+        //we need a ws just for the control PV, since a user may only want that one
+        //we need another ws just for the settings PVs, in case the user wants those options.
+        //or can we just combine them into one?
+    
+        const {
+            handleSetValueRequest,
+            devices,
+            toggleExpand,
+            toggleDeviceLock
+        } = useOphydSocket(wsUrl, deviceNames);
+    
+        const startAcquire = useCallback( () => {
+            handleSetValueRequest(`${prefix}:cam1:Acquire`, 1);
+        }, [])
+    
+        const stopAcquire = useCallback( () => {
+            handleSetValueRequest(`${prefix}:cam1:Acquire`, 0);
+        }, [])
+    
+        const onSubmitSettings = useCallback(handleSetValueRequest, []);
+        console.log({devices})
+    
+        const cameraControlPV = devices[`${prefix}:cam1:Acquire`];
+
         return (
             <div className="w-full h-full flex flex-wrap space-x-4 items-start justify-center">
                 <div className="flex flex-col flex-shrink-0 items-center">
