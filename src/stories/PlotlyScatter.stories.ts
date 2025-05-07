@@ -34,8 +34,7 @@ const sampleData: PlotParams['data'] = [
 
 export const Default: Story = {
     args: {
-        height: 'h-96',
-        width: 'w-full',
+        className: "h-96 w-full",
         data: sampleData,
         xAxisTitle: 'my title',
         yAxisTitle: 'my y axis title',
@@ -47,8 +46,7 @@ export const Default: Story = {
 
 export const NoTitles: Story = {
     args: {
-        height: 'h-96',
-        width: 'w-full',
+        className: "h-96 w-full",
         data: sampleData,
     }
 }
