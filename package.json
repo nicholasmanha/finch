@@ -36,8 +36,8 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "peerDependencies": {
-    "react": "16.8.0 || >=17.x",
-    "react-dom": "16.8.0 || >=17.x",
+    "react": ">16.8.x",
+    "react-dom": ">16.8.x",
     "react-router": "^7.0.0"
   },
   "devDependencies": {

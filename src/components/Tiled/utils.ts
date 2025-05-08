@@ -1,6 +1,7 @@
 import { tiledStructureIcons } from "./icons";
 import { TiledSearchItem, TiledStructures } from "./types";
 import { getDefaultTiledUrl } from "./apiClient";
+import { Slider } from "./types";
 const defaultTiledUrl = getDefaultTiledUrl();
 
 export const generateLinksForCallback = (item: TiledSearchItem<TiledStructures>, url?:string) => {
