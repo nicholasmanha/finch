@@ -1,22 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import InputSlider from "../InputSlider";
-import { TiledSearchItem, ArrayStructure } from "./types";
+import { TiledSearchItem, ArrayStructure, Slider } from "./types";
 import { generateSearchPath, generateFullImagePngPath, numpyTypeSizesBytes, onPopoutClick, createSliders  } from './utils';
 import {  } from "./apiClient";
 
 
-
-type PreviewNDArrayProps = {
-    arrayItem: TiledSearchItem<ArrayStructure>;
-    url?: string;
-};
-
-type Slider = {
-    min: number;
-    max: number;
-    index: number;
-    value: number;
-};
 
 const arrowsPointingOut = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
@@ -29,10 +17,16 @@ const arrowTopRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBo
 </svg>;
 
 
+type PreviewNDArrayProps = {
+    arrayItem: TiledSearchItem<ArrayStructure>;
+    url?: string;
+    isFullWidth?: boolean;
+};    
 
 export default function PreviewNDArray({
     arrayItem,
     url,
+    isFullWidth,
 }: PreviewNDArrayProps) {
     const [ sliders, setSliders ] = useState<Slider[]>([]);
     const [ imageUrl, setImageUrl ] = useState('');
@@ -56,9 +50,8 @@ export default function PreviewNDArray({
             return newState;
         })
     }
+
     const searchPath = generateSearchPath(arrayItem);
-
-
 
     const updateImage = (stack?:number[]) => {
         var stepX = 1;
@@ -89,10 +82,10 @@ export default function PreviewNDArray({
     }, [arrayItem]);
 
     return (
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col w-full space-y-2">
             <p className="text-sky-900 text-center">{arrayItem.id}</p>
-            <div className={`${sliderCount > 2 ? 'flex-wrap' : 'flex-col'} flex items-center justify-center`}>
-                <div className="relative bg-slate-300 min-h-72 h-1/2 aspect-square m-auto">
+            <div className={`${sliderCount > 2 ? 'flex-wrap' : 'flex-col'} flex items-center justify-center w-full`}>
+                <div className={`relative bg-slate-300 aspect-square m-auto ${isFullWidth ? 'w-4/6' : 'w-72'}`}>
                     {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
                     {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
                     <p className="text-sm text-center text-slate-500">{`True Dimensions:  [${arrayItem.attributes.structure.shape.join(', ')}]`}</p>

@@ -60,8 +60,8 @@ export default function TiledPreview({
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
             </div>
             <div className="w-full flex flex-col items-center space-y-8 py-4">
-                {isArrayStructure(previewItem) && <PreviewNDArray arrayItem={previewItem} url={url}/>}
-                {isTableStructure(previewItem) && <PreviewTable tableItem={previewItem} url={url}/>}
+                {isArrayStructure(previewItem) && <PreviewNDArray arrayItem={previewItem} url={url} isFullWidth={isFullWidth}/>}
+                {isTableStructure(previewItem) && <PreviewTable tableItem={previewItem} url={url} />}
                 { handleSelectClick && <Button text="Select" size="medium" cb={()=>handleSelectClick(previewItem)} />}
             </div>
             <TiledPreviewMetadata item={previewItem}/>
