@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import TiledHeader from "./TiledHeader";
 import TiledColumns from "./TiledColumns";
 import TiledPreview from "./TiledPreview";
@@ -27,6 +29,7 @@ export default function TiledContainer({
     singleColumnMode,
     ...props
 }: TiledContainerProps) {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { 
         columns, 
@@ -54,7 +57,7 @@ export default function TiledContainer({
                 onHomeClick={resetAllData} 
                 secondaryTitle={url}
             />
-            <TiledBody>
+            <TiledBody ref={scrollContainerRef}>
                 {/* <TiledColumns 
                     columns={columns} 
                     breadcrumbs={breadcrumbs} 
@@ -79,6 +82,7 @@ export default function TiledContainer({
                         previewSize={previewSize} 
                         handleSelectClick={handleSelectClick} 
                         url={url}
+                        scrollContainerRef={scrollContainerRef}
                     />
                 }
             </TiledBody>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Button from '../Button';
 import PreviewNDArray from './PreviewNDArray';
 import PreviewTable from './PreviewTable';
@@ -7,6 +8,10 @@ import TiledPreviewMetadata from './TiledPreviewMetadata';
 const arrowsPointingOut = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
 </svg>;
+const arrowsPointingIn = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
+<path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25" />
+</svg>
+
 const arrowDownTray = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
 </svg>;
@@ -19,14 +24,20 @@ type TiledPreviewProps = {
     previewSize: PreviewSize;
     handleSelectClick?:Function;
     url?: string;
+    scrollContainerRef: React.RefObject<HTMLDivElement>;
+
 }
 export default function TiledPreview({
     previewItem,
     handleSelectClick,
     previewSize='medium',
     url,
+    scrollContainerRef,
     ...props
 }: TiledPreviewProps) {
+
+    const [ isFullWidth, setIsFullWidth ] = useState<boolean>(false);
+
     const previewSizeMap = {
         'hidden': 'hidden',
         'small': 'min-w-72',
@@ -34,11 +45,18 @@ export default function TiledPreview({
         'large': 'min-w-[30rem]'
     }
 
+    useEffect(() => {
+        //when columns load scroll to the right
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+        } 
+    }, [isFullWidth]);
+
 
     return (
-        <div className={`${previewSizeMap[previewSize]} flex-grow h-full flex flex-col overflow-y-auto relative`} {...props}>
+        <div className={`${previewSizeMap[previewSize]} flex-grow h-full flex flex-col overflow-y-auto relative ${isFullWidth && 'min-w-full'}`} {...props}>
             <div className="flex justify-between px-2 pt-2 absolute top-0 w-full">
-                <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowsPointingOut}</div>
+                <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600" onClick={()=>setIsFullWidth(!isFullWidth)}>{isFullWidth ? arrowsPointingIn : arrowsPointingOut}</div>
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
             </div>
             <div className="w-full flex flex-col items-center space-y-8 py-4">

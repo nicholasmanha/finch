@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import InputSlider from "../InputSlider";
 import { TiledSearchItem, ArrayStructure } from "./types";
-import { generateSearchPath, generateFullImagePngPath, numpyTypeSizesBytes } from './utils';
+import { generateSearchPath, generateFullImagePngPath, numpyTypeSizesBytes, onPopoutClick, createSliders  } from './utils';
 import {  } from "./apiClient";
+
 
 
 type PreviewNDArrayProps = {
@@ -27,28 +28,11 @@ const arrowTopRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBo
 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
 </svg>;
 
-const onPopoutClick =(popoutUrl:string) => {
-    //open a new tab with the specified URL
-    window.open(popoutUrl, '_blank', 'noopener,noreferrer');
-};
 
-const createSliders = (sliderCount:number, shape:number[]) => {
-    var initialSliders:Slider[] = [];
-    //the first values from shape represent the number of stacks, the last two dims are the actual 'image' size
-    for ( let i = 0; i < sliderCount; i++) {
-        const newSlider = {
-            min: 0,
-            max: shape[i]-1,
-            index: i,
-            value: Math.floor((shape[i]) / 2)
-        };
-        initialSliders.push(newSlider);
-    };
-    return initialSliders;
-}
+
 export default function PreviewNDArray({
     arrayItem,
-    url
+    url,
 }: PreviewNDArrayProps) {
     const [ sliders, setSliders ] = useState<Slider[]>([]);
     const [ imageUrl, setImageUrl ] = useState('');
@@ -102,12 +86,13 @@ export default function PreviewNDArray({
         const stack = shape.slice(0, sliderCount).map((dim) => Math.floor(dim/2));
         setSliders(createSliders(sliderCount, shape));
         updateImage(stack);
-    }, [arrayItem])
+    }, [arrayItem]);
+
     return (
         <div className="flex flex-col space-y-2">
             <p className="text-sky-900 text-center">{arrayItem.id}</p>
             <div className={`${sliderCount > 2 ? 'flex-wrap' : 'flex-col'} flex items-center justify-center`}>
-                <div className="relative bg-slate-300 h-72 aspect-square m-auto">
+                <div className="relative bg-slate-300 min-h-72 h-1/2 aspect-square m-auto">
                     {popoutUrl && <div onClick={()=>onPopoutClick(popoutUrl)} className="absolute top-2 right-2 w-6 aspect-square hover:cursor-pointer hover:text-slate-500">{arrowTopRight}</div>}
                     {imageUrl && <img src={imageUrl} className="w-full h-full"/>}
                     <p className="text-sm text-center text-slate-500">{`True Dimensions:  [${arrayItem.attributes.structure.shape.join(', ')}]`}</p>

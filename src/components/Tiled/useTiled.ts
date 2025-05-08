@@ -20,12 +20,8 @@ type useTiledProps = {
 }
 type Url = string;
 export const useTiled = (url?:Url) => {
-    console.log('url', url)
-    //console.log('run useTiled.ts')
 
     const [ columns, setColumns ] = useState<TiledSearchResult[]>([]);
-    //const [ previewVisibility, setPreviewVisibility ] = useState<boolean>(false);
-    //const [ ancestors, setAncestors ] = useState<string[]>(['']);
     const [ breadcrumbs, setBreadcrumbs ] = useState<Breadcrumb[]>([]);
     const [ imageUrl, setImageUrl ] = useState<string | undefined>();
     const [ popoutUrl, setPopoutUrl ] = useState<string | undefined>();

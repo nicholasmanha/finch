@@ -44,9 +44,19 @@ export default function Tiled({
                 <div className={cn("flex flex-col min-w-[800px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2 border border-slate-400 shadow-lg rounded-md bg-white", contentClassName)}>
                     {
                         (enableStartupScreen && showStartupScreen) ?
-                            <StartupScreen url={url} handleUrlChange={setUrl} handleSubmit={handleStartupScreenSubmit}/>
+                            <StartupScreen 
+                                url={url} 
+                                handleUrlChange={setUrl} 
+                                handleSubmit={handleStartupScreenSubmit}
+                            />
                         :
-                        <TiledContainer setIsClosed={setIsClosed} url={url} closeOnSelect={closeOnSelect} onSelectCallback={onSelectCallback} singleColumnMode={singleColumnMode}/>
+                        <TiledContainer 
+                            setIsClosed={setIsClosed} 
+                            url={url} 
+                            closeOnSelect={closeOnSelect} 
+                            onSelectCallback={onSelectCallback} 
+                            singleColumnMode={singleColumnMode}
+                        />
                     }
                 </div>
             </div>
