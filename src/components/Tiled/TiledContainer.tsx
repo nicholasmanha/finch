@@ -20,6 +20,8 @@ type TiledContainerProps = {
     closeOnSelect?: boolean,
     setIsClosed: Function,
     singleColumnMode?: boolean,
+    handleExpandClick: Function,
+    isExpanded: boolean,
 }
 export default function TiledContainer({
     url,
@@ -27,6 +29,8 @@ export default function TiledContainer({
     closeOnSelect,
     setIsClosed,
     singleColumnMode,
+    handleExpandClick,
+    isExpanded,
     ...props
 }: TiledContainerProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -56,6 +60,8 @@ export default function TiledContainer({
                 onRightArrowClick={handleRightArrowClick} 
                 onHomeClick={resetAllData} 
                 secondaryTitle={url}
+                handleExpandClick={handleExpandClick}
+                isExpanded={isExpanded}
             />
             <TiledBody ref={scrollContainerRef}>
                 {/* <TiledColumns 

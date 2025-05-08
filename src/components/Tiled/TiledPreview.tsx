@@ -4,20 +4,8 @@ import PreviewNDArray from './PreviewNDArray';
 import PreviewTable from './PreviewTable';
 import { PreviewSize, TiledSearchItem, ArrayStructure, TableStructure, isArrayStructure, isTableStructure } from './types';
 import TiledPreviewMetadata from './TiledPreviewMetadata';
+import { tailwindIcons } from '@/assets/icons';
 
-const arrowsPointingOut = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-<path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-</svg>;
-const arrowsPointingIn = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
-<path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9 3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5 5.25 5.25" />
-</svg>
-
-const arrowDownTray = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
-<path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-</svg>;
-const arrowTopRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" >
-<path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-</svg>;
 
 type TiledPreviewProps = {
     previewItem: TiledSearchItem<ArrayStructure> | TiledSearchItem<TableStructure>
@@ -56,8 +44,8 @@ export default function TiledPreview({
     return (
         <div className={`${previewSizeMap[previewSize]} flex-grow h-full flex flex-col overflow-y-auto relative ${isFullWidth && 'min-w-full'}`} {...props}>
             <div className="flex justify-between px-2 pt-2 absolute top-0 w-full">
-                <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600" onClick={()=>setIsFullWidth(!isFullWidth)}>{isFullWidth ? arrowsPointingIn : arrowsPointingOut}</div>
-                <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{arrowDownTray}</div>
+                <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600" onClick={()=>setIsFullWidth(!isFullWidth)}>{isFullWidth ? tailwindIcons.arrowsPointingIn : tailwindIcons.arrowsPointingOut}</div>
+                <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{tailwindIcons.arrowDownTray}</div>
             </div>
             <div className="w-full flex flex-col items-center space-y-8 py-4">
                 {isArrayStructure(previewItem) && <PreviewNDArray arrayItem={previewItem} url={url} isFullWidth={isFullWidth}/>}
