@@ -4,6 +4,7 @@ import ContainerQServer from '@/components/QServer/ContainerQServer';
 import Tiled from '../components/Tiled/Tiled';
 import HubAppLayout from '@/components/HubAppLayout';
 import BoltControl from '@/features/bolt/BoltControl';
+import Paper from '@/components/Paper';
 
 import { RouteItem } from '@/types/navigationRouterTypes';
 
@@ -15,14 +16,14 @@ function App() {
     {element:<BoltControl/>, path: "/control", label: "Control", icon: <Joystick size={32} />},
     {element:<ContainerQServer className="m-8 h-[calc(100%-4rem)] w-[calc(100%-4rem)] bg-white/50"/>, path: "/qserver", label: "Q Server", icon: <StackPlus size={32} />},
     {element:
-      <Tiled 
-        
-
-
-        onSelectCallback={(links:any) => {
-          console.log(links);
-        }}
-      />, 
+        <Tiled 
+          size="medium"
+      
+          onSelectCallback={(links:any) => {
+            console.log(links);
+          }}
+        /> ,
+ 
     path: "/data", 
     label: "Data", 
     icon: <ImageSquare size={32} />

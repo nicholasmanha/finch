@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 export type TiledProps = {
     onSelectCallback?: Function,
-    size?: 'screen'
+    size?: 'small' | 'medium' | 'large'
     closeOnSelect?: boolean,
     isPopup?: boolean,
     enableStartupScreen?: boolean,
@@ -15,6 +15,7 @@ export type TiledProps = {
     backgroundClassName?: string,
     singleColumnMode?: boolean,
     contentClassName?: string,
+    isFullWidth?: boolean,
 }
 export default function Tiled({
     onSelectCallback,
@@ -26,12 +27,19 @@ export default function Tiled({
     backgroundClassName,
     contentClassName,
     singleColumnMode=false,
+    isFullWidth=false,
     ...props
 }: TiledProps) {
     const [ isClosed, setIsClosed ] = useState<boolean>(false);
     const [ showStartupScreen, setShowStartupScreen ] = useState<boolean>(true);
     const [ url, setUrl ] = useState<undefined | string>(tiledBaseUrl);
     const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
+
+    const sizeClassMap = {
+        small: 'min-w-[600px] min-h-[500px]',
+        medium: 'min-w-[800px] min-h-[800px]',
+        large: 'min-w-[1200px] min-h-[1200px]',
+    };
 
     const handleExpandClick = () => {
         setIsExpanded(!isExpanded);
@@ -44,8 +52,8 @@ export default function Tiled({
 
     if (!isClosed) {
         return (
-            <div className={cn(`flex w-full h-full justify-center items-center ${isPopup ? 'relative top-0 left-0 z-50 w-screen h-screen' : ''}`, backgroundClassName)} {...props}>
-                <div className={cn(`flex flex-col border border-slate-400 shadow-lg rounded-md bg-white ${isExpanded ? 'h-full w-full' : 'min-w-[800px] max-w-[1000px] w-1/2 max-h-[2000px] min-h-[700px] h-1/2'}`, contentClassName)}>
+            <div className={cn(`flex w-full h-full justify-center items-center ${size && sizeClassMap[size]} ${isPopup ? 'relative top-0 left-0 z-50 w-screen h-screen' : ''}`, backgroundClassName)} {...props}>
+                <div className={cn(`flex flex-col border border-slate-400 shadow-lg rounded-md bg-white ${size ? `${sizeClassMap[size]} w-1/2 h-1/2` : `${sizeClassMap['small']} w-full h-full`} ${isFullWidth && 'w-full'}  ${isExpanded && 'h-full w-full'}`, contentClassName)}>
                     {
                         (enableStartupScreen && showStartupScreen) ?
                             <StartupScreen 
