@@ -18,7 +18,6 @@ function App() {
     {element:
         <Tiled 
           size="medium"
-      
           onSelectCallback={(links:any) => {
             console.log(links);
           }}
