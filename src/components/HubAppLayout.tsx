@@ -8,10 +8,13 @@ import { RouteItem } from "@/types/navigationRouterTypes";
 export type HubAppLayoutProps = {
     routes: RouteItem[];
     headerTitle?: string;
+    headerTitleClassName?: string;
     headerLogoUrl?: string;
     mainContentClassName?: string;
     headerClassName?: string;
     sidebarClassName?: string;
+    sidebarActiveLinkClassName?: string;
+    sidebarInactiveLinkClassName?: string;
     }
 export default function HubAppLayout ( {
     routes,
@@ -19,7 +22,10 @@ export default function HubAppLayout ( {
     headerLogoUrl,
     mainContentClassName, 
     headerClassName,
-    sidebarClassName
+    headerTitleClassName,
+    sidebarClassName,
+    sidebarActiveLinkClassName,
+    sidebarInactiveLinkClassName
   }: HubAppLayoutProps) {
 
 return (
@@ -27,11 +33,14 @@ return (
         <HubSidebar 
             routes={routes}
             className={sidebarClassName} 
+            activeLinkClassName={sidebarActiveLinkClassName}
+            inactiveLinkClassName={sidebarInactiveLinkClassName}
         />
         <HubHeader 
             title={headerTitle} 
             logoUrl={headerLogoUrl}
             className={headerClassName}
+            titleClassName={headerTitleClassName}
         />
         <HubMainContent 
             routes={routes}

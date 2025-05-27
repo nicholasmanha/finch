@@ -6,9 +6,11 @@ import { RouteItem } from "@/types/navigationRouterTypes";
 export type HubSidebarProps = {
     routes: RouteItem[];
     className?: string;
+    activeLinkClassName?: string;
+    inactiveLinkClassName?: string;
 }
-export default function HubSidebar({routes, className}: HubSidebarProps) {
-    const navStyles = 'flex flex-col items-center justify-center h-20 aspect-square rounded-lg text-white hover:bg-sky-800 cursor-pointer';
+export default function HubSidebar({routes, className, activeLinkClassName, inactiveLinkClassName}: HubSidebarProps) {
+    const navStyles = cn('flex flex-col items-center justify-center h-20 aspect-square rounded-lg text-white hover:bg-sky-800 cursor-pointer', inactiveLinkClassName);
     return (
         <aside className={cn("row-span-2 bg-sky-950 flex flex-col py-4", className)}>
             {routes.map((item, index) => 
@@ -16,7 +18,7 @@ export default function HubSidebar({routes, className}: HubSidebarProps) {
                     <NavLink 
                         to={item.path}
                         className={({isActive}) =>
-                            isActive ? cn(navStyles, "bg-sky-300 text-black") : navStyles
+                            isActive ? cn(navStyles, cn("bg-sky-300 text-black", activeLinkClassName)) : navStyles
                         }
                     >
                         {item.icon}
