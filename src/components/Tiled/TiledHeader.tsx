@@ -1,13 +1,8 @@
 import { Breadcrumb } from "./types";
 import { getDefaultTiledUrl } from "./apiClient";
-
-
-const chevronLeft = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="">
-<path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-</svg>;
-const chevronRight = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="">
-<path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-</svg>;
+//import blueskyLogo from "../../assets/bluesky-logo.png";
+import blueskyLogo from "./bluesky_logo.png"
+import { tailwindIcons } from "@/assets/icons";
 
 const defaultUrl = getDefaultTiledUrl();
 
@@ -20,15 +15,19 @@ type TiledHeaderProps = {
     imageUrl?: string;
     title?: string;
     secondaryTitle?: string;
+    handleExpandClick: Function;
+    isExpanded: boolean;
 }
 export default function TiledHeader({
     breadcrumbs=[],
     onLeftArrowClick,
     onRightArrowClick,
     onHomeClick,
-    imageUrl="/images/bluesky_logo.png",
+    imageUrl=blueskyLogo,
     title="Tiled",
     secondaryTitle=defaultUrl,
+    handleExpandClick,
+    isExpanded,
     ...props
 }: TiledHeaderProps) {
     //console.log('render TiledHeader.tsx');
@@ -51,8 +50,8 @@ export default function TiledHeader({
     return (
         <div className="flex w-full min-h-14 pb-2 pt-2 relative pl-4 " {...props}>
             <div className="flex items-end w-1/4">
-                <Arrow onClick={onLeftArrowClick} icon={chevronLeft}/>
-                <Arrow onClick={onRightArrowClick} icon={chevronRight} />
+                <Arrow onClick={onLeftArrowClick} icon={tailwindIcons.chevronLeft}/>
+                <Arrow onClick={onRightArrowClick} icon={tailwindIcons.chevronRight} />
                 <p className="truncate"> {breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length - 1].label }</p>
             </div>
             
@@ -62,6 +61,9 @@ export default function TiledHeader({
                     <h2 className="text-sky-900 font-semibold text-lg">{title}</h2> 
                     <p className="text-sm">{secondaryTitle}</p>
                 </div>
+            </div>
+            <div className="absolute top-0 right-0 mr-3 mt-3 h-6 aspect-square text-slate-500 hover:text-slate-900 hover:cursor-pointer" onClick={()=>handleExpandClick()}>
+                {isExpanded ? tailwindIcons.arrowsPointingIn :tailwindIcons.arrowsPointingOut}
             </div>
 
         </div>

@@ -1,8 +1,54 @@
-# React Vite Boilerplate
-This repo currently contains various components written in Typescript and viewable with Storybook. The components are configured here to publish to npm as well, through the bluesky-web package.
+# Bluesky Web Component Library
+Bluesky Web React component library. 
 
-# Dev Setup
-## Pull down and install
+Documentation and Storybook example webpage in progress.
+
+#  Installation
+Install within your existing React project:
+```
+npm install bluesky-web
+```
+
+Example usage:
+```js
+//App.tsx
+import { Tiled } from 'bluesky-web';
+import 'bluesky-web/style.css';
+
+function App() {
+  return (
+    <Tiled tiledBaseUrl='http://customUrl:port/api/v1'>
+  )
+}
+```
+
+You will only need to import 'bluesky-web/style.css' once, so long as it is imported inside a component that is high enough in the React tree to include all bluesky-web components.
+
+To use the `HubAppLayout` component, the entire app should be wrapped in a react-router component. This code example assumes react-router version 7, older version may need to import from react-router-dom.
+
+```js
+//main.tsx
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router'
+import './app/index.css'
+import App from './app/App'
+
+createRoot(document.getElementById('root')!).render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+)
+
+```
+
+Hint: To quickly check the props that a component takes on typescript apps, press 'ctrl+space' when clicked inside a component.
+
+# Installation - Developer
+Developer setup clones the repo and allows the local use of Storybook, an interactive UI component viewer.
+
+New to React? Make sure you have [npm installed first](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+## Clone repo and install
 
 ```
 git clone https://github.com/SeijDeLeon/react-vite-boilerplate.git
@@ -24,56 +70,7 @@ To start up the storybook server:
 npm run storybook
 ```
 
-Issues installing? Make sure you have [npm installed first](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```

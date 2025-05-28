@@ -1,6 +1,7 @@
 import { tiledStructureIcons } from "./icons";
 import { TiledSearchItem, TiledStructures } from "./types";
 import { getDefaultTiledUrl } from "./apiClient";
+import { Slider } from "./types";
 const defaultTiledUrl = getDefaultTiledUrl();
 
 export const generateLinksForCallback = (item: TiledSearchItem<TiledStructures>, url?:string) => {
@@ -81,3 +82,23 @@ export const numpyTypeSizesBytes: Record<string, number> = {
     m: 8,  // timedelta64
     V: 1   // void (raw data, size depends on context)
   };
+
+ export const onPopoutClick =(popoutUrl:string) => {
+    //open a new tab with the specified URL
+    window.open(popoutUrl, '_blank', 'noopener,noreferrer');
+};
+
+export const createSliders = (sliderCount:number, shape:number[]) => {
+    var initialSliders:Slider[] = [];
+    //the first values from shape represent the number of stacks, the last two dims are the actual 'image' size
+    for ( let i = 0; i < sliderCount; i++) {
+        const newSlider = {
+            min: 0,
+            max: shape[i]-1,
+            index: i,
+            value: Math.floor((shape[i]) / 2)
+        };
+        initialSliders.push(newSlider);
+    };
+    return initialSliders;
+}

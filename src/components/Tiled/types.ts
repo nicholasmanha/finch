@@ -10,6 +10,12 @@ export type Breadcrumb = {
     iconStyle?: string;
     onClick?: Function;
 }
+export type Slider = {
+    min: number;
+    max: number;
+    index: number;
+    value: number;
+};
 
 
 export type Paths = PathItem[];

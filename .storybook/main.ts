@@ -14,6 +14,7 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  staticDirs: ['../public'], //added this to support mws for api call mocks, see public/mockServiceWorker.js
   async viteFinal(config) {
     return mergeConfig(config, {
       css: {

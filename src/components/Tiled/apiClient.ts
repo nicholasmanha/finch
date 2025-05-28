@@ -5,20 +5,20 @@ import { sampleTiledSearchData } from "./sampleData";
 //TILED_ALLOW_ORIGINS=http://localhost:5174 tiled serve demo
 
 const getDefaultTiledUrl = () => {
-    //to do fix env imports
     try{
         if (import.meta.env.VITE_API_TILED_URL) {
+            console.log('using env variable for tiled url: ', import.meta.env.VITE_API_TILED_URL);
             return import.meta.env.VITE_API_TILED_URL;
         } else {
             return 'http://127.0.0.1:8000/api/v1';
         }
     } catch(e) {
+        console.error('error parsing VITE_API_TILED_URL env: ', e)
         return 'http://127.0.0.1:8000/api/v1';
     }
 };
 
 const getTiledApiKey = () => {
-    //to do fix env imports
     try{
         if (import.meta.env.VITE_API_TILED_API_KEY) {
             return import.meta.env.VITE_API_TILED_API_KEY;
@@ -26,6 +26,7 @@ const getTiledApiKey = () => {
             return null;
         }
     } catch(e) {
+        console.error('error parsing VITE_API_TILED_API_KEY: ', e)
         return null;
     }
 }

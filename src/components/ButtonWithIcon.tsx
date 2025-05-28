@@ -1,4 +1,4 @@
-type ButtonWithIconProps = {
+export type ButtonWithIconProps = {
     /** callback function on click */
     cb?: () => void;
     /** text inside button */ 

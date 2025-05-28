@@ -1,5 +1,6 @@
 import { TiledSearchItem, TiledStructures, Breadcrumb } from "./types";
 import { Tooltip } from "react-tooltip";
+import { cn } from "@/lib/utils";
 import Button from "../Button";
 
 type TiledColumnProps = {
@@ -8,6 +9,8 @@ type TiledColumnProps = {
     index: number;
     breadcrumbs: Breadcrumb[];
     handleSelectClick?: Function;
+    className?: string;
+    showTooltip?: boolean;
 };
 
 
@@ -36,10 +39,10 @@ const renderIcon = (structureFamily:string) => {
     )
 };
 
-export function TiledColumn ({data, index, onItemClick, breadcrumbs, handleSelectClick}: TiledColumnProps) {
+export function TiledColumn ({data, index, onItemClick, breadcrumbs, handleSelectClick, className, showTooltip=true}: TiledColumnProps) {
 
     return (
-        <div className="flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-full pt-2">
+        <div className={cn("flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-full pt-2", className)}>
 {/*             <div className={`${breadcrumbs.length  === index ? '' : 'hidden'} peer m-auto py-2 mt-1 w-full text-center border-t`}>
                 <Button text="Select Container" size="small" cb={handleSelectClick ? ()=>handleSelectClick(data) : () =>{}}/>
             </div>     */}        
@@ -56,7 +59,7 @@ export function TiledColumn ({data, index, onItemClick, breadcrumbs, handleSelec
                             {renderIcon(item.attributes.structure_family)}
                             <p className="truncate max-w-full">{item.id}</p>
                             {item.attributes.structure_family === 'container' ? <p className="absolute right-1 text-slate-500">&gt;</p> : ''}
-                            {handleSelectClick &&
+                            {(handleSelectClick && showTooltip) &&
                                 <Tooltip 
                                     children={
                                         <Button 
