@@ -1,4 +1,8 @@
-# Finch
+
+# finch
+
+  ![finch_icon](https://github.com/user-attachments/assets/bf17cfe1-5df5-4fcd-8c4d-3a99982ce2fe)  
+  
 A React component library for Bluesky beamlines. 
 
 To view components in your browser check out our [storybook library.](https://blueskyproject.io/finch)
