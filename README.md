@@ -1,10 +1,11 @@
-# Finch Component Library
+# Finch
 A React component library for Bluesky beamlines. 
 
-Documentation and Storybook example webpage in progress.
+To view components in your browser check out our [storybook library.](https://blueskyproject.io/finch)
+
 
 #  Installation
-Install within your existing React project:
+Once you have your own React app setup, install finch in the root project directory with:
 ```
 npm install @blueskyproject/finch
 ```
@@ -46,7 +47,9 @@ Hint: To quickly check the props that a component takes on typescript apps, pres
 # Bluesky Requirements
 Components in this library require network access to the Bluesky Queue Server, Tiled, and Ophyd-Websocket. The components are designed to work out of the box with the default ports for each service. 
 
-Specific paths/ports can be set at runtime with environment variables, or alternatively passed in as props to components that need them. Documentation in progress.
+Specific paths/ports can be set at runtime with environment variables, or alternatively passed in as props to components that need them. 
+
+Documentation for env variables in progress.
 
 https://github.com/bluesky/bluesky-queueserver
 
@@ -56,7 +59,7 @@ https://github.com/bluesky/ophyd-websocket
 
 
 # Installation - Developer
-Developer setup clones the repo and allows the local use of Storybook, an interactive UI component viewer.
+To check out the project without creating your own React app, or for development, you can pull down the repo and install with npm.
 
 New to React? Make sure you have [npm installed first](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
@@ -77,11 +80,13 @@ To start up the react app:
 npm run dev
 ```
 
+[localhost:5173](http://localhost:5173)
+
 To start up the storybook server:
 ```
 npm run storybook
 ```
-
+[localhost:6006](http://localhost:6006)
 
 
 
