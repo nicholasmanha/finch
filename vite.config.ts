@@ -48,9 +48,9 @@ export default defineConfig(() => ({
     lib: {
       //entry: resolve('src', 'components/index.ts'),
       entry: resolve('src', 'index.ts'),
-      name: 'BlueskyWeb',
+      name: 'Finch',
       formats: ['es', 'umd'],
-      fileName: (format) => `bluesky-web.${format}.js`,
+      fileName: (format) => `finch.${format}.js`,
     },
     rollupOptions: {
       external: [...Object.keys(packageJson.peerDependencies)],

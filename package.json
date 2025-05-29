@@ -1,7 +1,7 @@
 {
-  "name": "bluesky-web",
+  "name": "@blueskyproject/finch",
   "private": false,
-  "version": "0.2.19",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,14 +18,14 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/bluesky-web.es.js",
-      "require": "./dist/bluesky-web.umd.js"
+      "import": "./dist/finch.es.js",
+      "require": "./dist/finch.umd.js"
     },
-    "./style.css": "./dist/bluesky-web.css",
-    "./dist/bluesky-web.css": "./dist/bluesky-web.css"
+    "./style.css": "./dist/finch.css",
+    "./dist/finch.css": "./dist/finch.css"
   },
-  "main": "./dist/bluesky-web.umd.js",
-  "module": "./dist/bluesky-web.es.js",
+  "main": "./dist/finch.umd.js",
+  "module": "./dist/finch.es.js",
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
     "class-variance-authority": "^0.7.1",
@@ -80,14 +80,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SeijDeLeon/react-vite-boilerplate"
+    "url": "https://github.com/bluesky/finch"
   },
   "bugs": {
-    "url": "https://github.com/SeijDeLeon/react-vite-boilerplate/issues"
+    "url": "https://github.com/bluesky/finch/issues"
   },
-  "homepage": "https://github.com/SeijDeLeon/react-vite-boilerplate#readme",
+  "homepage": "https://github.com/bluesky/finch#readme",
   "author": "Seij De Leon",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
