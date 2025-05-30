@@ -29,6 +29,8 @@
   "module": "./dist/finch.es.js",
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
+    "@storybook/addons": "^7.6.17",
+    "@storybook/theming": "^8.6.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
