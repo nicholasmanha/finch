@@ -4,7 +4,9 @@ import Paper from "@/components/Paper";
 import PlotlyScatter from "@/components/PlotlyScatter";
 import SignalMonitorPlot from "@/components/SignalMonitorPlot";
 import Plot, { PlotParams } from 'react-plotly.js';
-
+import ADLView from "@/components/ADLView";
+import { cameraDeviceData } from "@/components/Camera/utils/cameraDeviceData";
+import CameraContainer from "@/components/Camera/CameraContainer";
 
 export default function About() {
 
@@ -18,15 +20,19 @@ export default function About() {
     }];
 
     return (
-     
-            <Paper title="About">
-                
-                <p className="text-lg text-center mt-4">A testing page for new components</p>
-                {/* <PlotlyScatter data={data} className="h-4/5 w-4/5 m-auto" xAxisRange={[0, 100]}/> */}
-                <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={100} pollingIntervalMilliseconds={500} tickTextIntervalSeconds={20}/>
-                <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={50} pollingIntervalMilliseconds={2000} tickTextIntervalSeconds={2}/>
 
-            </Paper>
+        <Paper title="About">
+
+            <p className="text-lg text-center mt-4">A testing page for new components</p>
+            {/* <PlotlyScatter data={data} className="h-4/5 w-4/5 m-auto" xAxisRange={[0, 100]}/> */}
+            <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={100} pollingIntervalMilliseconds={500} tickTextIntervalSeconds={20} />
+            <SignalMonitorPlot className="h-2/5 w-4/5 m-auto" numVisiblePoints={50} pollingIntervalMilliseconds={2000} tickTextIntervalSeconds={2} />
+            <h1>ADL VIEW</h1>
+            <ADLView prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={false} />
+            <div className="h-[400px]"></div>
+            <h1>CAMERA CONTAINER</h1>
+            <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={false} />
+        </Paper>
 
     )
 }
