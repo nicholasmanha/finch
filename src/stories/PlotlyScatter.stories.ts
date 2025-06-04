@@ -4,7 +4,7 @@ import PlotlyScatter from '../components/PlotlyScatter';
 import { PlotParams } from 'react-plotly.js';
 
 const meta = {
-    title: 'Example/PlotlyScatter',
+    title: 'General Components/PlotlyScatter',
     component: PlotlyScatter,
     tags: ['autodocs'],
     parameters: {

@@ -262,7 +262,7 @@ const mockTiledResponseFolder = {
 }
 
 const meta = {
-    title: 'Example/Tiled',
+    title: 'Bluesky Components/Tiled',
     component: Tiled,
     parameters: {
       layout: 'centered',

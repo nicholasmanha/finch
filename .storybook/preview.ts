@@ -16,6 +16,11 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    options: {
+      storySort: {
+        order: ['About', 'Documentation', 'Bluesky Components', 'Layout Components', 'General Components'],
+      },
+    },
   },
   loaders: [mswLoader],
 };

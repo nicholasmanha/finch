@@ -5,7 +5,7 @@ import React from 'react';
 import ButtonWithIcon from '../components/ButtonWithIcon';
 
 const meta = {
-    title: 'Example/ButtonWithIcon',
+    title: 'General Components/ButtonWithIcon',
     component: ButtonWithIcon,
     parameters: {
       // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout

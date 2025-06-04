@@ -40,7 +40,7 @@ const routes:RouteItem[] = [
 ];
 
 const meta = {
-    title: 'Example/HubAppLayout',
+    title: 'Layout Components/HubAppLayout',
     component: HubAppLayout,
     tags: ['autodocs'],
     parameters: {

@@ -4,7 +4,7 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 
 const meta = {
-    title: 'Example/Sidebar',
+    title: 'Layout Components/Sidebar',
     component: Sidebar,
     tags: ['autodocs'],
     parameters: {
