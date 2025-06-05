@@ -9,6 +9,9 @@ import { DetectorSetting } from "./Camera/types/cameraTypes";
 import InputGroup from "./Camera/InputGroup";
 import InputField from "./Camera/InputField";
 import CameraContainer from "./Camera/CameraContainer";
+import DeviceControllerBox from "./DeviceControllerBox";
+import { deviceIcons } from '@/assets/icons';
+import BasicInput from "./BasicInput";
 
 //"13SIM1:image1:ArrayData"
 export type CameraContainerProps = {
@@ -93,15 +96,14 @@ export default function ADLView(
   //we need another ws just for the settings PVs, in case the user wants those options.
   //or can we just combine them into one?
 
-  const {
-    devices,
-
-  } = useOphydSocket(wsUrl, deviceNames);
+  // const { devices } = useOphydSocket(wsUrl, deviceNames);
 
 
 
+  const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
+  const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
+  var device = devices['IOC:m1']
   console.log("devices-ADLViewer: ", devices)
-  var group = settings[0]
 
 
   return (
@@ -113,7 +115,7 @@ export default function ADLView(
       </div>
 
       {/* <InputGroup key={group.title} settingsGroup={group} prefix={prefix} cameraSettingsPVs={devices} onSubmit={() => { }} /> */}
-      <InputField
+      {/* <InputField
         pv={'13SIM1:cam1:GainRed'}
         key={"GainRed"}
         input={{
@@ -125,7 +127,18 @@ export default function ADLView(
         }}
         cameraSettingsPVs={devices}
         onSubmit={() => { }}
+      /> */}
+      <BasicInput device={device}
+        handleSetValueRequest={handleSetValueRequest}
       />
+
+      {/* <DeviceControllerBox 
+                    device={devices['IOC:m1']} 
+                    handleSetValueRequest={handleSetValueRequest} 
+                    handleLockClick={toggleDeviceLock} 
+                    svgIcon={deviceIcons.stepperMotor}
+                    className="shadow-xl"
+                /> */}
 
     </div>
   )
