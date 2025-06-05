@@ -6,6 +6,9 @@ import CameraSettings from "./Camera/CameraSettings";
 import { cameraDeviceData } from "./Camera/utils/cameraDeviceData.js";
 import useOphydSocket from "@/hooks/useOphydSocket";
 import { DetectorSetting } from "./Camera/types/cameraTypes";
+import InputGroup from "./Camera/InputGroup";
+import InputField from "./Camera/InputField";
+import CameraContainer from "./Camera/CameraContainer";
 
 //"13SIM1:image1:ArrayData"
 export type CameraContainerProps = {
@@ -30,7 +33,7 @@ export default function ADLView(
     prefix = '13SIM1',
     settings = cameraDeviceData.ADSimDetector,
     enableControlPanel = true,
-    
+
   }: CameraContainerProps) {
 
   // removes trailing ":" and trims
@@ -49,13 +52,17 @@ export default function ADLView(
     //ex) a single pv suffix is at settings[0].inputs[0].suffix
     //console.log({settings})
 
-    var sanitizedPrefix = sanitizeInputPrefix(prefix);
+    var sanitizedPrefix = sanitizeInputPrefix(prefix); // prefix without trailing ":" or spaces
 
     var pvArray: string[] = [];
     settings.forEach((group) => {
       group.inputs.forEach((input) => {
         //console.log(group.prefix)
+
+        // prefx:devicePrefix:suffic, ex. 13SIM1:cam1:GainRed
         let pv = `${sanitizedPrefix}:${group.prefix !== null ? group.prefix + ':' : ''}${input.suffix}`
+
+        // array of output from above
         pvArray.push(pv);
       })
     })
@@ -76,7 +83,8 @@ export default function ADLView(
     return controlPV;
   };
 
-
+  // array of ex. "13SIM1:cam1:GainRed"
+  // settings is cameraDeviceData which is json of data fro PV's for the camera
   var deviceNames = useMemo(() => createDeviceNameArray(settings, prefix), []);
   const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
 
@@ -92,16 +100,32 @@ export default function ADLView(
 
 
 
-  console.log({ devices })
-
+  console.log("devices-ADLViewer: ", devices)
+  var group = settings[0]
 
 
   return (
     <div className="w-full h-full flex flex-wrap space-x-4 items-start justify-center">
 
       <div className='overflow-x-auto overflow-y-auto'>
-        <CameraSettings settings={settings} prefix="13SIM1" cameraSettingsPVs={devices} />
+        <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={true} />
+
       </div>
+
+      {/* <InputGroup key={group.title} settingsGroup={group} prefix={prefix} cameraSettingsPVs={devices} onSubmit={() => { }} /> */}
+      <InputField
+        pv={'13SIM1:cam1:GainRed'}
+        key={"GainRed"}
+        input={{
+          suffix: "GainRed",
+          label: "Gain Red",
+          type: 'float',
+          min: 0,
+          max: 100
+        }}
+        cameraSettingsPVs={devices}
+        onSubmit={() => { }}
+      />
 
     </div>
   )
