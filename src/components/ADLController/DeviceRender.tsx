@@ -1,19 +1,22 @@
 import React from 'react'
-import { useState } from "react";
-import { Device } from "@/types/deviceControllerTypes";
-import InputNumber from "../InputNumber";
-import Button from "../Button";
+import { Devices } from "@/types/deviceControllerTypes";
+import { Entry } from './types/ADLEntry';
 
 export type DeviceRenderProps = {
-    device: Device;
-    
+    PVs: Devices;
+    ADLData: Entry[];
 }
 
-function DeviceRender({ device}: DeviceRenderProps) {
-    if (!device) return;
+
+
+function DeviceRender({ PVs, ADLData=[]}: DeviceRenderProps) {
+    if (!PVs) return;
+    console.log("device render data: ",ADLData);
     return (
         <>
-            <div>name: {device.name} value: {device.value}</div><br></br>
+            {ADLData.map((entry, index) => (
+          <li key={index}>{entry.name}</li>
+        ))}
             
         </>
 

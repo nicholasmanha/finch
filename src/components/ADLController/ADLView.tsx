@@ -13,6 +13,9 @@ import DeviceControllerBox from "../DeviceControllerBox";
 import { deviceIcons } from '@/assets/icons';
 import BasicInput from "./BasicInput";
 import DeviceRender from "./DeviceRender";
+import { adSimDetectorSetup } from "./utils/simDetectorSetupADL";
+import { Entry } from "./types/ADLEntry";
+import { ADLParser } from "./utils/ADLParse";
 
 //"13SIM1:image1:ArrayData"
 export type CameraContainerProps = {
@@ -40,6 +43,12 @@ export default function ADLView(
 
   }: CameraContainerProps) {
 
+  const P = "13SIM1"
+  const R = "cam1"
+
+    const ADLData = ADLParser(adSimDetectorSetup)
+
+
   // removes trailing ":" and trims
   const sanitizeInputPrefix = (prefix: string) => {
     var santizedPrefix = '';
@@ -51,7 +60,19 @@ export default function ADLView(
     return santizedPrefix;
   };
 
-  const createDeviceNameArray = (settings: DetectorSetting[], prefix: string) => {
+const createDeviceNameArray = (settings: DetectorSetting[], prefix: string) => {
+
+    var pvArray: string[] = [];
+    ADLData.forEach((group) => {
+      let pv = `${P}:${R}:${group.name}`
+      pvArray.push(pv);
+      
+    })
+    
+    return pvArray;
+  };
+
+  const createDeviceNameArrayold = (settings: DetectorSetting[], prefix: string) => {
     //settings is an array of objects, grouped by setting type
     //ex) a single pv suffix is at settings[0].inputs[0].suffix
     //console.log({settings})
@@ -97,47 +118,19 @@ export default function ADLView(
   //we need another ws just for the settings PVs, in case the user wants those options.
   //or can we just combine them into one?
 
-  // const { devices } = useOphydSocket(wsUrl, deviceNames);
+  const { devices } = useOphydSocket(wsUrl, deviceNames);
 
 
 
   const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
-  const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
+  // const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
   var device = devices['IOC:m1']
   console.log("devices-ADLViewer: ", devices)
-
 
   return (
     <div className="w-full h-full flex flex-wrap space-x-4 items-start justify-center">
 
-      <div className='overflow-x-auto overflow-y-auto'>
-        {/* <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={true} /> */}
-
-      </div>
-
-      {/* <InputGroup key={group.title} settingsGroup={group} prefix={prefix} cameraSettingsPVs={devices} onSubmit={() => { }} /> */}
-      {/* <InputField
-        pv={'13SIM1:cam1:GainGreen_RBV'}
-        key={"GainGreen_RBV"}
-        input={{
-          suffix: "GainGreen_RBV",
-          label: "Gain Red",
-          type: 'float',
-          min: 0,
-          max: 100
-        }}
-        cameraSettingsPVs={devices}
-        onSubmit={() => { }}
-      /> */}
-      <DeviceRender device={device}/>
-
-      {/* <DeviceControllerBox 
-                    device={devices['IOC:m1']} 
-                    handleSetValueRequest={handleSetValueRequest} 
-                    handleLockClick={toggleDeviceLock} 
-                    svgIcon={deviceIcons.stepperMotor}
-                    className="shadow-xl"
-                /> */}
+      <DeviceRender PVs={devices} ADLData={ADLData} />
 
     </div>
   )
