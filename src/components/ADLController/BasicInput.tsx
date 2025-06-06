@@ -3,10 +3,10 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Lock, LockOpen, QuestionMark } from "@phosphor-icons/react";
 import { Device } from "@/types/deviceControllerTypes";
-import ControllerAbsoluteMove from "./ControllerAbsoluteMove";
-import ControllerRelativeMove from "./ControllerRelativeMove";
-import InputNumber from "./InputNumber";
-import Button from "./Button";
+import ControllerAbsoluteMove from "../ControllerAbsoluteMove";
+import ControllerRelativeMove from "../ControllerRelativeMove";
+import InputNumber from "../InputNumber";
+import Button from "../Button";
 import { controllerIcons } from "@/assets/icons";
 
 export type BasicInputProps = {

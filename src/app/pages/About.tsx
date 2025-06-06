@@ -4,7 +4,7 @@ import Paper from "@/components/Paper";
 import PlotlyScatter from "@/components/PlotlyScatter";
 import SignalMonitorPlot from "@/components/SignalMonitorPlot";
 import Plot, { PlotParams } from 'react-plotly.js';
-import ADLView from "@/components/ADLView";
+import ADLView from "@/components/ADLController/ADLView";
 import { cameraDeviceData } from "@/components/Camera/utils/cameraDeviceData";
 import CameraContainer from "@/components/Camera/CameraContainer";
 

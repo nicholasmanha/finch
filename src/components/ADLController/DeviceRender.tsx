@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from "react";
 import { Device } from "@/types/deviceControllerTypes";
-import InputNumber from "./InputNumber";
-import Button from "./Button";
+import InputNumber from "../InputNumber";
+import Button from "../Button";
 
 export type DeviceRenderProps = {
     device: Device;

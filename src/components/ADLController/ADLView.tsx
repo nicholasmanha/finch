@@ -1,15 +1,15 @@
 import { useMemo, useCallback } from "react";
 
 
-import CameraSettings from "./Camera/CameraSettings";
+import CameraSettings from "../Camera/CameraSettings";
 //import { useCamera } from "./hooks/useCamera";
-import { cameraDeviceData } from "./Camera/utils/cameraDeviceData.js";
+import { cameraDeviceData } from "../Camera/utils/cameraDeviceData.js";
 import useOphydSocket from "@/hooks/useOphydSocket";
-import { DetectorSetting } from "./Camera/types/cameraTypes";
-import InputGroup from "./Camera/InputGroup";
-import InputField from "./Camera/InputField";
-import CameraContainer from "./Camera/CameraContainer";
-import DeviceControllerBox from "./DeviceControllerBox";
+import { DetectorSetting } from "../Camera/types/cameraTypes";
+import InputGroup from "../Camera/InputGroup";
+import InputField from "../Camera/InputField";
+import CameraContainer from "../Camera/CameraContainer";
+import DeviceControllerBox from "../DeviceControllerBox";
 import { deviceIcons } from '@/assets/icons';
 import BasicInput from "./BasicInput";
 import DeviceRender from "./DeviceRender";
