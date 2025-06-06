@@ -16,25 +16,9 @@ import DeviceRender from "./DeviceRender";
 import { adSimDetectorSetup } from "./utils/simDetectorSetupADL";
 import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
+import React from "react";
 
-//"13SIM1:image1:ArrayData"
-export type CameraContainerProps = {
-  prefix: string;
-  customSetup?: boolean;
-  imageArrayPV?: string;
-  settings?: DetectorSetting[];
-  enableControlPanel?: boolean;
-  enableSettings?: boolean;
-  canvasSize?: 'small' | 'medium' | 'large' | 'automatic';
-  sizePVs?: {
-    startX_pv: string;
-    startY_pv: string;
-    sizeX_pv: string;
-    sizeY_pv: string;
-    colorMode_pv: string;
-    dataType_pv: string;
-  }
-}
+
 export default function ADLView() {
 
   const P = "13SIM1"
@@ -52,7 +36,6 @@ export default function ADLView() {
     // Return what remains (or original string if no patterns were found)
     return withoutPrefix || input;
   }
-
 
   const createDeviceNameArray = (Data: Entry[]) => {
 
@@ -84,15 +67,27 @@ export default function ADLView() {
 
   // const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
   // const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
-  var device = devices['IOC:m1']
-  console.log("devices-ADLViewer: ", devices)
+
+  console.log("ADLDAta: ",ADLData)
+  const renderDevices = () => {
+    return ADLData.map((device) => {
+    console.log("device ", device.name);
+    let pv = `${P}:${R}:${extractPVName(device.name)}`;
+    console.log("devices-ADLViewer: ", devices[pv]);
+    
+    return (
+      <React.Fragment key={device.name}>
+        <DeviceRender PV={devices[pv]} ADLData={ADLData} />
+      </React.Fragment>
+    );
+  });
+  };
 
   return (
-    <div className="w-full h-full flex flex-wrap space-x-4 items-start justify-center">
-
-      <DeviceRender PVs={devices} ADLData={ADLData} />
-
-    </div>
+    <>
+      {renderDevices()}
+      
+    </>
   )
 
 }

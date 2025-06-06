@@ -1,23 +1,22 @@
 import React from 'react'
-import { Devices } from "@/types/deviceControllerTypes";
+import { Device } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 
 export type DeviceRenderProps = {
-    PVs: Devices;
+    PV: Device;
     ADLData: Entry[];
 }
 
 
 
-function DeviceRender({ PVs, ADLData=[]}: DeviceRenderProps) {
-    if (!PVs) return;
-    console.log("device render data: ",ADLData);
+function DeviceRender({ PV, ADLData = [] }: DeviceRenderProps) {
+    
+    if (!PV) return;
+    console.log("device render data: ", PV);
     return (
         <>
-            {ADLData.map((entry, index) => (
-          <li key={index}>{entry.name}</li>
-        ))}
-            
+                <li key={PV.name}>{PV.name}: {PV.value}</li>
+
         </>
 
 
