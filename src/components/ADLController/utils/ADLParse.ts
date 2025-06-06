@@ -23,15 +23,6 @@ export function ADLParser(config: any[]): Entry[] {
             });
         }
         
-        if (item["text"]) {
-            const text = item["text"];
-            entries.push({
-                var_type: "text",
-                location: { x: text.object.x, y: text.object.y },
-                size: { width: text.object.width, height: text.object.height },
-                name: text.textix
-            });
-        }
     });
     return entries;
   }
