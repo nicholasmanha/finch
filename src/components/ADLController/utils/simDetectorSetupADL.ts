@@ -43,4 +43,6 @@ const adSimDetectorSetup = [
             "textix": "Start Y"
         }
     }
-]
+];
+
+export {adSimDetectorSetup};
