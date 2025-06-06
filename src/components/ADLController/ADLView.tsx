@@ -35,82 +35,42 @@ export type CameraContainerProps = {
     dataType_pv: string;
   }
 }
-export default function ADLView(
-  {
-    prefix = '13SIM1',
-    settings = cameraDeviceData.ADSimDetector,
-    enableControlPanel = true,
-
-  }: CameraContainerProps) {
+export default function ADLView() {
 
   const P = "13SIM1"
   const R = "cam1"
 
-    const ADLData = ADLParser(adSimDetectorSetup)
+  const ADLData = ADLParser(adSimDetectorSetup)
 
 
-  // removes trailing ":" and trims
-  const sanitizeInputPrefix = (prefix: string) => {
-    var santizedPrefix = '';
-    if (prefix.trim().slice(-1) === ':') {
-      santizedPrefix = prefix.trim().substring(0, prefix.length - 1)
-    } else {
-      santizedPrefix = prefix.trim();
-    }
-    return santizedPrefix;
-  };
+  function extractPVName(input: string): string {
+    if (!input) return '';
 
-const createDeviceNameArray = (settings: DetectorSetting[], prefix: string) => {
+    // Remove all $(...) patterns
+    const withoutPrefix = input.replace(/\$\(.*?\)/g, '');
+
+    // Return what remains (or original string if no patterns were found)
+    return withoutPrefix || input;
+  }
+
+
+  const createDeviceNameArray = (Data: Entry[]) => {
 
     var pvArray: string[] = [];
-    ADLData.forEach((group) => {
-      let pv = `${P}:${R}:${group.name}`
+    Data.forEach((group) => {
+      let pv = `${P}:${R}:${extractPVName(group.name)}`
       pvArray.push(pv);
-      
+
     })
-    
+
     return pvArray;
   };
 
-  const createDeviceNameArrayold = (settings: DetectorSetting[], prefix: string) => {
-    //settings is an array of objects, grouped by setting type
-    //ex) a single pv suffix is at settings[0].inputs[0].suffix
-    //console.log({settings})
 
-    var sanitizedPrefix = sanitizeInputPrefix(prefix); // prefix without trailing ":" or spaces
-
-    var pvArray: string[] = [];
-    settings.forEach((group) => {
-      group.inputs.forEach((input) => {
-        //console.log(group.prefix)
-
-        // prefx:devicePrefix:suffic, ex. 13SIM1:cam1:GainRed
-        let pv = `${sanitizedPrefix}:${group.prefix !== null ? group.prefix + ':' : ''}${input.suffix}`
-
-        // array of output from above
-        pvArray.push(pv);
-      })
-    })
-    if (enableControlPanel) {
-      let controlPV: string | false = createControlPVString(prefix);
-      controlPV && pvArray.push(controlPV);
-    }
-    return pvArray;
-  };
-
-  const createControlPVString = (prefix = '') => {
-    if (prefix === '' && enableControlPanel) {
-      console.log('Error in concatenating a camera control PV, received empty prefix string');
-      return false;
-    }
-    let acquireSuffix = 'cam1:Acquire'; //the suffix responsible for acquiring images, has a value of 1 or 0
-    var controlPV = `${sanitizeInputPrefix(prefix)}:${acquireSuffix}`;
-    return controlPV;
-  };
 
   // array of ex. "13SIM1:cam1:GainRed"
   // settings is cameraDeviceData which is json of data fro PV's for the camera
-  var deviceNames = useMemo(() => createDeviceNameArray(settings, prefix), []);
+  var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []);
   const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
 
 
@@ -122,7 +82,7 @@ const createDeviceNameArray = (settings: DetectorSetting[], prefix: string) => {
 
 
 
-  const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
+  // const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
   // const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
   var device = devices['IOC:m1']
   console.log("devices-ADLViewer: ", devices)
