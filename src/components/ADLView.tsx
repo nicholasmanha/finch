@@ -12,6 +12,7 @@ import CameraContainer from "./Camera/CameraContainer";
 import DeviceControllerBox from "./DeviceControllerBox";
 import { deviceIcons } from '@/assets/icons';
 import BasicInput from "./BasicInput";
+import DeviceRender from "./DeviceRender";
 
 //"13SIM1:image1:ArrayData"
 export type CameraContainerProps = {
@@ -110,16 +111,16 @@ export default function ADLView(
     <div className="w-full h-full flex flex-wrap space-x-4 items-start justify-center">
 
       <div className='overflow-x-auto overflow-y-auto'>
-        <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={true} />
+        {/* <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={true} /> */}
 
       </div>
 
       {/* <InputGroup key={group.title} settingsGroup={group} prefix={prefix} cameraSettingsPVs={devices} onSubmit={() => { }} /> */}
       {/* <InputField
-        pv={'13SIM1:cam1:GainRed'}
-        key={"GainRed"}
+        pv={'13SIM1:cam1:GainGreen_RBV'}
+        key={"GainGreen_RBV"}
         input={{
-          suffix: "GainRed",
+          suffix: "GainGreen_RBV",
           label: "Gain Red",
           type: 'float',
           min: 0,
@@ -128,9 +129,7 @@ export default function ADLView(
         cameraSettingsPVs={devices}
         onSubmit={() => { }}
       /> */}
-      <BasicInput device={device}
-        handleSetValueRequest={handleSetValueRequest}
-      />
+      <DeviceRender device={device}/>
 
       {/* <DeviceControllerBox 
                     device={devices['IOC:m1']} 
