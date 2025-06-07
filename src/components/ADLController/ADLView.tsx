@@ -17,6 +17,7 @@ import { adSimDetectorSetup } from "./utils/simDetectorSetupADL";
 import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
 import React from "react";
+import StyleRender from "./StyleRender";
 
 
 export default function ADLView() {
@@ -26,7 +27,7 @@ export default function ADLView() {
 
   const ADLData = ADLParser(adSimDetectorSetup)
 
-
+  console.log("adl data: ",ADLData)
   function extractPVName(input: string): string {
     if (!input) return '';
 
@@ -68,25 +69,30 @@ export default function ADLView() {
   // const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
   // const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
 
-  console.log("ADLDAta: ",ADLData)
+  console.log("ADLDAta: ", ADLData)
   const renderDevices = () => {
     return ADLData.map((device) => {
-    console.log("device ", device.name);
-    let pv = `${P}:${R}:${extractPVName(device.name)}`;
-    console.log("devices-ADLViewer: ", devices[pv]);
-    
-    return (
-      <React.Fragment key={device.name}>
-        <DeviceRender PV={devices[pv]} ADLData={ADLData} />
-      </React.Fragment>
-    );
-  });
+      if (device.var_type === "text") {
+        return (<StyleRender ADLEntry={device}/>);
+      }
+      else {
+        let pv = `${P}:${R}:${extractPVName(device.name)}`;
+        console.log("devices-ADLViewer: ", devices[pv]);
+
+        return (
+          <React.Fragment key={device.name}>
+            <DeviceRender PV={devices[pv]} ADLEntry={device} />
+          </React.Fragment>
+        );
+      }
+
+    });
   };
 
   return (
     <>
       {renderDevices()}
-      
+
     </>
   )
 

@@ -4,22 +4,43 @@ import { Entry } from './types/ADLEntry';
 
 export type DeviceRenderProps = {
     PV: Device;
-    ADLData: Entry[];
+    ADLEntry: Entry;
 }
 
 
 
-function DeviceRender({ PV, ADLData = [] }: DeviceRenderProps) {
-    
+function DeviceRender({ PV, ADLEntry }: DeviceRenderProps) {
+
     if (!PV) return;
-    console.log("device render data: ", PV);
+    console.log("device render data: ", ADLEntry);
+
+    const renderInput = () => {
+        if (typeof PV.value === 'number') {
+            switch (ADLEntry.var_type) {
+                case "entry":
+                    return <input
+                        type="text"
+                        value={PV.value} // Prepopulated value from PV object
+                        onChange={(e) => {
+                            // Handle change if needed
+                            console.log("New value:", e.target.value);
+                        }}
+                        className="border p-2 rounded" // Optional styling
+                    />
+                case "update":
+                    return <div>{PV.value}</div>
+
+                default:
+
+                    return <p>Input type error</p>;
+            }
+        }
+    }
+
     return (
         <>
-                <li key={PV.name}>{PV.name}: {PV.value}</li>
-
+            {renderInput()}
         </>
-
-
     )
 }
 
