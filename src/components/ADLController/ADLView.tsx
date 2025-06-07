@@ -18,6 +18,7 @@ import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
 import React from "react";
 import StyleRender from "./StyleRender";
+import ADLCanvas from "./ADLCanvas";
 
 
 export default function ADLView() {
@@ -80,9 +81,13 @@ export default function ADLView() {
         console.log("devices-ADLViewer: ", devices[pv]);
 
         return (
+          <>
+          
           <React.Fragment key={device.name}>
             <DeviceRender PV={devices[pv]} ADLEntry={device} />
           </React.Fragment>
+          </>
+          
         );
       }
 
@@ -91,8 +96,8 @@ export default function ADLView() {
 
   return (
     <>
-      {renderDevices()}
-
+      {/* {renderDevices()} */}
+      <ADLCanvas ADLData={ADLData} devices={devices} />
     </>
   )
 
