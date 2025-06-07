@@ -33,6 +33,15 @@ export function ADLParser(config: any[]): Entry[] {
                 name: text.textix
             });
         }
+        if (item["display"]) {
+            const text = item["display"];
+            entries.push({
+                var_type: "display",
+                location: { x: text.object.x, y: text.object.y },
+                size: { width: text.object.width, height: text.object.height },
+                name: "display"
+            });
+        }
     });
     return entries;
   }
