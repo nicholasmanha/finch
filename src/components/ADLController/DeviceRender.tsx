@@ -20,15 +20,16 @@ function DeviceRender({ PV, ADLEntry }: DeviceRenderProps) {
                 case "entry":
                     return <input
                         type="text"
-                        value={PV.value} // Prepopulated value from PV object
+                        value={PV.value}
                         onChange={(e) => {
-                            // Handle change if needed
                             console.log("New value:", e.target.value);
                         }}
-                        className="border p-2 rounded" // Optional styling
+                        className="absolute"
+                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}
                     />
                 case "update":
-                    return <div>{PV.value}</div>
+                    return <div className="absolute"
+                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value}</div>
 
                 default:
 

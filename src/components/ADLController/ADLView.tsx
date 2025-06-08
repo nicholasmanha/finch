@@ -70,33 +70,9 @@ export default function ADLView() {
   // const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
   // const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
 
-  console.log("ADLDAta: ", ADLData)
-  const renderDevices = () => {
-    return ADLData.map((device) => {
-      if (device.var_type === "text") {
-        return (<StyleRender ADLEntry={device}/>);
-      }
-      else {
-        let pv = `${P}:${R}:${extractPVName(device.name)}`;
-        console.log("devices-ADLViewer: ", devices[pv]);
-
-        return (
-          <>
-          
-          <React.Fragment key={device.name}>
-            <DeviceRender PV={devices[pv]} ADLEntry={device} />
-          </React.Fragment>
-          </>
-          
-        );
-      }
-
-    });
-  };
 
   return (
     <>
-      {/* {renderDevices()} */}
       <ADLCanvas ADLData={ADLData} devices={devices} />
     </>
   )

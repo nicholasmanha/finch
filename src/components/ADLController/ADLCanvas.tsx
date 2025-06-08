@@ -54,7 +54,7 @@ function ADLCanvas({ ADLData, devices }: ADLCanvasProps) {
         <>
             <div
                 style={{ width: `${width}px`, height: `${height}px` }}
-                className="bg-red-200"
+                className="bg-red-200 relative"
             >
                 {renderDevices()}
             </div>

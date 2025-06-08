@@ -6,9 +6,8 @@ export type DeviceRenderProps = {
 }
 
 function StyleRender({ADLEntry }: DeviceRenderProps) {
-  return (
-    <div>{ADLEntry.name}</div>
-  )
+  return <div className="absolute"
+                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{ADLEntry.name}</div>
 }
 
 export default StyleRender
