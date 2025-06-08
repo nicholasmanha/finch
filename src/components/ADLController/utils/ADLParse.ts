@@ -1,7 +1,6 @@
 import { Entry } from "../types/ADLEntry";
 
 export function ADLParser(config: any[]): Entry[] {
-    console.log("config: ",config);
     const entries: Entry[] = [];
     config.forEach((item: any) => {
       if (item["text entry"]) {

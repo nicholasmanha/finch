@@ -28,7 +28,6 @@ export default function ADLView() {
 
   const ADLData = ADLParser(adSimDetectorSetup)
 
-  console.log("adl data: ",ADLData)
   function extractPVName(input: string): string {
     if (!input) return '';
 

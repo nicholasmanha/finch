@@ -12,7 +12,6 @@ export type DeviceRenderProps = {
 function DeviceRender({ PV, ADLEntry }: DeviceRenderProps) {
 
     if (!PV) return;
-    console.log("device render data: ", ADLEntry);
 
     const renderInput = () => {
         if (typeof PV.value === 'number') {
@@ -22,7 +21,7 @@ function DeviceRender({ PV, ADLEntry }: DeviceRenderProps) {
                         type="text"
                         value={PV.value}
                         onChange={(e) => {
-                            console.log("New value:", e.target.value);
+                            // console.log("New value:", e.target.value);
                         }}
                         className="absolute"
                         style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}

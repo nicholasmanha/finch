@@ -36,7 +36,6 @@ function ADLCanvas({ ADLData, devices }: ADLCanvasProps) {
             }
             else {
                 let pv = `${P}:${R}:${extractPVName(device.name)}`;
-                console.log("devices-ADLViewer: ", devices[pv]);
 
                 return (
                     <>
