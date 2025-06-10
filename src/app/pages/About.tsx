@@ -30,7 +30,7 @@ export default function About() {
             <ADLView/>
             <div className="h-[400px]"></div>
             <h1>CAMERA CONTAINER</h1>
-            <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={false} />
+            {/* <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={false} /> */}
         </Paper>
 
     )

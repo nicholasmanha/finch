@@ -26,9 +26,13 @@ function ADLCanvas({ ADLData, devices }: ADLCanvasProps) {
     const P = "13SIM1"
     const R = "cam1"
     const renderDevices = () => {
-        return ADLData.map((device: Entry) => {
+        return ADLData.map((device: Entry, index: number) => {
             if (device.var_type === "text") {
-                return (<StyleRender ADLEntry={device} />);
+                return (
+                    <React.Fragment key={index}>
+                        <StyleRender ADLEntry={device} />
+                    </React.Fragment>
+                );
             }
             else if (device.var_type === "display") {
                 width = device.size.width;
@@ -57,7 +61,7 @@ function ADLCanvas({ ADLData, devices }: ADLCanvasProps) {
             >
                 {renderDevices()}
             </div>
-            
+
         </>
 
     )

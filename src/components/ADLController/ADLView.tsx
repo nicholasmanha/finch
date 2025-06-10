@@ -66,10 +66,6 @@ export default function ADLView() {
 
 
 
-  // const deviceNameList = useMemo(() => ['IOC:m1', 'IOC:m2'], []);
-  // const { devices, handleSetValueRequest} = useOphydSocket(wsUrl, deviceNameList);
-
-
   return (
     <>
       <ADLCanvas ADLData={ADLData} devices={devices} />
