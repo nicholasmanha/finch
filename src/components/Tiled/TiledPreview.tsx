@@ -42,7 +42,7 @@ export default function TiledPreview({
 
 
     return (
-        <div className={`${previewSizeMap[previewSize]} flex-grow h-full flex flex-col overflow-y-auto relative ${isFullWidth && 'min-w-full'}`} {...props}>
+        <div className={`${previewSizeMap[previewSize]} flex-grow h-full flex flex-col overflow-y-auto relative max-w-full ${isFullWidth && 'min-w-full'}`} {...props}>
             <div className="flex justify-between px-2 pt-2 absolute top-0 w-full">
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600" onClick={()=>setIsFullWidth(!isFullWidth)}>{isFullWidth ? tailwindIcons.arrowsPointingIn : tailwindIcons.arrowsPointingOut}</div>
                 <div className="h-6 aspect-square hover:cursor-pointer hover:text-slate-600">{tailwindIcons.arrowDownTray}</div>

@@ -129,7 +129,7 @@ After making changes to Storybook, commit.
 Then run the build and publish process
 
 ``` 
-npm deploy-storybook 
+npm run deploy-storybook 
 ```
 
 This will run the build process, upload the files to the gh-pages branch, and deploy the static files at [https://blueskyproject.io/finch/](https://blueskyproject.io/finch/).

@@ -17,7 +17,7 @@ function App() {
     {element:<ContainerQServer className="m-8 h-[calc(100%-4rem)] w-[calc(100%-4rem)] bg-white/50"/>, path: "/qserver", label: "Q Server", icon: <StackPlus size={32} />},
     {element:
         <Tiled 
-          size="medium"
+         
           onSelectCallback={(links:any) => {
             console.log(links);
           }}

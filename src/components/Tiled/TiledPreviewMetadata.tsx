@@ -35,7 +35,7 @@ export default function TiledPreviewMetadata({
             </ul>
 
             <h3 className="m-auto text-left pl-4 mt-2 text-sky-950">Metadata</h3>
-            <div className="px-8" {...props}>
+            <div className="px-8 max-w-[400px]" {...props}>
                 <pre className="text-sm font-mono text-gray-700 whitespace-pre-wrap break-words">{JSON.stringify(item, null, 2)}</pre>
             </div>
 

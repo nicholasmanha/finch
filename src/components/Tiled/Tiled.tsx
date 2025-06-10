@@ -36,9 +36,15 @@ export default function Tiled({
     const [ isExpanded, setIsExpanded ] = useState<boolean>(false);
 
     const sizeClassMap = {
-        small: 'min-w-[600px] min-h-[500px]',
-        medium: 'min-w-[800px] min-h-[800px]',
-        large: 'min-w-[1200px] min-h-[1200px]',
+        small: 'w-[600px] h-[500px]',
+        medium: 'w-[800px] h-[800px]',
+        large: 'w-[1200px] h-[1200px]',
+    };
+
+    const expandedSizeClassMap = {
+        small: 'w-[800px] h-[800px]',
+        medium: 'w-[1000px] h-[1000px]',
+        large: 'w-[1600px] h-[1600px]',
     };
 
     const handleExpandClick = () => {
@@ -52,8 +58,8 @@ export default function Tiled({
 
     if (!isClosed) {
         return (
-            <div className={cn(`flex w-full h-full justify-center items-center ${size && sizeClassMap[size]} ${isPopup ? 'relative top-0 left-0 z-50 w-screen h-screen' : ''}`, backgroundClassName)} {...props}>
-                <div className={cn(`flex flex-col border border-slate-400 shadow-lg rounded-md bg-white ${size ? `${sizeClassMap[size]} w-1/2 h-1/2` : `${sizeClassMap['small']} w-full h-full`} ${isFullWidth && 'w-full'}  ${isExpanded && 'h-full w-full'}`, contentClassName)}>
+            <div className={cn(`flex w-full h-full min-w-[600px] min-h-[500px] justify-center items-center ${size && sizeClassMap[size]} ${(size && isExpanded) && expandedSizeClassMap[size] } ${isPopup ? 'relative top-0 left-0 z-50 w-screen h-screen' : ''}`, backgroundClassName)} {...props}>
+                <div className={cn(`flex flex-col border border-slate-400 shadow-lg rounded-md bg-white ${size ? `w-full h-full` : `h-1/2 w-1/2 min-w-[600px] min-h-[500px]`} ${isFullWidth && 'w-full'}  ${isExpanded && 'h-full w-full'}`, contentClassName)}>
                     {
                         (enableStartupScreen && showStartupScreen) ?
                             <StartupScreen 

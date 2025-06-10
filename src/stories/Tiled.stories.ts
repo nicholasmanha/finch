@@ -308,7 +308,7 @@ export const Primary: Story = {
   args: {
     enableStartupScreen: false,
     size: 'medium',
-    tiledBaseUrl: 'https://tiled-demo.blueskyproject.io/api/v1/'
+    tiledBaseUrl: 'https://tiled-demo.blueskyproject.io/api/v1'
   },
 };
 
