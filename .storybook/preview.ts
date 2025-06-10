@@ -1,13 +1,13 @@
 import type { Preview } from "@storybook/react";
-import {initialize, mswLoader } from "msw-storybook-addon"; // Import the MSW loader
+//import {initialize, mswLoader } from "msw-storybook-addon"; // Import the MSW loader
 import '../tailwind.css';
 const basePath = window.location.pathname.startsWith('/finch') ? '/finch' : ''; //required to work on both local dev and gh pages
 
-initialize({
-  serviceWorker: {
-    url: `${basePath}/mockServiceWorker.js`, 
-  }
-}); // Initialize MSW
+// initialize({
+//   serviceWorker: {
+//     url: `${basePath}/mockServiceWorker.js`, 
+//   }
+// }); 
 const preview: Preview = {
   parameters: {
     controls: {
@@ -22,7 +22,7 @@ const preview: Preview = {
       },
     },
   },
-  loaders: [mswLoader],
+  loaders: [],
 };
 
 export default preview;
