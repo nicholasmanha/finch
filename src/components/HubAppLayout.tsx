@@ -29,7 +29,7 @@ export default function HubAppLayout ( {
   }: HubAppLayoutProps) {
 
 return (
-    <div className="grid grid-cols-[6rem_1fr] grid-rows-[auto_1fr] h-screen">
+    <div className="grid grid-cols-[6rem_1fr] grid-rows-[auto_1fr] h-screen w-screen">
         <HubSidebar 
             routes={routes}
             className={sidebarClassName} 
