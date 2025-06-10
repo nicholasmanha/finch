@@ -7,6 +7,7 @@ import DeviceRender from './DeviceRender';
 export type ADLCanvasProps = {
     devices: Devices;
     ADLData: any;
+    onSubmit?: (pv:string, value:string | boolean | number) => void
 }
 
 function extractPVName(input: string): string {
@@ -22,7 +23,7 @@ function extractPVName(input: string): string {
 let width = 0;
 let height = 0;
 
-function ADLCanvas({ ADLData, devices }: ADLCanvasProps) {
+function ADLCanvas({ ADLData, devices, onSubmit=()=>{} }: ADLCanvasProps) {
     const P = "13SIM1"
     const R = "cam1"
     const renderDevices = () => {
@@ -44,7 +45,7 @@ function ADLCanvas({ ADLData, devices }: ADLCanvasProps) {
                 return (
                     <>
                         <React.Fragment key={device.name}>
-                            <DeviceRender PV={devices[pv]} ADLEntry={device} />
+                            <DeviceRender PV={devices[pv]} ADLEntry={device} onSubmit={onSubmit} />
                         </React.Fragment>
                     </>
 

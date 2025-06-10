@@ -19,7 +19,8 @@ import { ADLParser } from "./utils/ADLParse";
 import React from "react";
 import StyleRender from "./StyleRender";
 import ADLCanvas from "./ADLCanvas";
-
+import { createContext } from 'react';
+import { useContext } from 'react';
 
 export default function ADLView() {
 
@@ -37,6 +38,8 @@ export default function ADLView() {
     // Return what remains (or original string if no patterns were found)
     return withoutPrefix || input;
   }
+
+  
 
   const createDeviceNameArray = (Data: Entry[]) => {
 
@@ -57,18 +60,15 @@ export default function ADLView() {
   var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []);
   const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
 
-
   //we need a ws just for the control PV, since a user may only want that one
   //we need another ws just for the settings PVs, in case the user wants those options.
   //or can we just combine them into one?
 
-  const { devices } = useOphydSocket(wsUrl, deviceNames);
-
-
-
+  const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
+  const onSubmitSettings = useCallback(handleSetValueRequest, []);
   return (
     <>
-      <ADLCanvas ADLData={ADLData} devices={devices} />
+        <ADLCanvas ADLData={ADLData} devices={devices} onSubmit={onSubmitSettings}/>
     </>
   )
 
