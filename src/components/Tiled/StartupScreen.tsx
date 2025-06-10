@@ -21,8 +21,8 @@ export default function StartupScreen({
         console.log({url})
         //ping the tiled server at the url and check if we get a response.
         const res = await getSearchResults('', ()=>{}, url);
-        console.log(typeof res)
-        if (typeof res !== 'string' && 'data' in res) {
+        //console.log(typeof res)
+        if (res !== null && typeof res !== 'string' && 'data' in res) {
             //Tiled will return a data field when it's working
             console.log({res})
             handleSubmit();
@@ -30,12 +30,19 @@ export default function StartupScreen({
             //warn the user that the url isn't working
             console.log({res})
             setWarning(
-                <p>
-                    Did not receive a valid response from the above url. Verify the url.
+                <p className="px-8">
+                    Did not receive a valid response from <b><i>{url}</i></b>, please verify your Tiled server can be reached from this path. The most common issue is CORS restrictions, which need to be set during Tiled server initialization. Check the console for more details.
                 </p>
             );
         }
-    }
+    };
+
+    const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            testTiledConnection(url);
+        }
+    };
 
     return (
         <div className="flex flex-col justify-center items-center space-y-8 h-full w-full" {...props}>
@@ -45,7 +52,9 @@ export default function StartupScreen({
                     className="w-72 h-10 pl-2 border border-slate-500" 
                     type="text" 
                     value={url ? url : ''} 
-                    onChange={e=> handleUrlChange(e.target.value)}>
+                    onKeyDown={handleEnterKey}
+                    onChange={e=> handleUrlChange(e.target.value)}
+                >
                 </input>
                 <Button disabled={url ? false : true} text="Submit" cb={()=>testTiledConnection(url)}/>
             </div>
