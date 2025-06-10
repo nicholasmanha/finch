@@ -58,7 +58,7 @@ function ADLCanvas({ ADLData, devices, onSubmit=()=>{} }: ADLCanvasProps) {
         <>
             <div
                 style={{ width: `${width}px`, height: `${height}px` }}
-                className="bg-red-200 relative"
+                className="bg-[#b1b3b3] relative"
             >
                 {renderDevices()}
             </div>
