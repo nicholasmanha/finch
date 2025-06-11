@@ -55,7 +55,7 @@ export default function TableDeviceController({devices, handleSetValueRequest, t
                     Object.keys(devices).map((deviceName) => {
                         const device = devices[deviceName];
                         return (
-                            <TableRow key={deviceName} className={`${flashingRows[deviceName] ? 'animate-flash1' : ''}`}>
+                            <TableRow key={deviceName} className={`${flashingRows[deviceName] ? 'animate-flash1' : ''} text-black`}>
                                 <TableCell 
                                     className="hover:cursor-pointer py-5" 
                                     onClick={()=>toggleExpand(deviceName)}
