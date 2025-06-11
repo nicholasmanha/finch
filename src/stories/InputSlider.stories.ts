@@ -5,7 +5,7 @@ import { fn } from '@storybook/test';
 import InputSlider from '../components/InputSlider';
 
 const meta = {
-    title: 'Example/InputSlider',
+    title: 'General Components/InputSlider',
     component: InputSlider,
     tags: ['autodocs'],
     parameters: {

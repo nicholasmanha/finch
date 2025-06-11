@@ -4,7 +4,7 @@ import React from 'react';
 import DashboardPage from './DashboardPage';
 
 const meta = {
-    title: 'Example/DashboardPage',
+    title: 'Layout Components/DashboardPage',
     component: DashboardPage,
     tags: ['autodocs'],
     parameters: {

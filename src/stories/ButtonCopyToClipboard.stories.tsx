@@ -5,7 +5,7 @@ import ButtonCopy from '../components/Button';
 import ButtonCopyToClipboard from '../components/ButtonCopyToClipboard';
 
 const meta = {
-    title: 'Example/ButtonCopyToClipboard',
+    title: 'General Components/ButtonCopyToClipboard',
     component: ButtonCopyToClipboard,
     parameters: {
       // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout

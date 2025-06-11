@@ -5,7 +5,7 @@ import Widget from '../components/Widget';
 
 
 const meta = {
-    title: 'Example/Widget',
+    title: 'General Components/Widget',
     component: Widget,
     tags: ['autodocs'],
     parameters: {

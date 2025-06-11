@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import PlotlyHeatmap from '../components/PlotlyHeatmap';
 
 const meta = {
-    title: 'Example/PlotlyHeatmap',
+    title: 'General Components/PlotlyHeatmap',
     component: PlotlyHeatmap,
     tags: ['autodocs'],
     parameters: {

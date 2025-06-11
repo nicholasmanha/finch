@@ -42,7 +42,7 @@ const renderIcon = (structureFamily:string) => {
 export function TiledColumn ({data, index, onItemClick, breadcrumbs, handleSelectClick, className, showTooltip=true}: TiledColumnProps) {
 
     return (
-        <div className={cn("flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-full pt-2", className)}>
+        <div className={cn("flex flex-col-reverse border-r border-r-slate-300 min-w-56 w-fit max-w-xs px-4 h-auto pt-2", className)}>
 {/*             <div className={`${breadcrumbs.length  === index ? '' : 'hidden'} peer m-auto py-2 mt-1 w-full text-center border-t`}>
                 <Button text="Select Container" size="small" cb={handleSelectClick ? ()=>handleSelectClick(data) : () =>{}}/>
             </div>     */}        

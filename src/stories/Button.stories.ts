@@ -4,7 +4,7 @@ import { fn } from '@storybook/test';
 import Button from '../components/Button';
 
 const meta = {
-    title: 'Example/Button',
+    title: 'General Components/Button',
     component: Button,
     parameters: {
       // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
