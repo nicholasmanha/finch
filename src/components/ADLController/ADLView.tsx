@@ -1,28 +1,16 @@
-import { useMemo, useCallback } from "react";
-
-
-import CameraSettings from "../Camera/CameraSettings";
-//import { useCamera } from "./hooks/useCamera";
-import { cameraDeviceData } from "../Camera/utils/cameraDeviceData.js";
+import { useMemo, useCallback, CSSProperties } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
-import { DetectorSetting } from "../Camera/types/cameraTypes";
-import InputGroup from "../Camera/InputGroup";
-import InputField from "../Camera/InputField";
-import CameraContainer from "../Camera/CameraContainer";
-import DeviceControllerBox from "../DeviceControllerBox";
-import { deviceIcons } from '@/assets/icons';
-import BasicInput from "./BasicInput";
-import DeviceRender from "./DeviceRender";
 import { adSimDetectorSetup } from "./utils/simDetectorSetupADL";
 import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
-import React from "react";
-import StyleRender from "./StyleRender";
 import ADLCanvas from "./ADLCanvas";
-import { createContext } from 'react';
-import { useContext } from 'react';
+import { cn } from "@/lib/utils";
 
-export default function ADLView() {
+export type ADLViewProps = {
+  className?: string;
+}
+
+export default function ADLView({ className }: ADLViewProps) {
 
   const P = "13SIM1"
   const R = "cam1"
@@ -39,7 +27,7 @@ export default function ADLView() {
     return withoutPrefix || input;
   }
 
-  
+
 
   const createDeviceNameArray = (Data: Entry[]) => {
 
@@ -68,7 +56,13 @@ export default function ADLView() {
   const onSubmitSettings = useCallback(handleSetValueRequest, []);
   return (
     <>
-        <ADLCanvas ADLData={ADLData} devices={devices} onSubmit={onSubmitSettings}/>
+      <div className={cn(
+        "inline-block rounded-xl", 
+        className 
+      )}>
+        <ADLCanvas ADLData={ADLData} devices={devices} onSubmit={onSubmitSettings} />
+      </div>
+
     </>
   )
 

@@ -37,7 +37,7 @@ function ADLCanvas({ ADLData, devices, onSubmit=()=>{} }: ADLCanvasProps) {
             }
             else if (device.var_type === "display") {
                 width = device.size.width;
-                height = device.size.width;
+                height = device.size.height;
             }
             else {
                 let pv = `${P}:${R}:${extractPVName(device.name)}`;
@@ -58,7 +58,7 @@ function ADLCanvas({ ADLData, devices, onSubmit=()=>{} }: ADLCanvasProps) {
         <>
             <div
                 style={{ width: `${width}px`, height: `${height}px` }}
-                className="bg-[#b1b3b3] relative"
+                className="relative"
             >
                 {renderDevices()}
             </div>
