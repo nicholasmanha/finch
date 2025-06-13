@@ -80,7 +80,7 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                 <p className="text-5xl py-4 text-black">{formattedCurrentValue}</p>
             </div>
             {/* Row - Absolute move */}
-            <div className="flex justify-center items-center py-8 space-x-4">
+            <div className="flex justify-center items-center py-4 space-x-4">
                 <InputNumber 
                     label={device.units && device.units.slice(0,3)}
                     labelPosition='right' 
@@ -93,7 +93,8 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
                 <Button 
                     text="set" 
                     cb={()=>absoluteMoveValue!==null && handleSetValueRequest(device.name, absoluteMoveValue)} 
-                    size="small"
+                    size="medium"
+                    styles="px-6"
                     disabled={device.locked}
                 />
 
