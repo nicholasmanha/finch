@@ -8,22 +8,23 @@ import { generateSampleData, blankScatterData } from "@/utils/plotGenerators";
 
 //const sampleData: PlotlyScatterData = generateSampleData(30) // 30 points of sample data
 export type SignalMonitorPlotProps = {
+    pv: string;
     className?: string;
     numVisiblePoints?: number;
     pollingIntervalMilliseconds?: number;
     demo?: boolean;
     tickTextIntervalSeconds?: number;
-    
 }
 export default function SignalMonitorPlot({
     className,
     numVisiblePoints = 30,
     pollingIntervalMilliseconds = 1000,
     demo=false,
-    tickTextIntervalSeconds=10
+    tickTextIntervalSeconds=10,
+    pv
 }: SignalMonitorPlotProps) {
     const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
-    const deviceNameList = useMemo(()=>['IOC:m1'], []);
+    const deviceNameList = useMemo(()=>[pv], []);
     const { devices } = useOphydSocket(wsUrl, deviceNameList);  //todo: create an optional callback arg that sends update messages into fn
     const [data, setData] = useState<PlotlyScatterData>(demo ? generateSampleData(numVisiblePoints) : blankScatterData);
     const [ xLayout, setXLayout] = useState<{tickvals:string[], ticktext:string[]}>({tickvals: [], ticktext: []});
@@ -82,11 +83,11 @@ export default function SignalMonitorPlot({
             return () => clearInterval(interval);
         } else {
             //get live value from EPICS
-            if (!devices || !devices['IOC:m1']) {
+            if (!devices || !devices[pv]) {
                 return;
             } else {
                 //record the current value immediately to the chart
-                let currentValue = devices['IOC:m1'].value;
+                let currentValue = devices[pv].value;
                 if (typeof currentValue !== 'number') return;
                 const newXValue = new Date().toLocaleTimeString('en-US', { hour12: false });
                 setData((prevData) => {
@@ -111,7 +112,7 @@ export default function SignalMonitorPlot({
  
 
                 const interval = setInterval(() => {
-                    let currentValue = devices['IOC:m1'].value;
+                    let currentValue = devices[pv].value;
                     if (typeof currentValue !== 'number') return;
                     const newXValue = new Date().toLocaleTimeString('en-US', { hour12: false });
                     setData((prevData) => {
@@ -150,6 +151,7 @@ export default function SignalMonitorPlot({
             data={[data]} 
             className={className} 
             xAxisLayout={xLayout}
+            xAxisTitle={pv}
         />
     )
 }
