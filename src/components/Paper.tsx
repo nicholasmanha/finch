@@ -25,8 +25,15 @@ export default function Paper({size="full", rounded="medium", title, className, 
     return (
         <article className={cn(`bg-white shadow-lg py-2 px-[1px] ${sizeClassMap[size]} ${roundedEdgeClassMap[rounded]}`, className)}>
             <div className="h-full w-full overflow-y-auto rounded-scrollbar">
-                {title && <h3 className="w-full text-sky-900 font-medium mb-2 text-center">{title}</h3>}
-                {children}
+                {title 
+                    ? 
+                        <>
+                            <h3 className="w-full text-sky-900 font-medium mb-2 text-center h-4">{title}</h3>
+                            <div className="w-full h-[calc(100%-3rem)]">{children}</div>
+                        </>
+                    :
+                        children
+                    }
             </div>
         </article>
     )

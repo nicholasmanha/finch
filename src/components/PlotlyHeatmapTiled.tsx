@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PlotlyHeatmap from './PlotlyHeatmap';
-
+import { logNormalizeArray } from '@/utils/plotProcessors';
 type Props = {
   url: string; // Metadata URL from Tiled (e.g., /api/v1/metadata/my_image)
 };
@@ -60,7 +60,7 @@ export default function PlotlyHeatmapTiled({ url }: Props) {
         array2D.push(row);
       }
 
-      setArray(array2D.reverse());
+      setArray(logNormalizeArray(array2D.reverse()));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(`Failed to load PNG slice: ${msg}`);
@@ -101,13 +101,13 @@ export default function PlotlyHeatmapTiled({ url }: Props) {
   }, [sliderIndex]);
 
   return (
-    <div className="flex flex-col items-center gap-4 h-4/5">
+    <div className="flex flex-col items-center gap-4 h-full w-full">
       {error && <div className="text-red-600">{error}</div>}
 
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
       {shape?.length === 3 && (
-        <div className="w-full px-8">
+        <div className="w-full px-8 h-12">
           <input
             type="range"
             min={0}
@@ -121,14 +121,16 @@ export default function PlotlyHeatmapTiled({ url }: Props) {
       )}
 
       {array && (
-        <PlotlyHeatmap
-          array={array}
-          title="Tiled PNG Slice"
-          colorScale="Viridis"
-          lockPlotHeightToParent={true}
-          showTicks={false}
-          showScale={true}
-        />
+        <div className={`w-full ${shape?.length === 3 ? 'h-[calc(100%-4rem)]' : 'h-full'}`}>
+          <PlotlyHeatmap
+            array={array}
+            lockPlotHeightToParent={true}
+            title="Tiled PNG Slice"
+            colorScale='Viridis'
+            showTicks={false}
+            showScale={true}
+          />
+        </div>
       )}
     </div>
   );
