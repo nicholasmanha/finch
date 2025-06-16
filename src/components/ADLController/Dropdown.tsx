@@ -1,25 +1,39 @@
-import React from 'react'
+import React from 'react';
 import { Entry } from './types/ADLEntry';
+import { Device } from "@/types/deviceControllerTypes";
 
 export type DropdownProps = {
+    PV: Device;
     ADLEntry: Entry;
 }
 
-function Dropdown( {ADLEntry }: DropdownProps) {
-    return (
-        <>
-            <div className="absolute"
-                style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>
-                <select name="cars" id="cars">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </select>
-            </div>
-        </>
+function Dropdown({ PV, ADLEntry }: DropdownProps) {
+    console.log("Dropdown PV: ", PV); // Debug log
 
-    )
+    // render nothing if PV or enum_strs is missing
+    if (!PV || !PV.enum_strs) {
+        return null; 
+    }
+
+    return (
+        <div
+            className="absolute"
+            style={{
+                left: `${ADLEntry.location.x}px`,
+                top: `${ADLEntry.location.y}px`,
+                width: `${ADLEntry.size.width}px`,
+                height: `${ADLEntry.size.height}px`
+            }}
+        >
+            <select name="cars" id="cars">
+                {PV.enum_strs.map((option: string, index: number) => (
+                    <option key={index} value={index}>
+                        {option}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
 }
 
-export default Dropdown
+export default Dropdown;

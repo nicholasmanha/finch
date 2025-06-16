@@ -41,9 +41,11 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
                 height = device.size.height;
             }
             else if (device.var_type === "menu") {
+                let pv = `${P}:${R}:${extractPVName(device.name)}`;
+                console.log(devices[pv])
                 return (
                     < React.Fragment key={index} >
-                        <Dropdown ADLEntry={device}/>
+                        <Dropdown PV={devices[pv]} ADLEntry={device}/>
                     </React.Fragment >
                 );
             }
