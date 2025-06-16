@@ -3,11 +3,12 @@ import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
+import Dropdown from './Dropdown';
 
 export type ADLCanvasProps = {
     devices: Devices;
     ADLData: any;
-    onSubmit?: (pv:string, value:string | boolean | number) => void
+    onSubmit?: (pv: string, value: string | boolean | number) => void
 }
 
 function extractPVName(input: string): string {
@@ -23,7 +24,7 @@ function extractPVName(input: string): string {
 let width = 0;
 let height = 0;
 
-function ADLCanvas({ ADLData, devices, onSubmit=()=>{} }: ADLCanvasProps) {
+function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
     const P = "13SIM1"
     const R = "cam1"
     const renderDevices = () => {
@@ -38,6 +39,13 @@ function ADLCanvas({ ADLData, devices, onSubmit=()=>{} }: ADLCanvasProps) {
             else if (device.var_type === "display") {
                 width = device.size.width;
                 height = device.size.height;
+            }
+            else if (device.var_type === "menu") {
+                return (
+                    < React.Fragment key={index} >
+                        <Dropdown ADLEntry={device}/>
+                    </React.Fragment >
+                );
             }
             else {
                 let pv = `${P}:${R}:${extractPVName(device.name)}`;

@@ -3,7 +3,7 @@ import { Entry } from "../types/ADLEntry";
 export function ADLParser(config: any[]): Entry[] {
     const entries: Entry[] = [];
     config.forEach((item: any) => {
-      if (item["text entry"]) {
+        if (item["text entry"]) {
             const textEntry = item["text entry"];
             entries.push({
                 var_type: "entry",
@@ -12,7 +12,7 @@ export function ADLParser(config: any[]): Entry[] {
                 name: textEntry.control.chan
             });
         }
-        
+
         if (item["text update"]) {
             const textUpdate = item["text update"];
             entries.push({
@@ -22,7 +22,7 @@ export function ADLParser(config: any[]): Entry[] {
                 name: textUpdate.monitor.chan
             });
         }
-        
+
         if (item["text"]) {
             const text = item["text"];
             entries.push({
@@ -41,6 +41,15 @@ export function ADLParser(config: any[]): Entry[] {
                 name: "display"
             });
         }
+        if (item["menu"]) {
+            const menu = item["menu"];
+            entries.push({
+                var_type: "menu",
+                location: { x: menu.object.x, y: menu.object.y },
+                size: { width: menu.object.width, height: menu.object.height },
+                name: menu.control.chan
+            });
+        }
     });
     return entries;
-  }
+}
