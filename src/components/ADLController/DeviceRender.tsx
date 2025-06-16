@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Device } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import InputField from '../Camera/InputField';
-import InputInteger from './InputInteger';
+import InputInteger from './InputNumber';
 
 export type DeviceRenderProps = {
     PV: Device;

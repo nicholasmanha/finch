@@ -45,7 +45,7 @@ export default function ADLView({ className }: ADLViewProps) {
 
   // array of ex. "13SIM1:cam1:GainRed"
   // settings is cameraDeviceData which is json of data fro PV's for the camera
-  var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []);
+  var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []); 
   const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
 
   //we need a ws just for the control PV, since a user may only want that one

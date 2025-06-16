@@ -25,22 +25,24 @@ export default function InputInteger({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        // Allow numbers with decimals and empty string
-        if (newValue === '' || !isNaN(parseFloat(newValue))) {
+        if (!isNaN(parseFloat(newValue)) || newValue==='' || newValue==='.') {
             if (newValue === '') {
                 setValue('');
             } else {
-                // Convert to number but preserve decimal places
-                const numValue = parseFloat(newValue);
-                setValue(numValue);
+                setValue(newValue);
             }
         }
+        
     };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
+            console.log(typeof value)
             if (typeof value === 'number') {
                 onSubmit(value);
+            }
+            else if(typeof value === 'string') {
+                onSubmit(parseFloat(value));
             }
         }
     };
@@ -51,7 +53,7 @@ export default function InputInteger({
             <input
                 disabled={isDisabled}
                 type="text"
-                value={typeof value === 'number' ? value.toFixed(2) : parseFloat(value).toFixed(2)}
+                value={value}
                 className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
                 onKeyDown={handleKeyPress}
                 onChange={handleChange}
