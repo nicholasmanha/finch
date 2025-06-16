@@ -25,7 +25,10 @@ export default function InputInteger({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        if (!isNaN(parseFloat(newValue)) || newValue==='' || newValue==='.') {
+        
+        // only allows numbers, '', '.'
+        if (/^$|^[0-9]*\.?[0-9]*$/.test(newValue)) {
+            console.log(!isNaN(parseFloat(newValue)))
             if (newValue === '') {
                 setValue('');
             } else {
@@ -37,11 +40,10 @@ export default function InputInteger({
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            console.log(typeof value)
             if (typeof value === 'number') {
                 onSubmit(value);
             }
-            else if(typeof value === 'string') {
+            else if(typeof value === 'string' && !isNaN(parseFloat(value))) {
                 onSubmit(parseFloat(value));
             }
         }
