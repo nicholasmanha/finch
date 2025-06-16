@@ -1,21 +1,38 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useState, useEffect } from "react";
 
 type InputIntegerProps = {
     label?: string;
     onSubmit?: (value: number) => void;
     isDisabled?: boolean;
     style?: CSSProperties;
-    val?: number
+    val?: number;
 };
-export default function InputInteger ({label='', onSubmit=(input)=>{console.log('submit ' + input )}, isDisabled=false, style, val }: InputIntegerProps) {
-    const [value, setValue] = useState<string | number>('');
+
+export default function InputInteger({
+    label = '',
+    onSubmit = (input) => { console.log('submit ' + input) },
+    isDisabled = false,
+    style,
+    val
+}: InputIntegerProps) {
+    const [value, setValue] = useState<string | number>(val ?? '');
+
+    useEffect(() => {
+        if (val !== undefined) {
+            setValue(val);
+        }
+    }, [val]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        var newValue = e.target.value;
-        if (!newValue.endsWith('.') && (!isNaN(parseInt(newValue)) || newValue==='')) {
+        const newValue = e.target.value;
+        // Allow numbers with decimals and empty string
+        if (newValue === '' || !isNaN(parseFloat(newValue))) {
             if (newValue === '') {
-                setValue('')
+                setValue('');
             } else {
-                setValue(parseInt(newValue));
+                // Convert to number but preserve decimal places
+                const numValue = parseFloat(newValue);
+                setValue(numValue);
             }
         }
     };
@@ -33,10 +50,10 @@ export default function InputInteger ({label='', onSubmit=(input)=>{console.log(
             {label}
             <input
                 disabled={isDisabled}
-                type="text" 
-                value={value} 
-                className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`} 
-                onKeyDown={handleKeyPress} 
+                type="text"
+                value={typeof value === 'number' ? value.toFixed(2) : parseFloat(value).toFixed(2)}
+                className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
+                onKeyDown={handleKeyPress}
                 onChange={handleChange}
                 style={style}
             />

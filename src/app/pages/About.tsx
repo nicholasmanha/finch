@@ -28,9 +28,7 @@ export default function About() {
             {/* <PlotlyScatter data={data} className="h-4/5 w-4/5 m-auto" xAxisRange={[0, 100]}/> */}
 
             <p className="text-lg text-center mt-4">ADL VIEW</p>
-            <ADLView className="bg-slate-100"/>
-            <div className="h-[400px]"></div>
-            <h1>CAMERA CONTAINER</h1>
+            <ADLView/>
             {/* <CameraContainer prefix="13SIM1" enableControlPanel={true} enableSettings={true} canvasSize="medium" customSetup={false} /> */}
         </>
 

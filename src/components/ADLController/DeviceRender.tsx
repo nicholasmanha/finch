@@ -27,17 +27,9 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
             switch (ADLEntry.var_type) {
                 case "entry":
                     return <InputInteger val={PV.value} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }}/>;
-                // return <input
-                //     type="text"
-                //     value={PV.value}
-                //     onKeyDown={handleKeyPress}
-                //     onChange={handleChange}
-                //     className="absolute"
-                //     style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}
-                // />
                 case "update":
                     return <div className="absolute"
-                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value}</div>
+                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value.toFixed(2)}</div>
 
                 default:
 
