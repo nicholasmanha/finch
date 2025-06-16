@@ -12,7 +12,7 @@ function Dropdown({ PV, ADLEntry }: DropdownProps) {
 
     // render nothing if PV or enum_strs is missing
     if (!PV || !PV.enum_strs) {
-        return null; 
+        return null;
     }
 
     return (
@@ -25,13 +25,18 @@ function Dropdown({ PV, ADLEntry }: DropdownProps) {
                 height: `${ADLEntry.size.height}px`
             }}
         >
-            <select name="cars" id="cars">
-                {PV.enum_strs.map((option: string, index: number) => (
-                    <option key={index} value={index}>
-                        {option}
-                    </option>
-                ))}
-            </select>
+            {typeof PV.value === "number" ?
+                <select name="cars" id="cars" value={PV.value}>
+                    {PV.enum_strs.map((option: string, index: number) => (
+                        <option key={index} value={index}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+                :
+                <>{console.log("PV value NaN")}</>
+            }
+
         </div>
     );
 }
