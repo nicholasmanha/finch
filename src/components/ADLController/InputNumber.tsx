@@ -1,4 +1,4 @@
-import { CSSProperties, useState, useEffect } from "react";
+import { CSSProperties, useState, useEffect, useRef } from "react";
 
 type InputIntegerProps = {
     label?: string;
@@ -15,36 +15,45 @@ export default function InputInteger({
     style,
     val
 }: InputIntegerProps) {
-    const [value, setValue] = useState<string | number>(val ?? '');
+    const [inputValue, setInputValue] = useState<string>(val !== undefined ? val.toFixed(2) : '');
+    const inputRef = useRef<HTMLInputElement>(null); 
 
     useEffect(() => {
         if (val !== undefined) {
-            setValue(val);
+            setInputValue(val.toFixed(2));
         }
     }, [val]);
 
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        e.target.select();
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        
-        // only allows numbers, '', '.'
         if (/^$|^[0-9]*\.?[0-9]*$/.test(newValue)) {
-            console.log(!isNaN(parseFloat(newValue)))
-            if (newValue === '') {
-                setValue('');
-            } else {
-                setValue(newValue);
-            }
+            setInputValue(newValue);
         }
-        
+    };
+
+    const formatToTwoDecimals = () => {
+        if (inputValue === '') {
+            setInputValue('');
+            return;
+        }
+        const num = parseFloat(inputValue);
+        if (!isNaN(num)) {
+            setInputValue(num.toFixed(2));
+        } else {
+            setInputValue('');
+        }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            if (typeof value === 'number') {
-                onSubmit(value);
-            }
-            else if(typeof value === 'string' && !isNaN(parseFloat(value))) {
-                onSubmit(parseFloat(value));
+            formatToTwoDecimals();
+            const num = parseFloat(inputValue);
+            if (!isNaN(num)) {
+                onSubmit(num);
             }
         }
     };
@@ -53,14 +62,17 @@ export default function InputInteger({
         <label className={`${isDisabled ? 'text-slate-400' : 'text-black'} w-full max-w-64 flex justify-between`}>
             {label}
             <input
+                ref={inputRef}
                 disabled={isDisabled}
                 type="text"
-                value={value}
+                value={inputValue}
                 className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
-                onKeyDown={handleKeyPress}
                 onChange={handleChange}
+                onKeyDown={handleKeyPress}
+                onBlur={formatToTwoDecimals}
+                onFocus={handleFocus}
                 style={style}
             />
         </label>
-    )
+    );
 }
