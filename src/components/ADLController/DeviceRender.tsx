@@ -3,6 +3,7 @@ import { Device } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import InputField from '../Camera/InputField';
 import InputInteger from './InputNumber';
+import InputEnum from './InputEnum';
 
 export type DeviceRenderProps = {
     PV: Device;
@@ -30,7 +31,8 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
                 case "update":
                     return <div className="absolute"
                         style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value.toFixed(2)}</div>
-
+                case "menu":
+                    return <InputEnum val={PV.value} enums={PV.enum_strs} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }}/>
                 default:
 
                     return <p>Input type error</p>;

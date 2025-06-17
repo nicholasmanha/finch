@@ -4,6 +4,7 @@ import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
 import Dropdown from './Dropdown';
+import InputEnum from './InputEnum';
 
 export type ADLCanvasProps = {
     devices: Devices;
@@ -39,15 +40,6 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
             else if (device.var_type === "display") {
                 width = device.size.width;
                 height = device.size.height;
-            }
-            else if (device.var_type === "menu") {
-                let pv = `${P}:${R}:${extractPVName(device.name)}`;
-                console.log(devices[pv])
-                return (
-                    < React.Fragment key={index} >
-                        <Dropdown PV={devices[pv]} ADLEntry={device}/>
-                    </React.Fragment >
-                );
             }
             else {
                 let pv = `${P}:${R}:${extractPVName(device.name)}`;
