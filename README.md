@@ -92,6 +92,44 @@ npm run storybook
 ```
 [localhost:6006](http://localhost:6006)
 
+# Developer Scripts
 
+## Updating the NPM Package
+Future configuration will likely support automatic npm builds through gh actions, but currently manual updates are required.
 
+First commit any changes so your working tree is clean
 
+Then increment the package version as appropriate
+
+``` 
+npm version patch 
+```
+
+Run the build
+
+``` 
+npm run build 
+```
+
+Publish (token required the first time)
+
+```
+npm publish
+```
+
+To verify what you're about to publish, you can check out the /dist folder.
+
+The build can be viewed at [https://www.npmjs.com/package/@blueskyproject/finch](https://www.npmjs.com/package/@blueskyproject/finch).
+
+## Updating Storybook on GH Pages
+Please note that storybook on gh pages is hosted with a /finch path, and local development is served at /. The storybook manager and service worker are configured to look at the current path before deciding where to make files available at.
+
+After making changes to Storybook, commit.
+
+Then run the build and publish process
+
+``` 
+npm run deploy-storybook 
+```
+
+This will run the build process, upload the files to the gh-pages branch, and deploy the static files at [https://blueskyproject.io/finch/](https://blueskyproject.io/finch/).

@@ -73,11 +73,11 @@ export default function DeviceControllerBox({ device, handleSetValueRequest, han
             </div>
             {/* Row - Device Name */}
             <div className="flex justify-center items-center">
-                <p className="text-3xl text-slate-800">{device.name}</p>
+                <p className="text-3xl text-slate-800 overflow-hidden overflow-ellipsis px-4">{device.name}</p>
             </div>
             {/* Row - Current Device Value */}
             <div className="flex justify-center items-center ">
-                <p className="text-5xl py-4">{formattedCurrentValue}</p>
+                <p className="text-5xl py-4 text-black">{formattedCurrentValue}</p>
             </div>
             {/* Row - Absolute move */}
             <div className="flex justify-center items-center py-8 space-x-4">

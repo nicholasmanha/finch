@@ -1,12 +1,11 @@
-import { useMemo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import useOphydSocket from "@/hooks/useOphydSocket";
 import { Table, TableHeader, TableHead, TableCaption, TableBody, TableRow, TableCell } from "./ui/table";
 import ControllerAbsoluteMove from "./ControllerAbsoluteMove";
 import ControllerRelativeMove from "./ControllerRelativeMove";
 import { Devices } from "@/types/deviceControllerTypes";
 
-type TableDeviceControllerProps = {
+export type TableDeviceControllerProps = {
     devices: Devices;
     handleSetValueRequest: (deviceName: string, value: number) => void;
     toggleDeviceLock: (deviceName: string, locked: boolean) => void;
@@ -56,7 +55,7 @@ export default function TableDeviceController({devices, handleSetValueRequest, t
                     Object.keys(devices).map((deviceName) => {
                         const device = devices[deviceName];
                         return (
-                            <TableRow key={deviceName} className={`${flashingRows[deviceName] ? 'animate-flash1' : ''}`}>
+                            <TableRow key={deviceName} className={`${flashingRows[deviceName] ? 'animate-flash1' : ''} text-black`}>
                                 <TableCell 
                                     className="hover:cursor-pointer py-5" 
                                     onClick={()=>toggleExpand(deviceName)}
