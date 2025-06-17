@@ -3,8 +3,6 @@ import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
-import Dropdown from './Dropdown';
-import InputEnum from './InputEnum';
 
 export type ADLCanvasProps = {
     devices: Devices;

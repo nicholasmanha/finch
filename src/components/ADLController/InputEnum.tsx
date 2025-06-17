@@ -5,7 +5,7 @@ import { Entry } from './types/ADLEntry';
 
 type InputEnumProps = {
     label?: string;
-    onSubmit?: (input: number) => void; // Changed from string to number
+    onSubmit?: (input: number) => void;
     isDisabled?: boolean;
     style?: CSSProperties;
     val?: number;
@@ -18,19 +18,21 @@ export default function InputEnum({ label = '',
     style,
     val,
     enums = ['blank1', 'blank2'] }: InputEnumProps) {
-    const [selectedEnum, setSelectedEnum] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
-
     const containerRef = useRef<null | HTMLDivElement>(null);
+
+    const getCurrentEnum = () => {
+        if (val === undefined || !enums || val < 0 || val >= enums.length) return '';
+        return enums[val];
+    };
 
     const handleInputClick = () => {
         if (!isDisabled) setDropdownVisible(!dropdownVisible);
     };
 
-    const handleEnumClick = (item: string, index: number) => { // Added index parameter
-        if (item !== selectedEnum) {
-            setSelectedEnum(item);
-            onSubmit(index); // Now submitting the index instead of the string
+    const handleEnumClick = (index: number) => {
+        if (val !== index) {
+            onSubmit(index);
         }
         setDropdownVisible(false);
     };
@@ -53,7 +55,7 @@ export default function InputEnum({ label = '',
             <div className={`w-1/2 border border-slate-300 flex flex-col`} onClick={handleInputClick}>
                 <div className="flex w-full">
                     <div className="flex-grow">
-                        <p className='pl-2'>{selectedEnum}</p>
+                        <p className='pl-2'>{getCurrentEnum()}</p>
                     </div>
                     <div className="flex-shrink-0">{dropdownVisible ? tailwindIcons.chevronUp : tailwindIcons.chevronDown}</div>
                 </div>
@@ -62,11 +64,11 @@ export default function InputEnum({ label = '',
                         {dropdownVisible && (
                             <ul className="z-10 absolute w-full top-0 bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-auto">
                                 {enums ? enums
-                                    .map((item, index) => ( // Added index parameter to map
+                                    .map((item, index) => (
                                         <li
                                             key={item}
-                                            onClick={() => handleEnumClick(item, index)} // Passing both item and index
-                                            className="p-2 cursor-pointer hover:bg-gray-200"
+                                            onClick={() => handleEnumClick(index)}
+                                            className={`p-2 cursor-pointer hover:bg-gray-200 ${val === index ? 'bg-gray-100 font-medium' : ''}`}
                                         >
                                             {item}
                                         </li>

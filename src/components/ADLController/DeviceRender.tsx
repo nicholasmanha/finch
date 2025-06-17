@@ -34,7 +34,6 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
                 case "menu":
                     return <InputEnum val={PV.value} enums={PV.enum_strs} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }}/>
                 default:
-
                     return <p>Input type error</p>;
             }
         }
