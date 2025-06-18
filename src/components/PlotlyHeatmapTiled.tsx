@@ -1,16 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PlotlyHeatmap from './PlotlyHeatmap';
-import { logNormalizeArray } from '@/utils/plotProcessors';
+import { logNormalizeArray, histEqualizeArray, histEqualizeUint8Array } from '@/utils/plotProcessors';
+import { cn } from '@/lib/utils';
 type Props = {
   url: string; // Metadata URL from Tiled (e.g., /api/v1/metadata/my_image)
+  className?: string; // Optional className for styling
+  size?: 'small' | 'medium' | 'large'; // Optional size prop for styling
 };
 
-export default function PlotlyHeatmapTiled({ url }: Props) {
+export default function PlotlyHeatmapTiled({ url, className, size='medium' }: Props) {
   const [array, setArray] = useState<number[][] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sliderIndex, setSliderIndex] = useState<number>(0);
   const [shape, setShape] = useState<number[] | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const sizeClassMap = {
+    small: 'w-[400px] h-[500px]',
+    medium: 'w-[700px] h-[800px]',
+    large: 'w-[1000px] h-[1200px]',
+};
 
   const fetchAndDecodePNG = async (zIndex: number, baseUrl: string) => {
     try {
@@ -60,7 +69,10 @@ export default function PlotlyHeatmapTiled({ url }: Props) {
         array2D.push(row);
       }
 
-      setArray(logNormalizeArray(array2D.reverse()));
+      setArray(array2D.reverse());
+      //setArray(logNormalizeArray(array2D.reverse()));
+      //setArray(histEqualizeUint8Array(array2D.reverse()))
+
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setError(`Failed to load PNG slice: ${msg}`);
@@ -101,11 +113,21 @@ export default function PlotlyHeatmapTiled({ url }: Props) {
   }, [sliderIndex]);
 
   return (
-    <div className="flex flex-col items-center gap-4 h-full w-full">
+    <div className={cn(`flex flex-col items-center gap-4 max-h-full max-w-full ${sizeClassMap[size]}`, className)}>
       {error && <div className="text-red-600">{error}</div>}
-
       <canvas ref={canvasRef} style={{ display: 'none' }} />
-
+      {array && (
+        <div className={`w-full ${shape?.length === 3 ? 'h-[calc(100%-4rem)]' : 'h-full'}`}>
+          <PlotlyHeatmap
+            array={array}
+            lockPlotHeightToParent={true}
+            lockPlotWidthHeightToInputArray={true}
+            colorScale='Viridis'
+            showTicks={false}
+            showScale={true}
+            />
+        </div>
+      )}
       {shape?.length === 3 && (
         <div className="w-full px-8 h-12">
           <input
@@ -117,19 +139,6 @@ export default function PlotlyHeatmapTiled({ url }: Props) {
             className="w-full"
           />
           <div className="text-center text-sm text-gray-600">Z-slice: {sliderIndex}</div>
-        </div>
-      )}
-
-      {array && (
-        <div className={`w-full ${shape?.length === 3 ? 'h-[calc(100%-4rem)]' : 'h-full'}`}>
-          <PlotlyHeatmap
-            array={array}
-            lockPlotHeightToParent={true}
-            title="Tiled PNG Slice"
-            colorScale='Viridis'
-            showTicks={false}
-            showScale={true}
-          />
         </div>
       )}
     </div>

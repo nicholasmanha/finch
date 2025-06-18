@@ -41,6 +41,16 @@ export interface TiledSearchResult {
     };
 }
 
+export interface TiledItemLinks {
+        self: string;
+        full?: string;
+        block?: string;
+        buffers?: string;
+        partition?: string;
+        search?: string;
+        default?: string;
+}
+
 // Definition for a single search item
 export interface TiledSearchItem<StructureType> {
     id: string; // Identifier for the item
@@ -53,15 +63,7 @@ export interface TiledSearchItem<StructureType> {
         sorting: Sorting[] | null; // Sorting details, if applicable
         data_sources: string | null; // Data source, if any
     };
-    links: {
-        self: string;
-        full?: string;
-        block?: string;
-        buffers?: string;
-        partition?: string;
-        search?: string;
-        default?: string;
-    };
+    links: TiledItemLinks; // Links related to the item
     meta: unknown | null; // Optional metadata
 }
 
