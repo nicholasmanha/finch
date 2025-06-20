@@ -25,9 +25,8 @@ export default function SignalMonitorPlot({
     pv,
     color="grey"
 }: SignalMonitorPlotProps) {
-    const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
     const deviceNameList = useMemo(()=>[pv], []);
-    const { devices } = useOphydSocket(wsUrl, deviceNameList);  //todo: create an optional callback arg that sends update messages into fn
+    const { devices } = useOphydSocket(deviceNameList);  //todo: create an optional callback arg that sends update messages into fn
     let styledData = {...blankScatterData, marker: {...blankScatterData.marker, color:color}};
     const [data, setData] = useState<PlotlyScatterData>(demo ? generateSampleData(numVisiblePoints) : styledData);
     const [ xLayout, setXLayout] = useState<{tickvals:string[], ticktext:string[]}>({tickvals: [], ticktext: []});

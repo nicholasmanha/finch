@@ -7,7 +7,8 @@ import {
     MetaUpdateResponse,
 } from 'src/types/ophydSocketTypes';
 
-export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) {
+export default function useOphydSocket(deviceNameList: string[], wsUrl?: string) {
+    const apiUrl:string = wsUrl ? wsUrl : (import.meta.env.VITE_OPHYD_WS || "ws://localhost:8000/ophydSocket");
     const [devices, setDevices] = useState<Devices>({});
     const wsRef = useRef<WebSocket | null>(null);
     console.log('running hook')
@@ -68,7 +69,7 @@ export default function useOphydSocket(wsUrl: string, deviceNameList: string[]) 
     // Initialize WebSocket connection
     useEffect(() => {
         console.log('initializing WebSocket connection');
-        const ws = new WebSocket(wsUrl);
+        const ws = new WebSocket(apiUrl);
         wsRef.current = ws;
 
         // Open WebSocket connection and subscribe to devices
