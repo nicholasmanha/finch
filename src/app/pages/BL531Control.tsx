@@ -9,9 +9,8 @@ import SignalMonitorPlot from '@/components/SignalMonitorPlot';
 import { deviceIcons } from '@/assets/icons';
 
 export default function BL531Control() {
-    const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
     const deviceNameList = useMemo(()=>['IOC:m1', 'IOC:m2'], []);
-    const { devices, handleSetValueRequest, toggleDeviceLock, toggleExpand } = useOphydSocket(wsUrl, deviceNameList);
+    const { devices, handleSetValueRequest, toggleDeviceLock, toggleExpand } = useOphydSocket(deviceNameList);
 
     return (
         <Bento>
