@@ -9,14 +9,14 @@ import { TiledColumn } from "./TiledColumn";
 import './Tiled.css'
 
 
-import { TiledSearchItem, TiledStructures } from "./types";
+import { TiledSearchItem, TiledStructures, TiledItemLinks } from "./types";
 import { generateLinksForCallback } from "./utils";
 
 import { useTiled } from './useTiled';
 
 type TiledContainerProps = {
     url: string | undefined,
-    onSelectCallback?: Function,
+    onSelectCallback?: (links: TiledItemLinks ) => void,
     closeOnSelect?: boolean,
     setIsClosed: Function,
     singleColumnMode?: boolean,
