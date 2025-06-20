@@ -4,9 +4,10 @@ import StartupScreen from "./StartupScreen";
 import './Tiled.css'
 
 import { cn } from "@/lib/utils";
+import { TiledItemLinks } from "./types";
 
 export type TiledProps = {
-    onSelectCallback?: Function,
+    onSelectCallback?: (links: TiledItemLinks) => void,
     size?: 'small' | 'medium' | 'large'
     closeOnSelect?: boolean,
     isPopup?: boolean,
