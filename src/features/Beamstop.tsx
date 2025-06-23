@@ -3,6 +3,9 @@ import { useState, useMemo, useEffect } from "react";
 import SignalMonitorPlot from "@/components/SignalMonitorPlot";
 import DeviceControllerBox from "@/components/DeviceControllerBox";
 import useOphydSocket from "@/hooks/useOphydSocket";
+import Button from "@/components/Button";
+
+import { deviceIcons } from "@/assets/icons";
 
 export type BeamstopProps = {
     beamstopXName: string,
@@ -23,6 +26,15 @@ export default function Beamstop(
     const [bestXValue, setBestXValue] = useState<number | null>(null);
     const [bestYValue, setBestYValue] = useState<number | null>(null);
 
+    const goToBest = () => {
+        if (bestXValue !== null) {
+            handleSetValueRequest(beamstopXName, bestXValue);
+        }
+        if (bestYValue !== null) {
+            handleSetValueRequest(beamstopYName, bestYValue);
+        }
+    }
+
     useEffect(()=>{
         const currentDevice = devices[beamstopCurrentName];
         const xDevice = devices[beamstopXName];
@@ -40,16 +52,20 @@ export default function Beamstop(
         }
     }, [devices]);
     return (
-        <section className="w-full h-full">
-            <article className="w-1/2 bg-white flex flex-col">
-                <SignalMonitorPlot pv={beamstopCurrentName} />
-                <p>Best Current Value: {bestCurrent}</p>
-                <p>Best Beamstop X value: {bestXValue}</p>
-                <p>Best Beamstop Y value: {bestYValue}</p>
+        <section className="w-full h-full flex max-h-[800px] max-w-[1200px]">
+            <article className="w-1/2 h-full  bg-white flex flex-col p-8">
+                <h3 className="text-4xl text-center">Beamstop Current: {devices[beamstopCurrentName].value} {devices[beamstopCurrentName].units?.slice(0,3)}</h3>
+                <SignalMonitorPlot pv={beamstopCurrentName} className="h-1/2"/>
+                <p>Best Beamstop Current Value: {bestCurrent} {devices[beamstopCurrentName].units}</p>
+                <p>Best Beamstop X value: {bestXValue} {devices[beamstopXName].units}</p>
+                <p>Best Beamstop Y value: {bestYValue} {devices[beamstopYName].units}</p>
+                <div className="flex justify-center items-center py-8">
+                    <Button cb={goToBest} text="Go To Best"/>   
+                </div>
             </article>
-            <article className="w-1/2">
-                <DeviceControllerBox device={devices[beamstopXName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
-                <DeviceControllerBox device={devices[beamstopXName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+            <article className="w-1/2 h-full flex flex-col items-center justify-between">
+                <DeviceControllerBox svgIcon={deviceIcons.beamstopX} device={devices[beamstopXName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox svgIcon={deviceIcons.beamstopY} device={devices[beamstopYName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
             </article>
         </section>
     )

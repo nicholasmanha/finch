@@ -15,6 +15,8 @@ export type SignalMonitorPlotProps = {
     demo?: boolean;
     tickTextIntervalSeconds?: number;
     color?: string;
+    yAxisTitle?: string;
+    
 }
 export default function SignalMonitorPlot({
     className,
@@ -23,7 +25,8 @@ export default function SignalMonitorPlot({
     demo=false,
     tickTextIntervalSeconds=10,
     pv,
-    color="grey"
+    color="grey",
+    yAxisTitle,
 }: SignalMonitorPlotProps) {
     const deviceNameList = useMemo(()=>[pv], []);
     const { devices } = useOphydSocket(deviceNameList);  //todo: create an optional callback arg that sends update messages into fn
@@ -154,6 +157,7 @@ export default function SignalMonitorPlot({
             className={className} 
             xAxisLayout={xLayout}
             xAxisTitle={pv}
+            yAxisTitle={devices[pv].units}
         />
     )
 }
