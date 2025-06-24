@@ -4,9 +4,11 @@ import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
 import { ADLParser } from './utils/ADLParse';
-import * as detectorSetup from './utils/simDetectorSetupADL';
+import * as detectorSetup from './utils/adl';
+// import * as detectorSetup from './utils/simDetectorSetupADL';
 import { ADSetup } from "./utils/simDetectorSetupADL";
 import useOphydSocket from '@/hooks/useOphydSocket';
+import { parseCustomFormat } from './utils/ADLtoJSON';
 
 export type ADLCanvasProps = {
     devices: Devices;
@@ -43,6 +45,7 @@ const createDeviceNameArray = (Data: Entry[]) => {
 
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
+    // console.log(detectorSetup.default.ADBase)
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
         return ADLData.map((device: Entry, index: number) => {
@@ -68,9 +71,9 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
             }
             else if (device.var_type === "composite" && device.comp_file !== undefined) {
                 const objectName = device.comp_file.split('.')[0];
-                const component = detectorSetup[objectName as keyof typeof detectorSetup];
-
-                const data = ADLParser(component)
+                const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
+                const ADLJson = parseCustomFormat(component)
+                const data = ADLParser(ADLJson)
                 var deviceNames = useMemo(() => createDeviceNameArray(data), []);
                 const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
                 const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
