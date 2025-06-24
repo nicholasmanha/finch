@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
 import { ADLParser } from './utils/ADLParse';
 import * as detectorSetup from './utils/simDetectorSetupADL';
-import {ADSetup } from "./utils/simDetectorSetupADL";
+import { ADSetup } from "./utils/simDetectorSetupADL";
+import useOphydSocket from '@/hooks/useOphydSocket';
 
 export type ADLCanvasProps = {
     devices: Devices;
@@ -25,6 +26,22 @@ function extractPVName(input: string): string {
 
 let width = 0;
 let height = 0;
+const P = "13SIM1"
+const R = "cam1"
+
+const createDeviceNameArray = (Data: Entry[]) => {
+
+    var pvArray: string[] = [];
+    Data.forEach((group) => {
+        let pv = `${P}:${R}:${extractPVName(group.name)}`
+        pvArray.push(pv);
+
+    })
+
+    return pvArray;
+};
+
+
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
     const P = "13SIM1"
@@ -45,9 +62,12 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
             else if (device.var_type === "composite" && device.comp_file !== undefined) {
                 const objectName = device.comp_file.split('.')[0];
                 const component = detectorSetup[objectName as keyof typeof detectorSetup];
-                
-                const data = ADLParser(component)
 
+                const data = ADLParser(component)
+                var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []);
+                const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+                const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
+                const onSubmitSettings = useCallback(handleSetValueRequest, []);
                 return (
                     <React.Fragment key={index}>
                         <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} />
