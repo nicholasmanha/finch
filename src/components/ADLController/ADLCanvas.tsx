@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
@@ -44,8 +44,7 @@ const createDeviceNameArray = (Data: Entry[]) => {
 
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
-    const P = "13SIM1"
-    const R = "cam1"
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
         return ADLData.map((device: Entry, index: number) => {
             if (device.var_type === "text") {
@@ -56,8 +55,17 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
                 );
             }
             else if (device.var_type === "display") {
-                width = device.size.width;
-                height = device.size.height;
+                const displayDevice = useMemo(
+                    () => ADLData.find((d: Entry) => d.var_type === "display"),
+                    [ADLData]
+                );
+
+                // Update dimensions safely
+                useEffect(() => {
+                    if (displayDevice) {
+                        setDimensions(displayDevice.size);
+                    }
+                }, [displayDevice]); // Only runs when displayDevice changes
             }
             else if (device.var_type === "composite" && device.comp_file !== undefined) {
                 const objectName = device.comp_file.split('.')[0];
@@ -92,10 +100,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
     };
     return (
         <>
-            <div
-                style={{ width: `${width}px`, height: `${height}px` }}
-                className="relative"
-            >
+            <div style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }} className="relative">
                 {renderDevices()}
             </div>
 
