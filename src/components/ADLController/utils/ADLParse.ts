@@ -69,7 +69,9 @@ export function ADLParser(config: any[]): Entry[] {
                 size: { width: comp.object.width, height: comp.object.height },
                 name: comp["composite name"],
             };
-
+            if(comp["composite file"]){
+                compositeEntry.comp_file = comp["composite file"]
+            }
             if (comp.children) {
                 // Recursively parse the children
                 compositeEntry.children = ADLParser(comp.children);

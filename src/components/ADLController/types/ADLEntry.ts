@@ -12,4 +12,5 @@ export interface Entry {
   label?: string;
   press_msg?: string;
   children?: Entry[]
+  comp_file?: string;
 };
