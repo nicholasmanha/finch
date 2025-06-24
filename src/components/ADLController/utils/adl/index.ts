@@ -23,3 +23,5 @@ const modules = Object.entries(adlFiles).reduce((acc, [path, content]) => {
 }, {} as Record<string, string>);
 
 export default modules;
+
+export { default as simDetector } from './simDetector.adl?raw';

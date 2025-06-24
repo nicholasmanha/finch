@@ -5,8 +5,6 @@ import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
 import { ADLParser } from './utils/ADLParse';
 import * as detectorSetup from './utils/adl';
-// import * as detectorSetup from './utils/simDetectorSetupADL';
-import { ADSetup } from "./utils/simDetectorSetupADL";
 import useOphydSocket from '@/hooks/useOphydSocket';
 import { parseCustomFormat } from './utils/ADLtoJSON';
 

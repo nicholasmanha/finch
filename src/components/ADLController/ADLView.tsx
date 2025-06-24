@@ -1,10 +1,11 @@
 import { useMemo, useCallback, CSSProperties } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
-import {simDetector } from "./utils/simDetectorSetupADL";
+import { simDetector } from './utils/adl';
 import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
 import ADLCanvas from "./ADLCanvas";
 import { cn } from "@/lib/utils";
+import { parseCustomFormat } from "./utils/ADLtoJSON";
 
 export type ADLViewProps = {
   className?: string;
@@ -14,7 +15,7 @@ export default function ADLView({ className }: ADLViewProps) {
 
   const P = "13SIM1"
   const R = "cam1"
-  const ADLData = ADLParser(simDetector)
+  const ADLData = ADLParser(parseCustomFormat(simDetector))
 
   function extractPVName(input: string): string {
     if (!input) return '';
