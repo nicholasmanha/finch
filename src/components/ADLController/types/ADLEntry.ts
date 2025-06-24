@@ -11,4 +11,5 @@ export interface Entry {
   name: string;    
   label?: string;
   press_msg?: string;
+  children?: Entry[]
 };

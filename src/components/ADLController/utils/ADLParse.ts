@@ -61,7 +61,25 @@ export function ADLParser(config: any[]): Entry[] {
                 press_msg: btn.press_msg
             });
         }
+        if (item["composite"]) {
+            const comp = item["composite"];
+            const compositeEntry: Entry = {
+                var_type: "composite",
+                location: { x: comp.object.x, y: comp.object.y },
+                size: { width: comp.object.width, height: comp.object.height },
+                name: comp["composite name"],
+            };
+
+            if (comp.children) {
+                // Recursively parse the children
+                compositeEntry.children = ADLParser(comp.children);
+            }
+
+            entries.push(compositeEntry);
+
+        }
     });
-    console.log(entries)
+
+    console.log(JSON.stringify(entries))
     return entries;
 }

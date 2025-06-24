@@ -78,5 +78,6 @@ export function parseCustomFormat(input: string): CustomFormatObject[] {
     }
     // const res_arr = [];
     // res_arr.push(arr);
+    // console.log(JSON.stringify(arr))
     return arr;
 }
