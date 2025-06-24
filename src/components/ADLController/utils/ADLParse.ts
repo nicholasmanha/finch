@@ -53,11 +53,12 @@ export function ADLParser(config: any[]): Entry[] {
         if (item["message button"]) {
             const btn = item["message button"];
             entries.push({
-                var_type: "menu",
+                var_type: "button",
                 location: { x: btn.object.x, y: btn.object.y },
                 size: { width: btn.object.width, height: btn.object.height },
                 name: btn.control.chan,
-                label: btn.label
+                label: btn.label,
+                press_msg: btn.press_msg
             });
         }
     });
