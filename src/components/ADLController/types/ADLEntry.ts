@@ -9,4 +9,6 @@ export interface Entry {
     height: number;
   };
   name: string;    
+  label?: string;
+  press_msg?: string;
 };

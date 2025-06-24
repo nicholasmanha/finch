@@ -50,6 +50,17 @@ export function ADLParser(config: any[]): Entry[] {
                 name: menu.control.chan
             });
         }
+        if (item["message button"]) {
+            const btn = item["message button"];
+            entries.push({
+                var_type: "button",
+                location: { x: btn.object.x, y: btn.object.y },
+                size: { width: btn.object.width, height: btn.object.height },
+                name: btn.control.chan,
+                label: btn.label,
+                press_msg: btn.press_msg
+            });
+        }
     });
     return entries;
 }
