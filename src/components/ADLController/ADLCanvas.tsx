@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
@@ -12,6 +12,7 @@ export type ADLCanvasProps = {
     devices: Devices;
     ADLData: any;
     onSubmit?: (pv: string, value: string | boolean | number) => void
+    style?: React.CSSProperties;
 }
 
 function extractPVName(input: string): string {
@@ -24,8 +25,6 @@ function extractPVName(input: string): string {
     return withoutPrefix || input;
 }
 
-let width = 0;
-let height = 0;
 const P = "13SIM1"
 const R = "cam1"
 
@@ -43,7 +42,7 @@ const createDeviceNameArray = (Data: Entry[]) => {
 
 
 
-function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
+function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
         return ADLData.map((device: Entry, index: number) => {
@@ -72,13 +71,13 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
                 const component = detectorSetup[objectName as keyof typeof detectorSetup];
 
                 const data = ADLParser(component)
-                var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []);
+                var deviceNames = useMemo(() => createDeviceNameArray(data), []);
                 const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
                 const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
                 const onSubmitSettings = useCallback(handleSetValueRequest, []);
                 return (
                     <React.Fragment key={index}>
-                        <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} />
+                        <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute', left: `${device.location.x}px`, top: `${device.location.y}px`}}/>
                     </React.Fragment>
                 )
 
@@ -100,7 +99,11 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
     };
     return (
         <>
-            <div style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }} className="relative">
+            <div style={{ 
+                width: `${dimensions.width}px`, 
+                height: `${dimensions.height}px`,
+                 ...style 
+                 }} className="relative">
                 {renderDevices()}
             </div>
 

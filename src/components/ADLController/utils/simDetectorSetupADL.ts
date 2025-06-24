@@ -1496,6 +1496,1338 @@ text {
 	}
 }`)
 
+const ADAttrFile = parseCustomFormat(
+	`
+	
+file {
+	name="/home/epics/devel/areaDetector/ADCore/ADApp/op/adl/ADAttrFile.adl"
+	version=030109
+}
+display {
+	object {
+		x=214
+		y=81
+		width=350
+		height=110
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=127
+		y=2
+		width=107
+		height=21
+	}
+	"basic attribute" {
+		clr=2
+	}
+}
+text {
+	object {
+		x=130
+		y=2
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Attributes"
+	align="horiz. centered"
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=350
+		height=110
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+}
+text {
+	object {
+		x=25
+		y=30
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="File"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=71
+		y=31
+		width=275
+		height=20
+	}
+	control {
+		chan="$(P)$(R)NDAttributesFile"
+		clr=14
+		bclr=51
+	}
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=55
+		width=60
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Macros"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=70
+		y=56
+		width=275
+		height=20
+	}
+	control {
+		chan="$(P)$(R)NDAttributesMacros"
+		clr=14
+		bclr=51
+	}
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=5
+		y=80
+		width=60
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Status"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=70
+		y=81
+		width=275
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)NDAttributesStatus"
+		clr=14
+		bclr=2
+	}
+	clrmod="alarm"
+	format="string"
+	limits {
+	}
+}
+	`
+)
+
+const ADShutter = parseCustomFormat(
+	`
+	
+file {
+	name="/home/epics/devel/areaDetector-3-2/ADCore/ADApp/op/adl/ADShutter.adl"
+	version=030109
+}
+display {
+	object {
+		x=85
+		y=111
+		width=350
+		height=165
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=122
+		y=2
+		width=107
+		height=21
+	}
+	"basic attribute" {
+		clr=2
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=350
+		height=165
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+}
+text {
+	object {
+		x=140
+		y=3
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Shutter"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=46
+		y=34
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Shutter mode"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=173
+		y=34
+		width=120
+		height=20
+	}
+	control {
+		chan="$(P)$(R)ShutterMode"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=66
+		y=83
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Open/Close"
+	align="horiz. right"
+}
+"message button" {
+	object {
+		x=173
+		y=83
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)ShutterControl"
+		clr=14
+		bclr=51
+	}
+	label="Open"
+	press_msg="1"
+}
+"message button" {
+	object {
+		x=240
+		y=83
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)ShutterControl"
+		clr=14
+		bclr=51
+	}
+	label="Close"
+	press_msg="0"
+}
+text {
+	object {
+		x=6
+		y=58
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Status: Det."
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=132
+		y=59
+		width=60
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ShutterStatus_RBV"
+		clr=54
+		bclr=2
+	}
+	clrmod="alarm"
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=132
+		y=108
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)ShutterOpenDelay"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=15
+		y=108
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Delay: Open"
+	align="horiz. right"
+}
+text {
+	object {
+		x=215
+		y=108
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Close"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=272
+		y=108
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)ShutterCloseDelay"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"related display" {
+	object {
+		x=205
+		y=136
+		width=70
+		height=20
+	}
+	display[0] {
+		label="EPICS shutter setup"
+		name="ADEpicsShutter.adl"
+		args="P=$(P),R=$(R)"
+	}
+	clr=14
+	bclr=51
+}
+text {
+	object {
+		x=6
+		y=136
+		width=190
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="EPICS shutter setup"
+	align="horiz. right"
+}
+text {
+	object {
+		x=215
+		y=58
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="EPICS"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=272
+		y=59
+		width=60
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ShutterStatusEPICS_RBV"
+		clr=54
+		bclr=2
+	}
+	clrmod="alarm"
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+	`
+)
+
+const ADPlugins = parseCustomFormat(
+	`
+	
+file {
+	name="/home/epics/devel/areaDetector-3-11/ADCore/ADApp/op/adl/ADPlugins.adl"
+	version=030109
+}
+display {
+	object {
+		x=141
+		y=292
+		width=350
+		height=80
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+text {
+	object {
+		x=122
+		y=10
+		width=1
+		height=40
+	}
+	"basic attribute" {
+		clr=14
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=350
+		height=80
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+}
+rectangle {
+	object {
+		x=122
+		y=2
+		width=107
+		height=21
+	}
+	"basic attribute" {
+		clr=2
+	}
+}
+text {
+	object {
+		x=140
+		y=3
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Plugins"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=90
+		y=29
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="File"
+}
+text {
+	object {
+		x=230
+		y=29
+		width=30
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="ROI"
+}
+"related display" {
+	object {
+		x=135
+		y=29
+		width=64
+		height=20
+	}
+	display[0] {
+		label="netCDF file #1"
+		name="NDFileNetCDF.adl"
+		args="P=$(P), R=netCDF1:, EXT=nc"
+	}
+	display[1] {
+		label="TIFF file #1"
+		name="NDFileTIFF.adl"
+		args="P=$(P), R=TIFF1:, EXT=tif"
+	}
+	display[2] {
+		label="JPEG file #1"
+		name="NDFileJPEG.adl"
+		args="P=$(P), R=JPEG1:, EXT=jpg"
+	}
+	display[3] {
+		label="NeXus file #1"
+		name="NDFileNexus.adl"
+		args="P=$(P), R=Nexus1:, EXT=h5"
+	}
+	display[4] {
+		label="Magick file #1"
+		name="NDFileMagick.adl"
+		args="P=$(P), R=Magick1:, EXT=tif"
+	}
+	display[5] {
+		label="HDF5 file #1"
+		name="NDFileHDF5.adl"
+		args="P=$(P), R=HDF1:, EXT=h5"
+	}
+	display[6] {
+		label="Null file #1"
+		name="NDFileNull.adl"
+		args="P=$(P), R=Null1:, EXT=null"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=265
+		y=29
+		width=64
+		height=20
+	}
+	display[0] {
+		label="ROI #1"
+		name="NDROI.adl"
+		args="P=$(P), R=ROI1:"
+	}
+	display[1] {
+		label="ROI #2"
+		name="NDROI.adl"
+		args="P=$(P), R=ROI2:"
+	}
+	display[2] {
+		label="ROI #3"
+		name="NDROI.adl"
+		args="P=$(P), R=ROI3:"
+	}
+	display[3] {
+		label="ROI #4"
+		name="NDROI.adl"
+		args="P=$(P), R=ROI4:"
+	}
+	display[4] {
+		label="ROI 1-4 combined"
+		name="NDROI4.adl"
+		args="P=$(P), R1=ROI1:,R2=ROI2:, R3=ROI3:,R4=ROI4:"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=10
+		y=29
+		width=64
+		height=20
+	}
+	display[0] {
+		label="Common plugins"
+		name="commonPlugins.adl"
+		args="P=$(P)"
+	}
+	clr=14
+	bclr=51
+	label="-All"
+}
+text {
+	object {
+		x=10
+		y=55
+		width=50
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Stats"
+}
+"related display" {
+	object {
+		x=65
+		y=55
+		width=64
+		height=20
+	}
+	display[0] {
+		label="Statistics #1"
+		name="NDStats.adl"
+		args="P=$(P), R=Stats1:"
+	}
+	display[1] {
+		label="Statistics #2"
+		name="NDStats.adl"
+		args="P=$(P), R=Stats2:"
+	}
+	display[2] {
+		label="Statistics #3"
+		name="NDStats.adl"
+		args="P=$(P), R=Stats3:"
+	}
+	display[3] {
+		label="Statistics #4"
+		name="NDStats.adl"
+		args="P=$(P), R=Stats4:"
+	}
+	display[4] {
+		label="Statistics #5"
+		name="NDStats.adl"
+		args="P=$(P), R=Stats5:"
+	}
+	display[5] {
+		label="Statistics 1-5"
+		name="NDStats5.adl"
+		args="P=$(P), R1=Stats1:,R2=Stats2:,R3=Stats3:,R4=Stats4:,R5=Stats5:"
+	}
+	clr=14
+	bclr=51
+}
+"related display" {
+	object {
+		x=177
+		y=55
+		width=80
+		height=20
+	}
+	display[0] {
+		label="Image #1"
+		name="NDStdArrays.adl"
+		args="P=$(P), R=image1:"
+	}
+	display[1] {
+		label="Pva #1"
+		name="NDPva.adl"
+		args="P=$(P), R=Pva1:"
+	}
+	display[2] {
+		label="Process #1"
+		name="NDProcess.adl"
+		args="P=$(P), R=Proc1:"
+	}
+	display[3] {
+		label="Transform #1"
+		name="NDTransform.adl"
+		args="P=$(P), R=Trans1:"
+	}
+	display[4] {
+		label="Color convert #1"
+		name="NDColorConvert.adl"
+		args="P=$(P), R=CC1:"
+	}
+	display[5] {
+		label="Color convert #2"
+		name="NDColorConvert.adl"
+		args="P=$(P), R=CC2:"
+	}
+	display[6] {
+		label="Overlay #1"
+		name="NDOverlay.adl"
+		args="P=$(P), R=Over1:"
+	}
+	display[7] {
+		label="Overlays 1-8"
+		name="NDOverlay8.adl"
+		args="P=$(P), R=Over1:,O1=Over1:1:,O2=Over1:2:,O3=Over1:3:,O4=Over1:4:,O5=Over1:5:,O6=Over1:6:,O7=Over1:7:,O8=Over1:8:"
+	}
+	display[8] {
+		label="Circular buffer #1"
+		name="NDCircularBuff.adl"
+		args="P=$(P), R=CB1:"
+	}
+	display[9] {
+		label="ROI Statistics #1"
+		name="NDROIStat.adl"
+		args="P=$(P), R=ROIStat1:"
+	}
+	display[10] {
+		label="Attribute #1"
+		name="NDPluginAttribute.adl"
+		args="P=$(P), R=Attr1:"
+	}
+	display[11] {
+		label="FFT #1"
+		name="NDFFT.adl"
+		args="P=$(P), R=FFT1:"
+	}
+	display[12] {
+		label="Scatter #1"
+		name="NDScatter.adl"
+		args="P=$(P), R=Scatter1:"
+	}
+	display[13] {
+		label="Gather #1"
+		name="NDGather8.adl"
+		args="P=$(P), R=Gather1:"
+	}
+	display[14] {
+		label="Codec #1"
+		name="NDCodec.adl"
+		args="P=$(P), R=Codec1:"
+	}
+	display[15] {
+		label="Codec #2"
+		name="NDCodec.adl"
+		args="P=$(P), R=Codec2:"
+	}
+	clr=14
+	bclr=51
+	label="Other #1"
+}
+"related display" {
+	object {
+		x=264
+		y=55
+		width=80
+		height=20
+	}
+	display[0] {
+		label="Image #2"
+		name="NDStdArrays.adl"
+		args="P=$(P), R=image2:"
+	}
+	display[1] {
+		label="Scan #1"
+		name="scan_more.adl"
+		args="P=$(P), S=scan1, N=1"
+	}
+	display[2] {
+		label="Acquire Sequence"
+		name="yySseq.adl"
+		args="P=$(P), S=AcquireSequence"
+	}
+	display[3] {
+		label="devIocStats"
+		name="ioc_stats_soft.adl"
+		args="ioc=$(P)"
+	}
+	display[4] {
+		label="Open CV #1"
+		name="ADCompVision.adl"
+		args="P=$(P), R=CV1:"
+	}
+	display[5] {
+		label="Edge #1"
+		name="NDPluginEdge.adl"
+		args="P=$(P), R=Edge1:"
+	}
+	display[6] {
+		label="Bad Pixel #1"
+		name="NDBadPixel.adl"
+		args="P=$(P), R=BadPix1:"
+	}
+	display[7] {
+		label="AS configMenu"
+		name="configMenu.adl"
+		args="P=$(P), CONFIG=ADAutoSave"
+	}
+	clr=14
+	bclr=51
+	label="Other #2"
+}
+	`
+)
+
+const ADBuffers = parseCustomFormat(
+	`
+	
+file {
+	name="/home/epics/devel/areaDetector/ADCore/ADApp/op/adl/ADBuffers.adl"
+	version=030109
+}
+display {
+	object {
+		x=603
+		y=111
+		width=350
+		height=160
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+composite {
+	object {
+		x=123
+		y=2
+		width=105
+		height=21
+	}
+	"composite name"=""
+	children {
+		rectangle {
+			object {
+				x=123
+				y=2
+				width=105
+				height=21
+			}
+			"basic attribute" {
+				clr=2
+			}
+		}
+	}
+}
+text {
+	object {
+		x=97
+		y=3
+		width=157
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Buffers"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=50
+		y=30
+		width=160
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Buffers used"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=215
+		y=31
+		width=50
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)PoolUsedBuffers"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=30
+		y=55
+		width=180
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Buffers alloc/free"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=215
+		y=56
+		width=50
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)PoolAllocBuffers"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=270
+		y=56
+		width=50
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)PoolFreeBuffers"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=350
+		height=160
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+}
+menu {
+	object {
+		x=245
+		y=105
+		width=90
+		height=20
+	}
+	control {
+		chan="$(P)$(R)PoolUsedMem.SCAN"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=10
+		y=105
+		width=230
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Buffer & memory polling"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=215
+		y=81
+		width=60
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)PoolMaxMem"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=280
+		y=81
+		width=60
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)PoolUsedMem"
+		clr=54
+		bclr=4
+	}
+	align="horiz. right"
+	limits {
+	}
+}
+text {
+	object {
+		x=10
+		y=80
+		width=200
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Memory max/used (MB)"
+	align="horiz. right"
+}
+text {
+	object {
+		x=60
+		y=130
+		width=150
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Empty free list"
+	align="horiz. right"
+}
+"message button" {
+	object {
+		x=215
+		y=130
+		width=83
+		height=20
+	}
+	control {
+		chan="$(P)$(R)EmptyFreeList"
+		clr=14
+		bclr=51
+	}
+	label="Empty"
+	press_msg="1"
+}
+	`
+)
+
 const simDetector = parseCustomFormat(
 	`
 	
@@ -1620,6 +2952,95 @@ composite {
 	}
 	"composite name"=""
 	"composite file"="ADSetup.adl"
+}
+composite {
+	object {
+		x=5
+		y=465
+		width=350
+		height=380
+	}
+	"composite name"=""
+	"composite file"="ADReadout.adl"
+}
+composite {
+	object {
+		x=360
+		y=665
+		width=350
+		height=110
+	}
+	"composite name"=""
+	"composite file"="ADAttrFile.adl"
+}
+composite {
+	object {
+		x=360
+		y=35
+		width=350
+		height=165
+	}
+	"composite name"=""
+	"composite file"="ADShutter.adl"
+}
+composite {
+	object {
+		x=5
+		y=380
+		width=350
+		height=80
+	}
+	"composite name"=""
+	"composite file"="ADPlugins.adl"
+}
+composite {
+	object {
+		x=360
+		y=780
+		width=350
+		height=160
+	}
+	"composite name"=""
+	"composite file"="ADBuffers.adl"
+}
+composite {
+	object {
+		x=66
+		y=867
+		width=238
+		height=20
+	}
+	"composite name"=""
+	children {
+		text {
+			object {
+				x=66
+				y=867
+				width=160
+				height=20
+			}
+			"basic attribute" {
+				clr=14
+			}
+			textix="Simulation setup"
+			align="horiz. right"
+		}
+		"related display" {
+			object {
+				x=234
+				y=867
+				width=70
+				height=20
+			}
+			display[0] {
+				label="Simulation setup"
+				name="simDetectorSetup.adl"
+				args="P=$(P),R=$(R)"
+			}
+			clr=14
+			bclr=51
+		}
+	}
 }
 rectangle {
 	object {
@@ -2280,6 +3701,709 @@ text {
 	`
 )
 
+const ADReadout = parseCustomFormat(
+	`
+	
+file {
+	name="/home/epics/devel/areaDetector/ADCore/ADApp/op/adl/ADReadout.adl"
+	version=030109
+}
+display {
+	object {
+		x=409
+		y=269
+		width=350
+		height=380
+	}
+	clr=14
+	bclr=4
+	cmap=""
+	gridSpacing=5
+	gridOn=0
+	snapToGrid=0
+}
+"color map" {
+	ncolors=65
+	colors {
+		ffffff,
+		ececec,
+		dadada,
+		c8c8c8,
+		bbbbbb,
+		aeaeae,
+		9e9e9e,
+		919191,
+		858585,
+		787878,
+		696969,
+		5a5a5a,
+		464646,
+		2d2d2d,
+		000000,
+		00d800,
+		1ebb00,
+		339900,
+		2d7f00,
+		216c00,
+		fd0000,
+		de1309,
+		be190b,
+		a01207,
+		820400,
+		5893ff,
+		597ee1,
+		4b6ec7,
+		3a5eab,
+		27548d,
+		fbf34a,
+		f9da3c,
+		eeb62b,
+		e19015,
+		cd6100,
+		ffb0ff,
+		d67fe2,
+		ae4ebc,
+		8b1a96,
+		610a75,
+		a4aaff,
+		8793e2,
+		6a73c1,
+		4d52a4,
+		343386,
+		c7bb6d,
+		b79d5c,
+		a47e3c,
+		7d5627,
+		58340f,
+		99ffff,
+		73dfff,
+		4ea5f9,
+		2a63e4,
+		0a00b8,
+		ebf1b5,
+		d4db9d,
+		bbc187,
+		a6a462,
+		8b8239,
+		73ff6b,
+		52da3b,
+		3cb420,
+		289315,
+		1a7309,
+	}
+}
+rectangle {
+	object {
+		x=117
+		y=2
+		width=117
+		height=21
+	}
+	"basic attribute" {
+		clr=2
+	}
+}
+rectangle {
+	object {
+		x=0
+		y=0
+		width=350
+		height=380
+	}
+	"basic attribute" {
+		clr=14
+		fill="outline"
+	}
+}
+text {
+	object {
+		x=140
+		y=3
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=54
+	}
+	textix="Readout"
+	align="horiz. centered"
+}
+text {
+	object {
+		x=168
+		y=30
+		width=10
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="X"
+	align="horiz. right"
+}
+text {
+	object {
+		x=261
+		y=30
+		width=10
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Y"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=143
+		y=100
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)BinX"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=236
+		y=100
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)BinY"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=143
+		y=80
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)BinX_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=80
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)BinY_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=62
+		y=100
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Binning"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=143
+		y=125
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)MinX_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=143
+		y=145
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)MinX"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=236
+		y=145
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)MinY"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=125
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)MinY_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=12
+		y=145
+		width=120
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Region start"
+	align="horiz. right"
+}
+text {
+	object {
+		x=22
+		y=190
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Region size"
+	align="horiz. right"
+}
+"text entry" {
+	object {
+		x=143
+		y=190
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)SizeX"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=236
+		y=190
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)SizeY"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=143
+		y=170
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)SizeX_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=170
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)SizeY_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=22
+		y=55
+		width=110
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Sensor size"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=143
+		y=56
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)MaxSizeX_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=56
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)MaxSizeY_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+text {
+	object {
+		x=29
+		y=280
+		width=180
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Image size (bytes)"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=236
+		y=281
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ArraySize_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=306
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)Gain_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text entry" {
+	object {
+		x=143
+		y=305
+		width=60
+		height=20
+	}
+	control {
+		chan="$(P)$(R)Gain"
+		clr=14
+		bclr=51
+	}
+	limits {
+	}
+}
+text {
+	object {
+		x=92
+		y=305
+		width=40
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Gain"
+	align="horiz. right"
+}
+text {
+	object {
+		x=42
+		y=330
+		width=90
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Data type"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=138
+		y=330
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)$(R)DataType"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=331
+		width=79
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)DataType_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=143
+		y=215
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ReverseX_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=215
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ReverseY_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=62
+		y=235
+		width=70
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Reverse"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=143
+		y=235
+		width=60
+		height=18
+	}
+	control {
+		chan="$(P)$(R)ReverseX"
+		clr=14
+		bclr=51
+	}
+}
+menu {
+	object {
+		x=236
+		y=235
+		width=60
+		height=18
+	}
+	control {
+		chan="$(P)$(R)ReverseY"
+		clr=14
+		bclr=51
+	}
+}
+text {
+	object {
+		x=32
+		y=355
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Color mode"
+	align="horiz. right"
+}
+menu {
+	object {
+		x=138
+		y=355
+		width=80
+		height=20
+	}
+	control {
+		chan="$(P)$(R)ColorMode"
+		clr=14
+		bclr=51
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=356
+		width=79
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ColorMode_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	format="string"
+	limits {
+	}
+}
+text {
+	object {
+		x=32
+		y=255
+		width=100
+		height=20
+	}
+	"basic attribute" {
+		clr=14
+	}
+	textix="Image size"
+	align="horiz. right"
+}
+"text update" {
+	object {
+		x=143
+		y=256
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ArraySizeX_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+"text update" {
+	object {
+		x=236
+		y=256
+		width=61
+		height=18
+	}
+	monitor {
+		chan="$(P)$(R)ArraySizeY_RBV"
+		clr=54
+		bclr=4
+	}
+	align="horiz. centered"
+	limits {
+	}
+}
+	`
+)
+
 const ADSetup = parseCustomFormat(
 	`
 	
@@ -2778,4 +4902,4 @@ text {
 	`
 )
 
-export { simDetector, ADSetup };
+export { simDetector, ADSetup, ADAttrFile, ADPlugins, ADBuffers, ADReadout, ADShutter};
