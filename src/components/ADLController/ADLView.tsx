@@ -14,7 +14,6 @@ export default function ADLView({ className }: ADLViewProps) {
 
   const P = "13SIM1"
   const R = "cam1"
-
   const ADLData = ADLParser(simDetector)
 
   function extractPVName(input: string): string {
@@ -26,8 +25,6 @@ export default function ADLView({ className }: ADLViewProps) {
     // Return what remains (or original string if no patterns were found)
     return withoutPrefix || input;
   }
-
-
 
   const createDeviceNameArray = (Data: Entry[]) => {
 

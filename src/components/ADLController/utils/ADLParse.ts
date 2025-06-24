@@ -82,6 +82,6 @@ export function ADLParser(config: any[]): Entry[] {
         }
     });
 
-    console.log(JSON.stringify(entries))
+    // console.log(JSON.stringify(entries))
     return entries;
 }

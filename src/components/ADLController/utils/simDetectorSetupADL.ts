@@ -1621,95 +1621,6 @@ composite {
 	"composite name"=""
 	"composite file"="ADSetup.adl"
 }
-composite {
-	object {
-		x=5
-		y=465
-		width=350
-		height=380
-	}
-	"composite name"=""
-	"composite file"="ADReadout.adl"
-}
-composite {
-	object {
-		x=360
-		y=665
-		width=350
-		height=110
-	}
-	"composite name"=""
-	"composite file"="ADAttrFile.adl"
-}
-composite {
-	object {
-		x=360
-		y=35
-		width=350
-		height=165
-	}
-	"composite name"=""
-	"composite file"="ADShutter.adl"
-}
-composite {
-	object {
-		x=5
-		y=380
-		width=350
-		height=80
-	}
-	"composite name"=""
-	"composite file"="ADPlugins.adl"
-}
-composite {
-	object {
-		x=360
-		y=780
-		width=350
-		height=160
-	}
-	"composite name"=""
-	"composite file"="ADBuffers.adl"
-}
-composite {
-	object {
-		x=66
-		y=867
-		width=238
-		height=20
-	}
-	"composite name"=""
-	children {
-		text {
-			object {
-				x=66
-				y=867
-				width=160
-				height=20
-			}
-			"basic attribute" {
-				clr=14
-			}
-			textix="Simulation setup"
-			align="horiz. right"
-		}
-		"related display" {
-			object {
-				x=234
-				y=867
-				width=70
-				height=20
-			}
-			display[0] {
-				label="Simulation setup"
-				name="simDetectorSetup.adl"
-				args="P=$(P),R=$(R)"
-			}
-			clr=14
-			bclr=51
-		}
-	}
-}
 rectangle {
 	object {
 		x=360
@@ -2867,4 +2778,4 @@ text {
 	`
 )
 
-export { simDetector };
+export { simDetector, ADSetup };

@@ -3,6 +3,9 @@ import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
+import { ADLParser } from './utils/ADLParse';
+import * as detectorSetup from './utils/simDetectorSetupADL';
+import {ADSetup } from "./utils/simDetectorSetupADL";
 
 export type ADLCanvasProps = {
     devices: Devices;
@@ -38,6 +41,19 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { } }: ADLCanvasProps) {
             else if (device.var_type === "display") {
                 width = device.size.width;
                 height = device.size.height;
+            }
+            else if (device.var_type === "composite" && device.comp_file !== undefined) {
+                const objectName = device.comp_file.split('.')[0];
+                const component = detectorSetup[objectName as keyof typeof detectorSetup];
+                
+                const data = ADLParser(component)
+
+                return (
+                    <React.Fragment key={index}>
+                        <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} />
+                    </React.Fragment>
+                )
+
             }
             else {
                 let pv = `${P}:${R}:${extractPVName(device.name)}`;
