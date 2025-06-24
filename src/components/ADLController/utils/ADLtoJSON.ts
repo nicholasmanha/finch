@@ -52,36 +52,3 @@ export function parseCustomFormat(input: string): CustomFormatObject[] {
     // res_arr.push(arr);
     return arr;
 }
-
-// Example Usage
-const input = `
-text {
-	object {
-		x=65
-		y=10
-		width=300
-		height=25
-	}
-	"basic attribute" {
-		clr=14
-	}
-	textix="Simulation Detector Setup"
-	align="horiz. centered"
-}
-text {
-	object {
-		x=435
-		y=10
-		width=430
-		height=25
-	}
-	"basic attribute" {
-		clr=54
-	}
-	textix="$(P)$(R)"
-	align="horiz. centered"
-}
-`;
-
-// export const jsonOutput = parseCustomFormat(input);
-// console.log(JSON.stringify(jsonOutput, null, 2));

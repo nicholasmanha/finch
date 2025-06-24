@@ -3,6 +3,10 @@ import { parseCustomFormat } from "./ADLtoJSON";
 const input = `
 
 
+file {
+	name="/home/epics/devel/areaDetector/ADSimDetector/simDetectorApp/op/adl/simDetectorSetup.adl"
+	version=030109
+}
 display {
 	object {
 		x=233
@@ -1363,6 +1367,7 @@ text {
 	"basic attribute" {
 		clr=14
 	}
+	text-type="title"
 	textix="Reset"
 	align="horiz. right"
 }
