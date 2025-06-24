@@ -2867,4 +2867,4 @@ text {
 	`
 )
 
-export { simDetectorSetup };
+export { simDetector };

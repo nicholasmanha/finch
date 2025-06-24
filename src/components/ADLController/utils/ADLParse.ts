@@ -62,5 +62,6 @@ export function ADLParser(config: any[]): Entry[] {
             });
         }
     });
+    console.log(entries)
     return entries;
 }
