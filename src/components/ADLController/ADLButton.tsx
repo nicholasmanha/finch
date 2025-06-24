@@ -19,18 +19,16 @@ export default function ADLButton({
 
     const handleClick = () => {
         console.log(val)
-        if (val !== undefined) {
+
+        if (!isDisabled) {
+            setIsPressed(true);
+            setTimeout(() => setIsPressed(false), 200);
+
+            if (val !== undefined) {
                 console.log(val);
                 onSubmit(val);
             }
-        if (!isDisabled) {
-            // Visual feedback
-            setIsPressed(true);
-            setTimeout(() => setIsPressed(false), 200);
-            
-            // Submit the value (defaults to 0 if not provided)
 
-            
         }
     };
 
