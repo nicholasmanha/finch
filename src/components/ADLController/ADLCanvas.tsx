@@ -47,6 +47,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
         return ADLData.map((device: Entry, index: number) => {
+            console.log(device)
             if (device.var_type === "text") {
                 return (
                     <React.Fragment key={index}>
@@ -67,20 +68,35 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                     }
                 }, [displayDevice]); // Only runs when displayDevice changes
             }
-            else if (device.var_type === "composite" && device.comp_file !== undefined) {
-                const objectName = device.comp_file.split('.')[0];
-                const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
-                const ADLJson = parseCustomFormat(component)
-                const data = ADLParser(ADLJson)
-                var deviceNames = useMemo(() => createDeviceNameArray(data), []);
-                const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
-                const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
-                const onSubmitSettings = useCallback(handleSetValueRequest, []);
-                return (
-                    <React.Fragment key={index}>
-                        <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute', left: `${device.location.x}px`, top: `${device.location.y}px`}}/>
-                    </React.Fragment>
-                )
+            else if (device.var_type === "composite") {
+                if (device.comp_file !== undefined) {
+                    const objectName = device.comp_file.split('.')[0];
+                    const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
+                    const ADLJson = parseCustomFormat(component)
+                    const data = ADLParser(ADLJson)
+                    var deviceNames = useMemo(() => createDeviceNameArray(data), []);
+                    const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+                    const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
+                    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+                    return (
+                        <React.Fragment key={index}>
+                            <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute', left: `${device.location.x}px`, top: `${device.location.y}px` }} />
+                        </React.Fragment>
+                    )
+                }
+                else if(device.children !== undefined) {
+                    
+                    var deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
+                    const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+                    const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
+                    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+                    console.log(device.children)
+                    return (
+                        <React.Fragment key={index}>
+                            <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute'}} />
+                        </React.Fragment>
+                    )
+                }
 
             }
             else {
@@ -100,11 +116,11 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
     };
     return (
         <>
-            <div style={{ 
-                width: `${dimensions.width}px`, 
+            <div style={{
+                width: `${dimensions.width}px`,
                 height: `${dimensions.height}px`,
-                 ...style 
-                 }} className="relative">
+                ...style
+            }} className="relative">
                 {renderDevices()}
             </div>
 
