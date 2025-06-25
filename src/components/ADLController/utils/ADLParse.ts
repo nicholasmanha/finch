@@ -11,7 +11,7 @@ export function ADLParser(config: any[]): Entry[] {
                 size: { width: textEntry.object.width, height: textEntry.object.height },
                 name: textEntry.control.chan
             };
-            if(textEntry["format"]){
+            if (textEntry["format"]) {
                 text_entry.format = textEntry["format"]
             }
             entries.push(text_entry)
@@ -65,6 +65,19 @@ export function ADLParser(config: any[]): Entry[] {
                 press_msg: btn.press_msg
             });
         }
+        if (item["related display"]) {
+            const rel = item["related display"];
+            const relDisplay: Entry = {
+                var_type: "related display",
+                location: { x: rel.object.x, y: rel.object.y },
+                size: { width: rel.object.width, height: rel.object.height },
+                name: "related display",
+            };
+            if (rel.label) {
+                relDisplay.label = rel.label;
+            }
+            entries.push(relDisplay);
+        }
         if (item["composite"]) {
             const comp = item["composite"];
             const compositeEntry: Entry = {
@@ -73,7 +86,7 @@ export function ADLParser(config: any[]): Entry[] {
                 size: { width: comp.object.width, height: comp.object.height },
                 name: comp["composite name"],
             };
-            if(comp["composite file"]){
+            if (comp["composite file"]) {
                 compositeEntry.comp_file = comp["composite file"]
             }
             if (comp.children) {

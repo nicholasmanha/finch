@@ -47,7 +47,6 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
         return ADLData.map((device: Entry, index: number) => {
-            console.log(device)
             if (device.var_type === "text") {
                 return (
                     <React.Fragment key={index}>
@@ -90,7 +89,6 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                     const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
                     const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
                     const onSubmitSettings = useCallback(handleSetValueRequest, []);
-                    console.log(device.children)
                     return (
                         <React.Fragment key={index}>
                             <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute'}} />
