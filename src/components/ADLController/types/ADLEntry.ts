@@ -13,4 +13,5 @@ export interface Entry {
   press_msg?: string;
   children?: Entry[]
   comp_file?: string;
+  format?: string;
 };

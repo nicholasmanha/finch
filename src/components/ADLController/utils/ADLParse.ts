@@ -5,12 +5,16 @@ export function ADLParser(config: any[]): Entry[] {
     config.forEach((item: any) => {
         if (item["text entry"]) {
             const textEntry = item["text entry"];
-            entries.push({
+            const text_entry: Entry = {
                 var_type: "entry",
                 location: { x: textEntry.object.x, y: textEntry.object.y },
                 size: { width: textEntry.object.width, height: textEntry.object.height },
                 name: textEntry.control.chan
-            });
+            };
+            if(textEntry["format"]){
+                text_entry.format = textEntry["format"]
+            }
+            entries.push(text_entry)
         }
 
         if (item["text update"]) {
