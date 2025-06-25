@@ -46,7 +46,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
             case "button":
                 return <ADLButton label={ADLEntry.label} val={parseInt(ADLEntry.press_msg ? ADLEntry.press_msg : '')} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
             case "related display":
-                return <RelatedDisp/>
+                return <RelatedDisp style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }}/>
             default:
                 return <p></p>;
         }

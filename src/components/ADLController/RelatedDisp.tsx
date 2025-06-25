@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
-function RelatedDisp() {
-  return (
-    <div>RelatedDisp</div>
-  )
+type RelatedDispProps = {
+    style?: CSSProperties
+}
+
+function RelatedDisp({
+    style
+}: RelatedDispProps) {
+    return (
+        <div style={style}>RelatedDisp</div>
+    )
 }
 
 export default RelatedDisp
