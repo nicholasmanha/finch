@@ -29,7 +29,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
         switch (ADLEntry.var_type) {
             case "entry":
                 if (ADLEntry.format) {
-                    
+
                     return <InputText val={PV.value} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />;
                 }
                 else {
@@ -46,7 +46,12 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
             case "button":
                 return <ADLButton label={ADLEntry.label} val={parseInt(ADLEntry.press_msg ? ADLEntry.press_msg : '')} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
             case "related display":
-                return <RelatedDisp style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }}/>
+                if (ADLEntry.label) {
+                    return <RelatedDisp label={ADLEntry.label} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
+                }
+                else {
+                    return <RelatedDisp label={ADLEntry.label} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
+                }
             default:
                 return <p></p>;
         }
