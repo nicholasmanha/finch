@@ -49,11 +49,21 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
         return ADLData.map((device: Entry, index: number) => {
             switch (device.var_type) {
                 case "text":
-                    return (
+                    if(device.dynamic_attribute){
+                        let pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
+                        console.log(devices[pv]);
+                        <React.Fragment key={index}>
+                            <StyleRender ADLEntry={device} val={devices[pv]?.value}/>
+                        </React.Fragment>
+                    }
+                    else{
+                        return (
                         <React.Fragment key={index}>
                             <StyleRender ADLEntry={device} />
                         </React.Fragment>
                     );
+                    }
+                    
                 case "display":
                     const displayDevice = useMemo(
                         () => ADLData.find((d: Entry) => d.var_type === "display"),
