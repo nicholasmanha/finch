@@ -43,9 +43,9 @@ const createDeviceNameArray = (Data: Entry[]) => {
 
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
-    // console.log(detectorSetup.default.ADBase)
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
+
         return ADLData.map((device: Entry, index: number) => {
             switch (device.var_type) {
                 case "text":
