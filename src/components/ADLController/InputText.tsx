@@ -1,29 +1,29 @@
 import { CSSProperties, useState, useEffect, useRef } from "react";
 
-type InputIntegerProps = {
+type InputTextProps = {
     label?: string;
-    onSubmit?: (value: number) => void;
+    onSubmit?: (value: string) => void;
     isDisabled?: boolean;
     style?: CSSProperties;
-    val?: number | string | boolean;
+    val?: string | number | boolean;
 };
 
-export default function InputInteger({
+export default function InputText({
     label = '',
     onSubmit = (input) => { console.log('submit ' + input) },
     isDisabled = false,
     style,
-    val
-}: InputIntegerProps) {
-    if (typeof val === 'number') {
+    val = ''
+}: InputTextProps) {
+    if (typeof val === 'string') {
 
 
-        const [inputValue, setInputValue] = useState<string>(val !== undefined ? val.toFixed(2) : '');
+        const [inputValue, setInputValue] = useState<string>(val);
         const inputRef = useRef<HTMLInputElement>(null);
 
         useEffect(() => {
             if (val !== undefined) {
-                setInputValue(val.toFixed(2));
+                setInputValue(val);
             }
         }, [val]);
 
@@ -32,32 +32,12 @@ export default function InputInteger({
         };
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            const newValue = e.target.value;
-            if (/^$|^[0-9]*\.?[0-9]*$/.test(newValue)) {
-                setInputValue(newValue);
-            }
-        };
-
-        const formatToTwoDecimals = () => {
-            if (inputValue === '') {
-                setInputValue('');
-                return;
-            }
-            const num = parseFloat(inputValue);
-            if (!isNaN(num)) {
-                setInputValue(num.toFixed(2));
-            } else {
-                setInputValue('');
-            }
+            setInputValue(e.target.value);
         };
 
         const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === "Enter") {
-                formatToTwoDecimals();
-                const num = parseFloat(inputValue);
-                if (!isNaN(num)) {
-                    onSubmit(num);
-                }
+                onSubmit(inputValue);
             }
         };
 
@@ -72,7 +52,6 @@ export default function InputInteger({
                     className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
                     onChange={handleChange}
                     onKeyDown={handleKeyPress}
-                    onBlur={formatToTwoDecimals}
                     onFocus={handleFocus}
                     style={style}
                 />
