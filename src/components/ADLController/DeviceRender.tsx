@@ -37,6 +37,10 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
                 }
             case "update":
                 if (typeof PV.value === 'number') {
+                    if(PV.enum_strs){
+                        return <div className="absolute"
+                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.enum_strs[PV.value]}</div>
+                    }
                     return <div className="absolute"
                         style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value.toFixed(2)}</div>
                 }
