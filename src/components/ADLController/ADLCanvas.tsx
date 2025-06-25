@@ -47,69 +47,66 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
         return ADLData.map((device: Entry, index: number) => {
-            if (device.var_type === "text") {
-                return (
-                    <React.Fragment key={index}>
-                        <StyleRender ADLEntry={device} />
-                    </React.Fragment>
-                );
-            }
-            else if (device.var_type === "display") {
-                const displayDevice = useMemo(
-                    () => ADLData.find((d: Entry) => d.var_type === "display"),
-                    [ADLData]
-                );
+            switch (device.var_type) {
+                case "text":
+                    return (
+                        <React.Fragment key={index}>
+                            <StyleRender ADLEntry={device} />
+                        </React.Fragment>
+                    );
+                case "display":
+                    const displayDevice = useMemo(
+                        () => ADLData.find((d: Entry) => d.var_type === "display"),
+                        [ADLData]
+                    );
 
-                // Update dimensions safely
-                useEffect(() => {
-                    if (displayDevice) {
-                        setDimensions(displayDevice.size);
+                    // Update dimensions safely
+                    useEffect(() => {
+                        if (displayDevice) {
+                            setDimensions(displayDevice.size);
+                        }
+                    }, [displayDevice]); // Only runs when displayDevice changes
+                    break;
+                case "composite":
+                    if (device.comp_file !== undefined) {
+                        const objectName = device.comp_file.split('.')[0];
+                        const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
+                        const ADLJson = parseCustomFormat(component)
+                        const data = ADLParser(ADLJson)
+                        var deviceNames = useMemo(() => createDeviceNameArray(data), []);
+                        const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+                        const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
+                        const onSubmitSettings = useCallback(handleSetValueRequest, []);
+                        return (
+                            <React.Fragment key={index}>
+                                <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute', left: `${device.location.x}px`, top: `${device.location.y}px` }} />
+                            </React.Fragment>
+                        )
                     }
-                }, [displayDevice]); // Only runs when displayDevice changes
-            }
-            else if (device.var_type === "composite") {
-                if (device.comp_file !== undefined) {
-                    const objectName = device.comp_file.split('.')[0];
-                    const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
-                    const ADLJson = parseCustomFormat(component)
-                    const data = ADLParser(ADLJson)
-                    var deviceNames = useMemo(() => createDeviceNameArray(data), []);
-                    const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
-                    const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
-                    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+                    else if (device.children !== undefined) {
+
+                        var deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
+                        const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+                        const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
+                        const onSubmitSettings = useCallback(handleSetValueRequest, []);
+                        return (
+                            <React.Fragment key={index}>
+                                <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute' }} />
+                            </React.Fragment>
+                        )
+                    }
+                default:
+                    let pv = `${P}:${R}:${extractPVName(device.name)}`;
+
                     return (
-                        <React.Fragment key={index}>
-                            <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute', left: `${device.location.x}px`, top: `${device.location.y}px` }} />
-                        </React.Fragment>
-                    )
-                }
-                else if (device.children !== undefined) {
+                        <>
+                            <React.Fragment key={device.name}>
+                                <DeviceRender PV={devices[pv]} ADLEntry={device} onSubmit={onSubmit} />
+                            </React.Fragment>
+                        </>
 
-                    var deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
-                    const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
-                    const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
-                    const onSubmitSettings = useCallback(handleSetValueRequest, []);
-                    return (
-                        <React.Fragment key={index}>
-                            <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute' }} />
-                        </React.Fragment>
-                    )
-                }
-
+                    );
             }
-            else {
-                let pv = `${P}:${R}:${extractPVName(device.name)}`;
-
-                return (
-                    <>
-                        <React.Fragment key={device.name}>
-                            <DeviceRender PV={devices[pv]} ADLEntry={device} onSubmit={onSubmit} />
-                        </React.Fragment>
-                    </>
-
-                );
-            }
-
         });
     };
     return (
