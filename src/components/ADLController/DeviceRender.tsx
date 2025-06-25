@@ -6,6 +6,7 @@ import InputInteger from './InputNumber';
 import InputEnum from './InputEnum';
 import ADLButton from './ADLButton';
 import InputText from './InputText';
+import RelatedDisp from './RelatedDisp';
 
 export type DeviceRenderProps = {
     PV: Device;
@@ -44,8 +45,10 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
                 return <InputEnum val={PV.value} enums={PV.enum_strs} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
             case "button":
                 return <ADLButton label={ADLEntry.label} val={parseInt(ADLEntry.press_msg ? ADLEntry.press_msg : '')} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
+            case "related display":
+                return <RelatedDisp/>
             default:
-                return <p>Input type error</p>;
+                return <p></p>;
         }
 
     }

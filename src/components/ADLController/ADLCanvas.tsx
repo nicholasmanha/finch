@@ -83,15 +83,15 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                         </React.Fragment>
                     )
                 }
-                else if(device.children !== undefined) {
-                    
+                else if (device.children !== undefined) {
+
                     var deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
                     const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
                     const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
                     const onSubmitSettings = useCallback(handleSetValueRequest, []);
                     return (
                         <React.Fragment key={index}>
-                            <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute'}} />
+                            <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute' }} />
                         </React.Fragment>
                     )
                 }
