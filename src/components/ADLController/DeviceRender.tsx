@@ -41,6 +41,10 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
                     return <div className="absolute"
                         style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value.toFixed(2)}</div>
                 }
+                else{
+                    return <div className="absolute"
+                        style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px` }}>{PV.value}</div>
+                }
 
             case "menu":
                 return <InputEnum val={PV.value} enums={PV.enum_strs} onSubmit={handleSubmitWithPV} style={{ left: `${ADLEntry.location.x}px`, top: `${ADLEntry.location.y}px`, width: `${ADLEntry.size.width}px`, height: `${ADLEntry.size.height}px`, position: 'absolute' }} />
