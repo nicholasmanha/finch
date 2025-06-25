@@ -3,102 +3,117 @@ import { Entry } from "../types/ADLEntry";
 export function ADLParser(config: any[]): Entry[] {
     const entries: Entry[] = [];
     config.forEach((item: any) => {
-        if (item["text entry"]) {
-            const textEntry = item["text entry"];
-            const text_entry: Entry = {
-                var_type: "entry",
-                location: { x: textEntry.object.x, y: textEntry.object.y },
-                size: { width: textEntry.object.width, height: textEntry.object.height },
-                name: textEntry.control.chan
-            };
-            if (textEntry["format"]) {
-                text_entry.format = textEntry["format"]
+        const itemType = Object.keys(item)[0];
+        
+        switch (itemType) {
+            case "text entry": {
+                const textEntry = item["text entry"];
+                const text_entry: Entry = {
+                    var_type: "entry",
+                    location: { x: textEntry.object.x, y: textEntry.object.y },
+                    size: { width: textEntry.object.width, height: textEntry.object.height },
+                    name: textEntry.control.chan
+                };
+                if (textEntry["format"]) {
+                    text_entry.format = textEntry["format"];
+                }
+                entries.push(text_entry);
+                break;
             }
-            entries.push(text_entry)
-        }
-
-        if (item["text update"]) {
-            const textUpdate = item["text update"];
-            entries.push({
-                var_type: "update",
-                location: { x: textUpdate.object.x, y: textUpdate.object.y },
-                size: { width: textUpdate.object.width, height: textUpdate.object.height },
-                name: textUpdate.monitor.chan
-            });
-        }
-
-        if (item["text"]) {
-            const text = item["text"];
-            entries.push({
-                var_type: "text",
-                location: { x: text.object.x, y: text.object.y },
-                size: { width: text.object.width, height: text.object.height },
-                name: text.textix
-            });
-        }
-        if (item["display"]) {
-            const text = item["display"];
-            entries.push({
-                var_type: "display",
-                location: { x: text.object.x, y: text.object.y },
-                size: { width: text.object.width, height: text.object.height },
-                name: "display"
-            });
-        }
-        if (item["menu"]) {
-            const menu = item["menu"];
-            entries.push({
-                var_type: "menu",
-                location: { x: menu.object.x, y: menu.object.y },
-                size: { width: menu.object.width, height: menu.object.height },
-                name: menu.control.chan
-            });
-        }
-        if (item["message button"]) {
-            const btn = item["message button"];
-            entries.push({
-                var_type: "button",
-                location: { x: btn.object.x, y: btn.object.y },
-                size: { width: btn.object.width, height: btn.object.height },
-                name: btn.control.chan,
-                label: btn.label,
-                press_msg: btn.press_msg
-            });
-        }
-        if (item["related display"]) {
-            const rel = item["related display"];
-            const relDisplay: Entry = {
-                var_type: "related display",
-                location: { x: rel.object.x, y: rel.object.y },
-                size: { width: rel.object.width, height: rel.object.height },
-                name: "related display",
-            };
-            if (rel.label) {
-                relDisplay.label = rel.label;
+            
+            case "text update": {
+                const textUpdate = item["text update"];
+                entries.push({
+                    var_type: "update",
+                    location: { x: textUpdate.object.x, y: textUpdate.object.y },
+                    size: { width: textUpdate.object.width, height: textUpdate.object.height },
+                    name: textUpdate.monitor.chan
+                });
+                break;
             }
-            entries.push(relDisplay);
-        }
-        if (item["composite"]) {
-            const comp = item["composite"];
-            const compositeEntry: Entry = {
-                var_type: "composite",
-                location: { x: comp.object.x, y: comp.object.y },
-                size: { width: comp.object.width, height: comp.object.height },
-                name: comp["composite name"],
-            };
-            if (comp["composite file"]) {
-                compositeEntry.comp_file = comp["composite file"]
+            
+            case "text": {
+                const text = item["text"];
+                entries.push({
+                    var_type: "text",
+                    location: { x: text.object.x, y: text.object.y },
+                    size: { width: text.object.width, height: text.object.height },
+                    name: text.textix
+                });
+                break;
             }
-            if (comp.children) {
-                // Recursively parse the children
-                compositeEntry.children = ADLParser(comp.children);
+            
+            case "display": {
+                const text = item["display"];
+                entries.push({
+                    var_type: "display",
+                    location: { x: text.object.x, y: text.object.y },
+                    size: { width: text.object.width, height: text.object.height },
+                    name: "display"
+                });
+                break;
             }
-
-            entries.push(compositeEntry);
-
+            
+            case "menu": {
+                const menu = item["menu"];
+                entries.push({
+                    var_type: "menu",
+                    location: { x: menu.object.x, y: menu.object.y },
+                    size: { width: menu.object.width, height: menu.object.height },
+                    name: menu.control.chan
+                });
+                break;
+            }
+            
+            case "message button": {
+                const btn = item["message button"];
+                entries.push({
+                    var_type: "button",
+                    location: { x: btn.object.x, y: btn.object.y },
+                    size: { width: btn.object.width, height: btn.object.height },
+                    name: btn.control.chan,
+                    label: btn.label,
+                    press_msg: btn.press_msg
+                });
+                break;
+            }
+            
+            case "related display": {
+                const rel = item["related display"];
+                const relDisplay: Entry = {
+                    var_type: "related display",
+                    location: { x: rel.object.x, y: rel.object.y },
+                    size: { width: rel.object.width, height: rel.object.height },
+                    name: "related display",
+                };
+                if (rel.label) {
+                    relDisplay.label = rel.label;
+                }
+                entries.push(relDisplay);
+                break;
+            }
+            
+            case "composite": {
+                const comp = item["composite"];
+                const compositeEntry: Entry = {
+                    var_type: "composite",
+                    location: { x: comp.object.x, y: comp.object.y },
+                    size: { width: comp.object.width, height: comp.object.height },
+                    name: comp["composite name"],
+                };
+                if (comp["composite file"]) {
+                    compositeEntry.comp_file = comp["composite file"];
+                }
+                if (comp.children) {
+                    compositeEntry.children = ADLParser(comp.children);
+                }
+                entries.push(compositeEntry);
+                break;
+            }
+            
+            // No default case needed as we only want to process known types
         }
     });
 
-    // console.log(JSON.stringify(entries))
     return entries;
 }
