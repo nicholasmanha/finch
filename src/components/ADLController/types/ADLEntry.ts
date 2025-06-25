@@ -14,4 +14,9 @@ export interface Entry {
   children?: Entry[]
   comp_file?: string;
   format?: string;
+  dynamic_attribute?: {
+    vis: string
+    calc: string
+    chan: string
+  }
 };

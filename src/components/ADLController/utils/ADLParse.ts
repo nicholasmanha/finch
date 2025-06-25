@@ -4,7 +4,7 @@ export function ADLParser(config: any[]): Entry[] {
     const entries: Entry[] = [];
     config.forEach((item: any) => {
         const itemType = Object.keys(item)[0];
-        
+
         switch (itemType) {
             case "text entry": {
                 const textEntry = item["text entry"];
@@ -20,7 +20,7 @@ export function ADLParser(config: any[]): Entry[] {
                 entries.push(text_entry);
                 break;
             }
-            
+
             case "text update": {
                 const textUpdate = item["text update"];
                 entries.push({
@@ -31,18 +31,24 @@ export function ADLParser(config: any[]): Entry[] {
                 });
                 break;
             }
-            
+
             case "text": {
                 const text = item["text"];
-                entries.push({
+                const txt: Entry = {
                     var_type: "text",
                     location: { x: text.object.x, y: text.object.y },
                     size: { width: text.object.width, height: text.object.height },
                     name: text.textix
-                });
+                };
+
+                if(text["dynamic attribute"]) {
+                    txt.dynamic_attribute = text["dynamic attribute"]
+                }
+
+                entries.push(txt);
                 break;
             }
-            
+
             case "display": {
                 const text = item["display"];
                 entries.push({
@@ -53,7 +59,7 @@ export function ADLParser(config: any[]): Entry[] {
                 });
                 break;
             }
-            
+
             case "menu": {
                 const menu = item["menu"];
                 entries.push({
@@ -64,7 +70,7 @@ export function ADLParser(config: any[]): Entry[] {
                 });
                 break;
             }
-            
+
             case "message button": {
                 const btn = item["message button"];
                 entries.push({
@@ -77,7 +83,7 @@ export function ADLParser(config: any[]): Entry[] {
                 });
                 break;
             }
-            
+
             case "related display": {
                 const rel = item["related display"];
                 const relDisplay: Entry = {
@@ -92,7 +98,7 @@ export function ADLParser(config: any[]): Entry[] {
                 entries.push(relDisplay);
                 break;
             }
-            
+
             case "composite": {
                 const comp = item["composite"];
                 const compositeEntry: Entry = {
@@ -110,7 +116,7 @@ export function ADLParser(config: any[]): Entry[] {
                 entries.push(compositeEntry);
                 break;
             }
-            
+
             // No default case needed as we only want to process known types
         }
     });
