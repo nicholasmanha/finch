@@ -51,11 +51,11 @@ export default function InputEnum({ label = '',
     }, []);
 
     return (
-        <div ref={containerRef} className={`${isDisabled ? 'text-slate-400' : 'text-black'} flex w-full max-w-64`} style={style}>
-            <div className={`w-1/2 border border-slate-300 flex flex-col`} onClick={handleInputClick}>
-                <div className="flex w-full">
+        <div ref={containerRef} className={`${isDisabled ? 'text-slate-400' : 'text-black'} w-1/2 border bg-white border-slate-300 flex w-full max-w-64`} style={style}>
+            <div className={` flex flex-col w-full`} onClick={handleInputClick}>
+                <div className="flex w-full justify-between">
                     <div className="flex-grow">
-                        <p className='pl-2'>{getCurrentEnum()}</p>
+                        <p className='text-xs'>{getCurrentEnum()}</p>
                     </div>
                     <div className="flex-shrink-0">{dropdownVisible ? tailwindIcons.chevronUp : tailwindIcons.chevronDown}</div>
                 </div>
