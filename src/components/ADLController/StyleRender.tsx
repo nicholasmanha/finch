@@ -20,55 +20,39 @@ function replacePVars(input: string | undefined): string {
 }
 
 function StyleRender({ ADLEntry, val, vis, dynamic }: DeviceRenderProps) {
-  const name = replacePVars(ADLEntry.name); // Safe even if ADLEntry.name is undefined
+  const name = replacePVars(ADLEntry.name); // replaces P and R with 13SIM1 and cam1 e.g.
+  const { x, y } = ADLEntry.location;
+  const { width, height } = ADLEntry.size;
   
+  const commonProps = {
+    className: "absolute",
+    style: { 
+      left: `${x}px`, 
+      top: `${y}px`, 
+      width: `${width}px`, 
+      height: `${height}px` 
+    },
+    children: name // automatically gets put inside div
+  };
+
+  // Spreads out all key value pairs of the common props to an empty div if it isn't dynamic (its just static text)
   if (!dynamic) {
-    return (
-      <div 
-        className="absolute"
-        style={{ 
-          left: `${ADLEntry.location.x}px`, 
-          top: `${ADLEntry.location.y}px`, 
-          width: `${ADLEntry.size.width}px`, 
-          height: `${ADLEntry.size.height}px` 
-        }}
-      >
-        {name}
-      </div>
-    );
-  } else {
-    if (vis === "if zero") {
-      return val === 0 ? (
-        <div 
-          className="absolute"
-          style={{ 
-            left: `${ADLEntry.location.x}px`, 
-            top: `${ADLEntry.location.y}px`, 
-            width: `${ADLEntry.size.width}px`, 
-            height: `${ADLEntry.size.height}px` 
-          }}
-        >
-          {name}
-        </div>
-      ) : null;
-    } else if (vis === "if not zero") {
-      return val !== 0 ? (
-        <div 
-          className="absolute"
-          style={{ 
-            left: `${ADLEntry.location.x}px`, 
-            top: `${ADLEntry.location.y}px`, 
-            width: `${ADLEntry.size.width}px`, 
-            height: `${ADLEntry.size.height}px` 
-          }}
-        >
-          {name}
-        </div>
-      ) : null;
-    }
+    return <div {...commonProps} />;
   }
 
-  return null; // Fallback if no conditions match
+  const visibilityConditions: Record<string, boolean> = {
+    "if zero": val === 0,
+    "if not zero": val !== 0,
+  };
+
+  // visibilityConditions[vis] takes in vis, which is either "if zero" or "if not zero", so this line asks if
+  // vis is defined and either val === 0 or val !== 0 thru visibilityConditions
+  
+  if (vis && visibilityConditions[vis]) {
+    return <div {...commonProps} />;
+  }
+
+  return null; // fallback condition
 }
 
 export default StyleRender;
