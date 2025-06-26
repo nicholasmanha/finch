@@ -157,7 +157,7 @@ export default function SignalMonitorPlot({
             className={className} 
             xAxisLayout={xLayout}
             xAxisTitle={pv}
-            yAxisTitle={devices[pv].units}
+            yAxisTitle={devices[pv] && devices[pv].units}
         />
     )
 }
