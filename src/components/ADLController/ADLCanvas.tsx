@@ -47,6 +47,11 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
     const renderDevices = () => {
 
         return ADLData.map((device: Entry, index: number) => {
+            const canvasStyle = {
+                position: 'absolute' as const,  // The 'as const' ensures TypeScript knows it's a literal
+                left: `${device.location.x}px`,
+                top: `${device.location.y}px`,
+            };
             switch (device.var_type) {
                 case "text":
                     if (device.dynamic_attribute) {
@@ -81,17 +86,23 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                     break;
                 case "composite":
                     if (device.comp_file !== undefined) {
+                        // if given ADSetup.adl, this returns ADSetup
                         const objectName = device.comp_file.split('.')[0];
+
+                        // this is the actual ADL file from detecetorSetup (which represents all contents of the adl folder)
                         const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
-                        const ADLJson = parseCustomFormat(component)
-                        const data = ADLParser(ADLJson)
+
+                        // parsed version of the adl file
+                        const data = ADLParser(parseCustomFormat(component))
+
+                        // ws call
                         var deviceNames = useMemo(() => createDeviceNameArray(data), []);
                         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
                         const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
                         const onSubmitSettings = useCallback(handleSetValueRequest, []);
                         return (
                             <React.Fragment key={index}>
-                                <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute', left: `${device.location.x}px`, top: `${device.location.y}px` }} />
+                                <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={canvasStyle} />
                             </React.Fragment>
                         )
                     }
