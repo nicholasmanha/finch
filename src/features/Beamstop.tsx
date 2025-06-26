@@ -24,7 +24,9 @@ export default function Beamstop(
         beamstopYIcon=deviceIcons.beamstopY,
     }: BeamstopProps
 ) {
-    const deviceNameList = useMemo(()=>[beamstopXName, beamstopYName, beamstopCurrentName], [beamstopXName, beamstopYName, beamstopCurrentName]);
+    const beamstopXNameRBV = useMemo(()=>beamstopXName + '.RBV', [beamstopXName]);
+    const beamstopYNameRBV = useMemo(()=> beamstopYName + '.RBV', [beamstopYName]);
+    const deviceNameList = useMemo(()=>[beamstopXName, beamstopYName, beamstopXNameRBV, beamstopYNameRBV, beamstopCurrentName], [beamstopXName, beamstopYName, beamstopXNameRBV, beamstopYNameRBV, beamstopCurrentName]);
     const { devices, handleSetValueRequest, toggleDeviceLock, toggleExpand } = useOphydSocket(deviceNameList);
     const [ bestCurrent, setBestCurrent ] = useState<number | null>(null);
     const [bestXValue, setBestXValue] = useState<number | null>(null);
@@ -69,8 +71,8 @@ export default function Beamstop(
                 </div>
             </article>
             <article className="w-1/2 h-full flex flex-col items-center justify-between">
-                <DeviceControllerBox svgIcon={beamstopXIcon} device={devices[beamstopXName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
-                <DeviceControllerBox svgIcon={beamstopYIcon} device={devices[beamstopYName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox svgIcon={beamstopXIcon} device={devices[beamstopXName]} deviceRBV={devices[beamstopXNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox svgIcon={beamstopYIcon} device={devices[beamstopYName]} deviceRBV={devices[beamstopYNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
             </article>
         </section>
     )

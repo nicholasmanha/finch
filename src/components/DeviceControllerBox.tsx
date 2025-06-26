@@ -10,20 +10,22 @@ import { controllerIcons } from "@/assets/icons";
 
 export type DeviceControllerBoxProps = {
     device: Device;
+    deviceRBV?: Device;
     handleSetValueRequest: (deviceName: string, value: number) => void;
     handleLockClick: (deviceName: string) => void;
     svgIcon?: React.ReactNode;
     className?: string;
 }
 
-export default function DeviceControllerBox({ device, handleSetValueRequest, handleLockClick, svgIcon, className }: DeviceControllerBoxProps) {
+export default function DeviceControllerBox({ device, deviceRBV, handleSetValueRequest, handleLockClick, svgIcon, className }: DeviceControllerBoxProps) {
     if (!device) return;
     const backgroundColorClass = device.locked ? 'bg-slate-400' : 'bg-slate-100';
     const [ absoluteMoveValue, setAbsoluteMoveValue ] = useState<number | null>(null);
     const [ relativeMoveIncrement, setRelativeMoveIncrement ] = useState<number | null>(null);
     const [ isExpanded, setIsExpanded ] = useState(false);
 
-    const formattedCurrentValue = `${typeof device.value === 'number' ? device.value.toPrecision(4) : device.value} ${device.units?.slice(0,3)}`;
+    const currentValue = deviceRBV ? deviceRBV.value : device.value;
+    const formattedCurrentValue = `${typeof currentValue === 'number' ? currentValue.toPrecision(4) : currentValue} ${device.units?.slice(0,3)}`;
     const handleIncrementClick = () => {
         if (relativeMoveIncrement !== null && typeof device.value === 'number') {
             handleSetValueRequest(device.name, relativeMoveIncrement + device.value);
