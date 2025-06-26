@@ -1,5 +1,5 @@
 import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
-import { Devices } from "@/types/deviceControllerTypes";
+import { Device, Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
@@ -40,7 +40,33 @@ const createDeviceNameArray = (Data: Entry[]) => {
     return pvArray;
 };
 
-
+function renderTextComponent(
+    device: Entry,
+    index: number,
+    P: string,
+    R: string,
+    devices: Devices
+): React.ReactElement {
+    if (device.dynamic_attribute) {
+        const pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
+        return (
+            <React.Fragment key={index}>
+                <StyleRender
+                    ADLEntry={device}
+                    dynamic={true}
+                    val={devices[pv]?.value}
+                    vis={device.dynamic_attribute.vis}
+                />
+            </React.Fragment>
+        );
+    }
+    
+    return (
+        <React.Fragment key={index}>
+            <StyleRender ADLEntry={device} dynamic={false} />
+        </React.Fragment>
+    );
+}
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -54,22 +80,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
             };
             switch (device.var_type) {
                 case "text":
-                    if (device.dynamic_attribute) {
-
-                        let pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
-                        return (
-                            <React.Fragment key={index}>
-                                <StyleRender ADLEntry={device} dynamic={true} val={devices[pv]?.value} vis={device.dynamic_attribute.vis} />
-                            </React.Fragment>
-                        )
-                    }
-                    else {
-                        return (
-                            <React.Fragment key={index}>
-                                <StyleRender ADLEntry={device} dynamic={false} />
-                            </React.Fragment>
-                        );
-                    }
+                    return renderTextComponent(device, index, P, R, devices);
 
                 case "display":
                     const displayDevice = useMemo(
@@ -85,6 +96,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                     }, [displayDevice]); // Only runs when displayDevice changes
                     break;
                 case "composite":
+                    // if the composite just has children components and not another ADL file
                     if (device.comp_file !== undefined) {
                         // if given ADSetup.adl, this returns ADSetup
                         const objectName = device.comp_file.split('.')[0];
