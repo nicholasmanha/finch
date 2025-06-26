@@ -61,7 +61,7 @@ function renderTextComponent(
             </React.Fragment>
         );
     }
-    
+
     return (
         <React.Fragment key={index}>
             <StyleRender ADLEntry={device} dynamic={false} />
@@ -69,21 +69,34 @@ function renderTextComponent(
     );
 }
 
-interface Dimensions {
-    width: number;
-    height: number;
-}
-
 function useDisplaySetup(
     device: Entry,
-    setDimensions: (dimensions: Dimensions) => void
+    setDimensions: (dimensions: { width: number; height: number }) => void
 ): void {
-
     useEffect(() => {
         if (device?.size) {
             setDimensions(device.size);
         }
     }, [device, setDimensions]);
+}
+
+function renderDeviceComponent(
+    index: number,
+    devices: Devices,
+    ADLEntry: Entry,
+    onSubmit: (pv: string, value: string | boolean | number) => void
+
+): React.ReactElement {
+    let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
+
+    return (
+        <>
+            <React.Fragment key={index}>
+                <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} />
+            </React.Fragment>
+        </>
+
+    );
 }
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
@@ -138,16 +151,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                         )
                     }
                 default:
-                    let pv = `${P}:${R}:${extractPVName(device.name)}`;
-
-                    return (
-                        <>
-                            <React.Fragment key={device.name}>
-                                <DeviceRender PV={devices[pv]} ADLEntry={device} onSubmit={onSubmit} />
-                            </React.Fragment>
-                        </>
-
-                    );
+                    return renderDeviceComponent(index, devices, device, onSubmit)
             }
         });
     };
