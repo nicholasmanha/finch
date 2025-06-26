@@ -11,6 +11,8 @@ export type BeamstopProps = {
     beamstopXName: string,
     beamstopYName: string,
     beamstopCurrentName: string,
+    beamstopXIcon?: JSX.Element,
+    beamstopYIcon?: JSX.Element
 }
 
 export default function Beamstop(
@@ -18,6 +20,8 @@ export default function Beamstop(
         beamstopXName,
         beamstopYName,
         beamstopCurrentName,
+        beamstopXIcon=deviceIcons.beamstopX,
+        beamstopYIcon=deviceIcons.beamstopY,
     }: BeamstopProps
 ) {
     const deviceNameList = useMemo(()=>[beamstopXName, beamstopYName, beamstopCurrentName], [beamstopXName, beamstopYName, beamstopCurrentName]);
@@ -56,17 +60,17 @@ export default function Beamstop(
         <section className="w-full h-full flex max-h-[800px] max-w-[1200px]">
             <article className="w-1/2 h-full  bg-white flex flex-col p-8">
                 <h3 className="text-4xl text-center">Beamstop Current: {devices[beamstopCurrentName] && devices[beamstopCurrentName].value} {devices[beamstopCurrentName] && devices[beamstopCurrentName].units?.slice(0,3)}</h3>
-                <SignalMonitorPlot pv={beamstopCurrentName} className="h-1/2"/>
-                <p>Best Beamstop Current Value: {bestCurrent} {devices[beamstopCurrentName] && devices[beamstopCurrentName].units}</p>
-                <p>Best Beamstop X value: {bestXValue} {devices[beamstopXName] && devices[beamstopXName].units}</p>
-                <p>Best Beamstop Y value: {bestYValue} {devices[beamstopYName] && devices[beamstopYName].units}</p>
+                <SignalMonitorPlot pv={beamstopCurrentName} className="h-1/2" numVisiblePoints={100} tickTextIntervalSeconds={30}/>
+                <p>Best Beamstop Current Value: {bestCurrent ? bestCurrent.toPrecision(5) : 'N/A'} {devices[beamstopCurrentName] && devices[beamstopCurrentName].units}</p>
+                <p>Best Beamstop X value: {bestXValue ? bestXValue.toPrecision(4): 'N/A'} {devices[beamstopXName] && devices[beamstopXName].units}</p>
+                <p>Best Beamstop Y value: {bestYValue ? bestYValue.toPrecision(4) : 'N/A'} {devices[beamstopYName] && devices[beamstopYName].units}</p>
                 <div className="flex justify-center items-center py-8">
                     <Button cb={goToBest} text="Go To Best"/>   
                 </div>
             </article>
             <article className="w-1/2 h-full flex flex-col items-center justify-between">
-                <DeviceControllerBox svgIcon={deviceIcons.beamstopX} device={devices[beamstopXName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
-                <DeviceControllerBox svgIcon={deviceIcons.beamstopY} device={devices[beamstopYName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox svgIcon={beamstopXIcon} device={devices[beamstopXName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox svgIcon={beamstopYIcon} device={devices[beamstopYName]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
             </article>
         </section>
     )
