@@ -48,6 +48,7 @@ function renderTextComponent(
     devices: Devices
 ): React.ReactElement {
     if (device.dynamic_attribute) {
+        // turn pv into "13SIM1:cam1:pv"
         const pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
         return (
             <React.Fragment key={index}>
@@ -68,6 +69,23 @@ function renderTextComponent(
     );
 }
 
+interface Dimensions {
+    width: number;
+    height: number;
+}
+
+function useDisplaySetup(
+    device: Entry,
+    setDimensions: (dimensions: Dimensions) => void
+): void {
+
+    useEffect(() => {
+        if (device?.size) {
+            setDimensions(device.size);
+        }
+    }, [device, setDimensions]);
+}
+
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
@@ -79,22 +97,11 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                 top: `${device.location.y}px`,
             };
             switch (device.var_type) {
+                case "display":
+                    useDisplaySetup(device, setDimensions);
+                    break;
                 case "text":
                     return renderTextComponent(device, index, P, R, devices);
-
-                case "display":
-                    const displayDevice = useMemo(
-                        () => ADLData.find((d: Entry) => d.var_type === "display"),
-                        [ADLData]
-                    );
-
-                    // Update dimensions safely
-                    useEffect(() => {
-                        if (displayDevice) {
-                            setDimensions(displayDevice.size);
-                        }
-                    }, [displayDevice]); // Only runs when displayDevice changes
-                    break;
                 case "composite":
                     // if the composite just has children components and not another ADL file
                     if (device.comp_file !== undefined) {
