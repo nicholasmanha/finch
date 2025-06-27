@@ -12,7 +12,9 @@ export type BeamstopProps = {
     beamstopYName: string,
     beamstopCurrentName: string,
     beamstopXIcon?: JSX.Element,
-    beamstopYIcon?: JSX.Element
+    beamstopYIcon?: JSX.Element,
+    beamstopXTitle?: string,
+    beamstopYTitle?: string
 }
 
 export default function Beamstop(
@@ -22,6 +24,8 @@ export default function Beamstop(
         beamstopCurrentName,
         beamstopXIcon=deviceIcons.beamstopX,
         beamstopYIcon=deviceIcons.beamstopY,
+        beamstopXTitle,
+        beamstopYTitle
     }: BeamstopProps
 ) {
     const beamstopXNameRBV = useMemo(()=>beamstopXName + '.RBV', [beamstopXName]);
@@ -71,8 +75,8 @@ export default function Beamstop(
                 </div>
             </article>
             <article className="w-1/2 h-full flex flex-col items-center justify-between">
-                <DeviceControllerBox svgIcon={beamstopXIcon} device={devices[beamstopXName]} deviceRBV={devices[beamstopXNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
-                <DeviceControllerBox svgIcon={beamstopYIcon} device={devices[beamstopYName]} deviceRBV={devices[beamstopYNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox title={beamstopXTitle} svgIcon={beamstopXIcon} device={devices[beamstopXName]} deviceRBV={devices[beamstopXNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
+                <DeviceControllerBox title={beamstopYTitle} svgIcon={beamstopYIcon} device={devices[beamstopYName]} deviceRBV={devices[beamstopYNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
             </article>
         </section>
     )

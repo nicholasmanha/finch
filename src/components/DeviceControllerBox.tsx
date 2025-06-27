@@ -15,9 +15,10 @@ export type DeviceControllerBoxProps = {
     handleLockClick: (deviceName: string) => void;
     svgIcon?: React.ReactNode;
     className?: string;
+    title?: string;
 }
 
-export default function DeviceControllerBox({ device, deviceRBV, handleSetValueRequest, handleLockClick, svgIcon, className }: DeviceControllerBoxProps) {
+export default function DeviceControllerBox({ device, deviceRBV, handleSetValueRequest, handleLockClick, svgIcon, className, title}: DeviceControllerBoxProps) {
     if (!device) return;
     const backgroundColorClass = device.locked ? 'bg-slate-400' : 'bg-slate-100';
     const [ absoluteMoveValue, setAbsoluteMoveValue ] = useState<number | null>(null);
@@ -25,15 +26,16 @@ export default function DeviceControllerBox({ device, deviceRBV, handleSetValueR
     const [ isExpanded, setIsExpanded ] = useState(false);
 
     const currentValue = deviceRBV ? deviceRBV.value : device.value;
+    const deviceName = deviceRBV ? deviceRBV.name : device.name;
     const formattedCurrentValue = `${typeof currentValue === 'number' ? currentValue.toPrecision(4) : currentValue} ${device.units?.slice(0,3)}`;
     const handleIncrementClick = () => {
         if (relativeMoveIncrement !== null && typeof device.value === 'number') {
-            handleSetValueRequest(device.name, relativeMoveIncrement + device.value);
+            handleSetValueRequest(deviceName, relativeMoveIncrement + device.value);
         }
     };
     const handleDecrementClick = () => {
         if (relativeMoveIncrement !== null && typeof device.value === 'number') {
-            handleSetValueRequest(device.name, device.value - relativeMoveIncrement);
+            handleSetValueRequest(deviceName, device.value - relativeMoveIncrement);
         }
     };
 
@@ -75,7 +77,7 @@ export default function DeviceControllerBox({ device, deviceRBV, handleSetValueR
             </div>
             {/* Row - Device Name */}
             <div className="flex justify-center items-center">
-                <p className="text-3xl text-slate-800 overflow-hidden overflow-ellipsis px-4">{device.name}</p>
+                <p className="text-3xl text-slate-800 overflow-hidden overflow-ellipsis px-4">{title ? title : device.name}</p>
             </div>
             {/* Row - Current Device Value */}
             <div className="flex justify-center items-center ">
