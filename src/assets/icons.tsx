@@ -113,8 +113,8 @@ const deviceIcons = {
         </svg>,
     sampleHolderX: <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_628_111)">
-        <path d="M10 24L16 28M10 24V28.5L16 32.5M10 24L16.5 20M16 28V32.5M16 28L31 15.6429M16 32.5L31 18.8571V15.6429M31 15.6429L26.5 14L21.5 17" stroke="black" stroke-width="0.8"/>
-        <path d="M16 17L17 22L22 18.5L21 14L16 17Z" stroke="black" stroke-width="0.5" stroke-dasharray="1 1"/>
+        <path d="M10 24L16 28M10 24V28.5L16 32.5M10 24L16.5 20M16 28V32.5M16 28L31 15.6429M16 32.5L31 18.8571V15.6429M31 15.6429L26.5 14L21.5 17" stroke="black" strokeWidth="0.8"/>
+        <path d="M16 17L17 22L22 18.5L21 14L16 17Z" stroke="black" strokeWidth="0.5" strokeDasharray="1 1"/>
         <path d="M41.892 2.49148V3.27273H38.7102V2.49148H41.892Z" fill="black"/>
         <path d="M3.89773 43.5028V38.8153H4.69318V43.5028H3.89773ZM1.9517 41.5568V40.7614H6.6392V41.5568H1.9517Z" fill="black"/>
         <path d="M6.625 37C6.625 37.2071 6.79289 37.375 7 37.375H10.375C10.5821 37.375 10.75 37.2071 10.75 37C10.75 36.7929 10.5821 36.625 10.375 36.625H7.375V33.625C7.375 33.4179 7.20711 33.25 7 33.25C6.79289 33.25 6.625 33.4179 6.625 33.625V37ZM12 32L11.7348 31.7348L6.73483 36.7348L7 37L7.26516 37.2652L12.2652 32.2652L12 32Z" fill="black"/>
@@ -131,8 +131,8 @@ const deviceIcons = {
         </svg>,
     sampleHolderY: <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_628_147)">
-        <path d="M10 24L16 28M10 24V28.5L16 32.5M10 24L16.5 20M16 28V32.5M16 28L31 15.6429M16 32.5L31 18.8571V15.6429M31 15.6429L26.5 14L21.5 17" stroke="black" stroke-width="0.8"/>
-        <path d="M16 17L17 22L22 18.5L21 14L16 17Z" stroke="black" stroke-width="0.5" stroke-dasharray="1 1"/>
+        <path d="M10 24L16 28M10 24V28.5L16 32.5M10 24L16.5 20M16 28V32.5M16 28L31 15.6429M16 32.5L31 18.8571V15.6429M31 15.6429L26.5 14L21.5 17" stroke="black" strokeWidth="0.8"/>
+        <path d="M16 17L17 22L22 18.5L21 14L16 17Z" stroke="black" strokeWidth="0.5" strokeDasharray="1 1"/>
         <path d="M13.8977 8.50284V3.81534H14.6932V8.50284H13.8977ZM11.9517 6.55682V5.76136H16.6392V6.55682H11.9517Z" fill="black"/>
         <path d="M15.892 39.4915V40.2727H12.7102V39.4915H15.892Z" fill="black"/>
         <path d="M21.7348 42.2652C21.8813 42.4116 22.1187 42.4116 22.2652 42.2652L24.6517 39.8787C24.7981 39.7322 24.7981 39.4948 24.6517 39.3484C24.5052 39.2019 24.2678 39.2019 24.1213 39.3484L22 41.4697L19.8787 39.3484C19.7322 39.2019 19.4948 39.2019 19.3483 39.3484C19.2019 39.4948 19.2019 39.7322 19.3483 39.8787L21.7348 42.2652ZM22 35L21.625 35L21.625 42L22 42L22.375 42L22.375 35L22 35Z" fill="black"/>
@@ -189,5 +189,31 @@ const controllerIcons = {
         </svg>,
 }
 
+const beamlineIcons = {
+    mono: <svg width="189" height="107" viewBox="0 0 189 107" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_635_37)">
+    <path d="M145.064 101.25H35.9355L90.5 4.50879L145.064 101.25Z" fill="url(#paint0_linear_635_37)" stroke="#D9D9D9" stroke-width="0.5"/>
+    <path opacity="0.6" d="M119.5 56L66.5 47.5L121 60L174.5 91V83.5L119.5 56Z" fill="#A1007E" stroke="white" stroke-width="0.5"/>
+    <path opacity="0.6" d="M117 52.5L66 47.5L119 56L174.5 83V75.5L117 52.5Z" fill="#FF09EF" stroke="white" stroke-width="0.5"/>
+    <path opacity="0.6" d="M115 49L66.5 48L117 52L174.5 75V68L115 49Z" fill="#0D4AE3" stroke="white" stroke-width="0.5"/>
+    <path opacity="0.6" d="M113 45L66 48L114.5 48.5L174.5 67.5V61L113 45Z" fill="#17C408" stroke="white" stroke-width="0.5"/>
+    <path opacity="0.6" d="M108.5 37L66 48L110.5 41L174.5 53V45.5L108.5 37Z" fill="#FF9D00" stroke="white" stroke-width="0.5"/>
+    <path opacity="0.6" d="M106 33L66 48L108.5 37L174.5 45V37.5L106 33Z" fill="#FF0000" stroke="white" stroke-width="0.5"/>
+    <path opacity="0.6" d="M110.5 41L66.5 48L113 44.5L174.5 60.5V53.5L110.5 41Z" fill="#FFFF00" stroke="white" stroke-width="0.5"/>
+    <line x1="64.115" y1="48.222" x2="8.11496" y2="77.222" stroke="#C4C4C4" stroke-width="0.5"/>
+    <line x1="64.1181" y1="49.2204" x2="8.11805" y2="79.2204" stroke="#C4C4C4" stroke-width="0.5"/>
+    </g>
+    <defs>
+    <linearGradient id="paint0_linear_635_37" x1="91" y1="26.5" x2="91" y2="103" gradientUnits="userSpaceOnUse">
+    <stop stop-color="white"/>
+    <stop offset="1" stop-color="#9CF0FF"/>
+    </linearGradient>
+    <clipPath id="clip0_635_37">
+    <rect width="189" height="107" fill="white"/>
+    </clipPath>
+    </defs>
+    </svg>
+}
 
-export {tailwindIcons, phosphorIcons, customIcons, deviceIcons, controllerIcons};
+
+export {tailwindIcons, phosphorIcons, customIcons, deviceIcons, controllerIcons, beamlineIcons};
