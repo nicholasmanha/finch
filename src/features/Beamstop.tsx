@@ -4,6 +4,7 @@ import SignalMonitorPlot from "@/components/SignalMonitorPlot";
 import DeviceControllerBox from "@/components/DeviceControllerBox";
 import useOphydSocket from "@/hooks/useOphydSocket";
 import Button from "@/components/Button";
+import BeamEnergy from "@/components/BeamEnergy";
 
 import { deviceIcons } from "@/assets/icons";
 
@@ -14,7 +15,9 @@ export type BeamstopProps = {
     beamstopXIcon?: JSX.Element,
     beamstopYIcon?: JSX.Element,
     beamstopXTitle?: string,
-    beamstopYTitle?: string
+    beamstopYTitle?: string,
+    enableBestOption?: boolean,
+    stackVertical?: boolean
 }
 
 export default function Beamstop(
@@ -25,7 +28,9 @@ export default function Beamstop(
         beamstopXIcon=deviceIcons.beamstopX,
         beamstopYIcon=deviceIcons.beamstopY,
         beamstopXTitle,
-        beamstopYTitle
+        beamstopYTitle,
+        enableBestOption,
+        stackVertical=true
     }: BeamstopProps
 ) {
     const beamstopXNameRBV = useMemo(()=>beamstopXName + '.RBV', [beamstopXName]);
@@ -63,18 +68,22 @@ export default function Beamstop(
         }
     }, [devices]);
     return (
-        <section className="w-full h-full flex max-h-[800px] max-w-[1200px]">
-            <article className="w-1/2 h-full  bg-white flex flex-col p-8">
+        <section className={`w-full h-full ${stackVertical ? 'flex-col' : 'max-w-[1200px]'} flex max-h-[800px] relative`}>
+            <article className={`${stackVertical ? 'w-full h-1/2' : 'w-1/2 h-full'}  bg-white flex flex-col p-8`}>
                 <h3 className="text-4xl text-center">Beamstop Current: {devices[beamstopCurrentName] && devices[beamstopCurrentName].value} {devices[beamstopCurrentName] && devices[beamstopCurrentName].units?.slice(0,3)}</h3>
-                <SignalMonitorPlot pv={beamstopCurrentName} className="h-1/2" numVisiblePoints={100} tickTextIntervalSeconds={30}/>
-                <p>Best Beamstop Current Value: {bestCurrent ? bestCurrent.toPrecision(5) : 'N/A'} {devices[beamstopCurrentName] && devices[beamstopCurrentName].units}</p>
-                <p>Best Beamstop X value: {bestXValue ? bestXValue.toPrecision(4): 'N/A'} {devices[beamstopXName] && devices[beamstopXName].units}</p>
-                <p>Best Beamstop Y value: {bestYValue ? bestYValue.toPrecision(4) : 'N/A'} {devices[beamstopYName] && devices[beamstopYName].units}</p>
-                <div className="flex justify-center items-center py-8">
-                    <Button cb={goToBest} text="Go To Best"/>   
-                </div>
+                <SignalMonitorPlot pv={beamstopCurrentName} className={stackVertical ? 'h-full' : 'h-1/2'} numVisiblePoints={200} tickTextIntervalSeconds={30}/>
+                { enableBestOption && 
+                    <>
+                        <p>Best Beamstop Current Value: {bestCurrent ? bestCurrent.toPrecision(5) : 'N/A'} {devices[beamstopCurrentName] && devices[beamstopCurrentName].units}</p>
+                        <p>Best Beamstop X value: {bestXValue ? bestXValue.toPrecision(4): 'N/A'} {devices[beamstopXName] && devices[beamstopXName].units}</p>
+                        <p>Best Beamstop Y value: {bestYValue ? bestYValue.toPrecision(4) : 'N/A'} {devices[beamstopYName] && devices[beamstopYName].units}</p>
+                        <div className="flex justify-center items-center py-8">
+                            <Button cb={goToBest} text="Go To Best"/>   
+                        </div>
+                    </>
+                }
             </article>
-            <article className="w-1/2 h-full flex flex-col items-center justify-between">
+            <article className={`${stackVertical ? 'w-full pt-4 max-h-1/2 flex flex-row justify-center gap-8' : 'w-1/2 h-full flex flex-col items-center justify-between'} `}>
                 <DeviceControllerBox title={beamstopXTitle} svgIcon={beamstopXIcon} device={devices[beamstopXName]} deviceRBV={devices[beamstopXNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
                 <DeviceControllerBox title={beamstopYTitle} svgIcon={beamstopYIcon} device={devices[beamstopYName]} deviceRBV={devices[beamstopYNameRBV]} handleLockClick={toggleDeviceLock} handleSetValueRequest={handleSetValueRequest}/>
             </article>
