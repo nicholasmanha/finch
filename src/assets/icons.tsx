@@ -88,7 +88,7 @@ const deviceIcons = {
         <path d="M1 29.5H30V18.5M30 18.5H1M30 18.5L28 7.5H18M1 18.5L3.5 7.5H13M1 18.5V30M13 7.5V3M13 7.5V10.5C13 10.5 14.4485 11.5 15.5 11.5C16.5515 11.5 18 10.5 18 10.5V7.5M13 3C13 3 14.4485 4 15.5 4C16.5515 4 18 3 18 3M13 3C13 3 14.2497 0.999849 15.5 1C17 1.00018 18 3 18 3M18 3V7.5" stroke="black"/>
         <path d="M6.5 11C6.5 11 11.571 15.4306 15.5 15.5C19.3456 15.5679 24.5 11.5 24.5 11.5M24.5 11.5L20.5 11M24.5 11.5V15.5" stroke="black"/>
         </svg>,
-    beamstopX: <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+    beamstopX: <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M15 6.12L26.0526 9.24M15 6.12L19.4211 3L29 6.12M15 6.12V38.88L26.0526 42M26.0526 9.24L29 6.12M26.0526 9.24V42M29 6.12V38.88L26.0526 42" stroke="black"/>
         <circle cx="21" cy="23" r="1" fill="#FF5656"/>
         <path d="M40.8977 30.5028V25.8153H41.6932V30.5028H40.8977ZM38.9517 28.5568V27.7614H43.6392V28.5568H38.9517Z" fill="black"/>
@@ -96,7 +96,7 @@ const deviceIcons = {
         <path d="M37.2428 27.4371C37.4842 27.303 37.5712 26.9986 37.4371 26.7572L35.2517 22.8235C35.1176 22.5821 34.8132 22.4951 34.5718 22.6292C34.3304 22.7633 34.2434 23.0677 34.3775 23.3091L36.3201 26.8057L32.8235 28.7483C32.5821 28.8824 32.4951 29.1868 32.6292 29.4282C32.7633 29.6696 33.0677 29.7566 33.3091 29.6225L37.2428 27.4371ZM30 25L29.8626 25.4808L36.8626 27.4808L37 27L37.1374 26.5192L30.1374 24.5192L30 25Z" fill="black"/>
         <path d="M5.75718 18.5629C5.51579 18.697 5.42881 19.0014 5.56292 19.2428L7.74831 23.1765C7.88242 23.4179 8.18682 23.5049 8.42821 23.3708C8.66961 23.2367 8.75658 22.9323 8.62247 22.6909L6.6799 19.1943L10.1765 17.2517C10.4179 17.1176 10.5049 16.8132 10.3708 16.5718C10.2367 16.3304 9.93228 16.2434 9.69089 16.3775L5.75718 18.5629ZM13 21L13.1374 20.5192L6.13736 18.5192L6 19L5.86264 19.4808L12.8626 21.4808L13 21Z" fill="black"/>
         </svg>,
-    beamstopY: <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+    beamstopY: <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_606_3)">
         <path d="M15 6.12L26.0526 9.24M15 6.12L19.4211 3L29 6.12M15 6.12V38.88L26.0526 42M26.0526 9.24L29 6.12M26.0526 9.24V42M29 6.12V38.88L26.0526 42" stroke="black"/>
         <circle cx="21" cy="23" r="1" fill="#FF5656"/>
@@ -107,11 +107,11 @@ const deviceIcons = {
         </g>
         <defs>
         <clipPath id="clip0_606_3">
-        <rect width="45" height="45" fill="white"/>
+        <rect fill="white"/>
         </clipPath>
         </defs>
         </svg>,
-    sampleHolderX: <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+    sampleHolderX: <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_628_111)">
         <path d="M10 24L16 28M10 24V28.5L16 32.5M10 24L16.5 20M16 28V32.5M16 28L31 15.6429M16 32.5L31 18.8571V15.6429M31 15.6429L26.5 14L21.5 17" stroke="black" stroke-width="0.8"/>
         <path d="M16 17L17 22L22 18.5L21 14L16 17Z" stroke="black" stroke-width="0.5" stroke-dasharray="1 1"/>
@@ -129,7 +129,7 @@ const deviceIcons = {
         </clipPath>
         </defs>
         </svg>,
-    sampleHolderY: <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+    sampleHolderY: <svg viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_628_147)">
         <path d="M10 24L16 28M10 24V28.5L16 32.5M10 24L16.5 20M16 28V32.5M16 28L31 15.6429M16 32.5L31 18.8571V15.6429M31 15.6429L26.5 14L21.5 17" stroke="black" stroke-width="0.8"/>
         <path d="M16 17L17 22L22 18.5L21 14L16 17Z" stroke="black" stroke-width="0.5" stroke-dasharray="1 1"/>

@@ -25,17 +25,17 @@ export default function DeviceControllerBox({ device, deviceRBV, handleSetValueR
     const [ relativeMoveIncrement, setRelativeMoveIncrement ] = useState<number | null>(null);
     const [ isExpanded, setIsExpanded ] = useState(false);
 
-    const currentValue = deviceRBV ? deviceRBV.value : device.value;
+    const currentValue = (deviceRBV ? deviceRBV.value : device.value) as number;
     const deviceName = deviceRBV ? deviceRBV.name : device.name;
     const formattedCurrentValue = `${typeof currentValue === 'number' ? currentValue.toPrecision(4) : currentValue} ${device.units?.slice(0,3)}`;
     const handleIncrementClick = () => {
         if (relativeMoveIncrement !== null && typeof device.value === 'number') {
-            handleSetValueRequest(deviceName, relativeMoveIncrement + device.value);
+            handleSetValueRequest(device.name, relativeMoveIncrement + currentValue);
         }
     };
     const handleDecrementClick = () => {
         if (relativeMoveIncrement !== null && typeof device.value === 'number') {
-            handleSetValueRequest(deviceName, device.value - relativeMoveIncrement);
+            handleSetValueRequest(device.name, currentValue - relativeMoveIncrement);
         }
     };
 
@@ -65,7 +65,7 @@ export default function DeviceControllerBox({ device, deviceRBV, handleSetValueR
                             />
                     }
                 </div>
-                <div className="aspect-square h-12 text-slate-600">
+                <div className="aspect-square h-20 text-slate-600">
                     {svgIcon && svgIcon}
                 </div>
                 <div 
@@ -81,10 +81,10 @@ export default function DeviceControllerBox({ device, deviceRBV, handleSetValueR
             </div>
             {/* Row - Current Device Value */}
             <div className="flex justify-center items-center ">
-                <p className="text-5xl py-4 text-black">{formattedCurrentValue}</p>
+                <p className="text-5xl py-2 text-black">{formattedCurrentValue}</p>
             </div>
             {/* Row - Absolute move */}
-            <div className="flex justify-center items-center py-4 space-x-4">
+            <div className="flex justify-center items-center py-2 space-x-4">
                 <InputNumber 
                     label={device.units && device.units.slice(0,3)}
                     labelPosition='right' 
