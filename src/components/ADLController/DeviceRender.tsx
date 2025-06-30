@@ -14,14 +14,12 @@ export type DeviceRenderProps = {
     onSubmit: (pv: string, value: string | boolean | number) => void
 }
 
-
-
 function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
     if (!PV) return;
 
     const pv = PV.name
     const handleSubmitWithPV = (newValue: string | number | boolean) => {
-        onSubmit(pv, newValue); //needs a new function for handling enums
+        onSubmit(pv, newValue); 
     };
 
     const renderInput = () => {
@@ -34,7 +32,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
         };
         switch (ADLEntry.var_type) {
             case "entry":
-                if (ADLEntry.format) {
+                if (ADLEntry.format === 'string') {
 
                     return <InputText val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
                 }
@@ -43,16 +41,16 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
                 }
             case "update":
                 if (typeof PV.value === 'number') {
+                    // if update value is for an enum
                     if (PV.enum_strs) {
-                        return <div className="absolute"
-                            style={positionStyle}>{PV.enum_strs[PV.value]}</div>
+                        return <div style={positionStyle}>{PV.enum_strs[PV.value]}</div>
                     }
-                    return <div className="absolute"
-                        style={positionStyle}>{PV.value.toFixed(2)}</div>
+                    // if update value is just a number
+                    return <div style={positionStyle}>{PV.value.toFixed(2)}</div>
                 }
+                // if update value is a string
                 else {
-                    return <div className="absolute"
-                        style={positionStyle}>{PV.value}</div>
+                    return <div style={positionStyle}>{PV.value}</div>
                 }
 
             case "menu":
