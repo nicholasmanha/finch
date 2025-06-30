@@ -4,7 +4,7 @@ import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
 import { ADLParser } from './utils/ADLParse';
-import * as detectorSetup from './utils/adl';
+import * as ADLs from './utils/adl';
 import useOphydSocket from '@/hooks/useOphydSocket';
 import { parseCustomFormat } from './utils/ADLtoJSON';
 
@@ -43,9 +43,9 @@ const createDeviceNameArray = (Data: Entry[], P: string, R: string) => {
 function renderTextComponent(
     device: Entry,
     index: number,
+    devices: Devices,
     P: string,
-    R: string,
-    devices: Devices
+    R: string
 ): React.ReactElement {
     if (device.dynamic_attribute) {
         // turn pv into "13SIM1:cam1:pv"
@@ -81,10 +81,11 @@ function useDisplaySetup(
 }
 
 function renderDeviceComponent(
+    ADLEntry: Entry,
     index: number,
     devices: Devices,
-    ADLEntry: Entry,
-        P: string,
+    
+    P: string,
     R: string,
     onSubmit: (pv: string, value: string | boolean | number) => void
 
@@ -105,10 +106,15 @@ function renderCompositeDevice(
     device: any, // Replace with your actual device type
     index: number,
     detectorSetup: any, // Replace with your actual detectorSetup type
-    canvasStyle: React.CSSProperties,
+
     P: string,
     R: string,
 ): JSX.Element | undefined {
+    const canvasStyle = {
+        position: 'absolute' as const,  // The 'as const' ensures TypeScript knows it's a literal
+        left: `${device.location.x}px`,
+        top: `${device.location.y}px`,
+    };
     // if the composite links to another adl file
     if (device.comp_file !== undefined) {
         // if given ADSetup.adl, this returns ADSetup
@@ -168,21 +174,16 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, P, R }: ADLC
     const renderDevices = () => {
 
         return ADLData.map((device: Entry, index: number) => {
-            const canvasStyle = {
-                position: 'absolute' as const,  // The 'as const' ensures TypeScript knows it's a literal
-                left: `${device.location.x}px`,
-                top: `${device.location.y}px`,
-            };
             switch (device.var_type) {
                 case "display":
                     useDisplaySetup(device, setDimensions);
                     break;
                 case "text":
-                    return renderTextComponent(device, index, P, R, devices);
+                    return renderTextComponent(device, index, devices, P, R);
                 case "composite":
-                    return renderCompositeDevice(device, index, detectorSetup, canvasStyle, P, R);
+                    return renderCompositeDevice(device, index, ADLs, P, R);
                 default:
-                    return renderDeviceComponent(index, devices, device, P, R, onSubmit)
+                    return renderDeviceComponent(device, index, devices, P, R, onSubmit)
             }
         });
     };
