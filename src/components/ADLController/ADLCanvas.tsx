@@ -99,6 +99,61 @@ function renderDeviceComponent(
     );
 }
 
+function renderCompositeDevice(
+    device: any, // Replace with your actual device type
+    index: number,
+    detectorSetup: any, // Replace with your actual detectorSetup type
+    canvasStyle: React.CSSProperties
+): JSX.Element | undefined {
+    // if the composite just has children components and not another ADL file
+    if (device.comp_file !== undefined) {
+        // if given ADSetup.adl, this returns ADSetup
+        const objectName: string = device.comp_file.split('.')[0];
+
+        // this is the actual ADL file from detecetorSetup (which represents all contents of the adl folder)
+        const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
+
+        // parsed version of the adl file
+        const data = ADLParser(parseCustomFormat(component));
+
+        // ws call
+        const deviceNames = useMemo(() => createDeviceNameArray(data), []);
+        const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+        const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
+        const onSubmitSettings = useCallback(handleSetValueRequest, []);
+        
+        return (
+            <React.Fragment key={index}>
+                <ADLCanvas 
+                    ADLData={data} 
+                    devices={devices} 
+                    onSubmit={onSubmitSettings} 
+                    style={canvasStyle} 
+                />
+            </React.Fragment>
+        );
+    }
+    else if (device.children !== undefined) {
+        const deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
+        const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
+        const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
+        const onSubmitSettings = useCallback(handleSetValueRequest, []);
+        
+        return (
+            <React.Fragment key={index}>
+                <ADLCanvas 
+                    ADLData={device.children!} 
+                    devices={devices} 
+                    onSubmit={onSubmitSettings} 
+                    style={{ position: 'absolute' }} 
+                />
+            </React.Fragment>
+        );
+    }
+    
+    return undefined;
+}
+
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
@@ -116,40 +171,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                 case "text":
                     return renderTextComponent(device, index, P, R, devices);
                 case "composite":
-                    // if the composite just has children components and not another ADL file
-                    if (device.comp_file !== undefined) {
-                        // if given ADSetup.adl, this returns ADSetup
-                        const objectName = device.comp_file.split('.')[0];
-
-                        // this is the actual ADL file from detecetorSetup (which represents all contents of the adl folder)
-                        const component = detectorSetup.default[objectName as keyof typeof detectorSetup];
-
-                        // parsed version of the adl file
-                        const data = ADLParser(parseCustomFormat(component))
-
-                        // ws call
-                        var deviceNames = useMemo(() => createDeviceNameArray(data), []);
-                        const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
-                        const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
-                        const onSubmitSettings = useCallback(handleSetValueRequest, []);
-                        return (
-                            <React.Fragment key={index}>
-                                <ADLCanvas ADLData={data} devices={devices} onSubmit={onSubmitSettings} style={canvasStyle} />
-                            </React.Fragment>
-                        )
-                    }
-                    else if (device.children !== undefined) {
-
-                        var deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
-                        const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
-                        const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
-                        const onSubmitSettings = useCallback(handleSetValueRequest, []);
-                        return (
-                            <React.Fragment key={index}>
-                                <ADLCanvas ADLData={device.children!} devices={devices} onSubmit={onSubmitSettings} style={{ position: 'absolute' }} />
-                            </React.Fragment>
-                        )
-                    }
+                    return renderCompositeDevice(device, index, detectorSetup, canvasStyle);
                 default:
                     return renderDeviceComponent(index, devices, device, onSubmit)
             }
