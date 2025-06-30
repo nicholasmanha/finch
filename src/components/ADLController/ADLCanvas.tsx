@@ -1,5 +1,5 @@
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
-import { Device, Devices } from "@/types/deviceControllerTypes";
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import StyleRender from './StyleRender';
 import DeviceRender from './DeviceRender';
@@ -84,7 +84,6 @@ function renderDeviceComponent(
     ADLEntry: Entry,
     index: number,
     devices: Devices,
-    
     P: string,
     R: string,
     onSubmit: (pv: string, value: string | boolean | number) => void
@@ -93,12 +92,9 @@ function renderDeviceComponent(
     let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
 
     return (
-        <>
-            <React.Fragment key={index}>
-                <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} />
-            </React.Fragment>
-        </>
-
+        <React.Fragment key={index}>
+            <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} />
+        </React.Fragment>
     );
 }
 
@@ -106,7 +102,6 @@ function renderCompositeDevice(
     device: any, // Replace with your actual device type
     index: number,
     detectorSetup: any, // Replace with your actual detectorSetup type
-
     P: string,
     R: string,
 ): JSX.Element | undefined {
@@ -188,17 +183,14 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, P, R }: ADLC
         });
     };
     return (
-        <>
-            <div style={{
+        <div
+            style={{
                 width: `${dimensions.width}px`,
                 height: `${dimensions.height}px`,
                 ...style
             }} className="relative">
-                {renderDevices()}
-            </div>
-
-        </>
-
+            {renderDevices()}
+        </div>
     )
 }
 
