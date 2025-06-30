@@ -13,6 +13,8 @@ export type ADLCanvasProps = {
     ADLData: any;
     onSubmit?: (pv: string, value: string | boolean | number) => void
     style?: React.CSSProperties;
+    P: string;
+    R: string;
 }
 
 function extractPVName(input: string): string {
@@ -25,10 +27,8 @@ function extractPVName(input: string): string {
     return withoutPrefix || input;
 }
 
-const P = "13SIM1"
-const R = "cam1"
 
-const createDeviceNameArray = (Data: Entry[]) => {
+const createDeviceNameArray = (Data: Entry[], P: string, R: string) => {
 
     var pvArray: string[] = [];
     Data.forEach((group) => {
@@ -84,6 +84,8 @@ function renderDeviceComponent(
     index: number,
     devices: Devices,
     ADLEntry: Entry,
+        P: string,
+    R: string,
     onSubmit: (pv: string, value: string | boolean | number) => void
 
 ): React.ReactElement {
@@ -103,9 +105,11 @@ function renderCompositeDevice(
     device: any, // Replace with your actual device type
     index: number,
     detectorSetup: any, // Replace with your actual detectorSetup type
-    canvasStyle: React.CSSProperties
+    canvasStyle: React.CSSProperties,
+    P: string,
+    R: string,
 ): JSX.Element | undefined {
-    // if the composite just has children components and not another ADL file
+    // if the composite links to another adl file
     if (device.comp_file !== undefined) {
         // if given ADSetup.adl, this returns ADSetup
         const objectName: string = device.comp_file.split('.')[0];
@@ -117,44 +121,49 @@ function renderCompositeDevice(
         const data = ADLParser(parseCustomFormat(component));
 
         // ws call
-        const deviceNames = useMemo(() => createDeviceNameArray(data), []);
+        const deviceNames = useMemo(() => createDeviceNameArray(data, P, R), []);
         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
         const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
         const onSubmitSettings = useCallback(handleSetValueRequest, []);
-        
+
         return (
             <React.Fragment key={index}>
-                <ADLCanvas 
-                    ADLData={data} 
-                    devices={devices} 
-                    onSubmit={onSubmitSettings} 
-                    style={canvasStyle} 
+                <ADLCanvas
+                    P={P}
+                    R={R}
+                    ADLData={data}
+                    devices={devices}
+                    onSubmit={onSubmitSettings}
+                    style={canvasStyle}
                 />
             </React.Fragment>
         );
     }
+    // if the composite just has children components and not another ADL file
     else if (device.children !== undefined) {
-        const deviceNames = useMemo(() => createDeviceNameArray(device.children!), []);
+        const deviceNames = useMemo(() => createDeviceNameArray(device.children!, P, R), []);
         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
         const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
         const onSubmitSettings = useCallback(handleSetValueRequest, []);
-        
+
         return (
             <React.Fragment key={index}>
-                <ADLCanvas 
-                    ADLData={device.children!} 
-                    devices={devices} 
-                    onSubmit={onSubmitSettings} 
-                    style={{ position: 'absolute' }} 
+                <ADLCanvas
+                    P={P}
+                    R={R}
+                    ADLData={device.children!}
+                    devices={devices}
+                    onSubmit={onSubmitSettings}
+                    style={{ position: 'absolute' }}
                 />
             </React.Fragment>
         );
     }
-    
+
     return undefined;
 }
 
-function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasProps) {
+function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, P, R }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const renderDevices = () => {
 
@@ -171,9 +180,9 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style }: ADLCanvasP
                 case "text":
                     return renderTextComponent(device, index, P, R, devices);
                 case "composite":
-                    return renderCompositeDevice(device, index, detectorSetup, canvasStyle);
+                    return renderCompositeDevice(device, index, detectorSetup, canvasStyle, P, R);
                 default:
-                    return renderDeviceComponent(index, devices, device, onSubmit)
+                    return renderDeviceComponent(index, devices, device, P, R, onSubmit)
             }
         });
     };
