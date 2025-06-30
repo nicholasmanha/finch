@@ -10,7 +10,7 @@ import { parseCustomFormat } from './utils/ADLtoJSON';
 
 export type ADLCanvasProps = {
     devices: Devices;
-    ADLData: any;
+    ADLData: Entry[];
     onSubmit?: (pv: string, value: string | boolean | number) => void
     style?: React.CSSProperties;
     P: string;
@@ -67,17 +67,6 @@ function renderTextComponent(
             <StyleRender ADLEntry={device} dynamic={false} />
         </React.Fragment>
     );
-}
-
-function useDisplaySetup(
-    device: Entry,
-    setDimensions: (dimensions: { width: number; height: number }) => void
-): void {
-    useEffect(() => {
-        if (device?.size) {
-            setDimensions(device.size);
-        }
-    }, [device, setDimensions]);
 }
 
 function renderDeviceComponent(
@@ -166,13 +155,19 @@ function renderCompositeDevice(
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, P, R }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+    // get display dimensions
+    useEffect(() => {
+        const displayDevice = ADLData.find(device => device.var_type === "display");
+        if (displayDevice?.size) {
+            setDimensions(displayDevice.size);
+        }
+    }, [ADLData]);
+
     const renderDevices = () => {
 
         return ADLData.map((device: Entry, index: number) => {
             switch (device.var_type) {
-                case "display":
-                    useDisplaySetup(device, setDimensions);
-                    break;
                 case "text":
                     return renderTextComponent(device, index, devices, P, R);
                 case "composite":
