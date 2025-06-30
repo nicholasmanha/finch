@@ -58,7 +58,7 @@ export default function ADLView({ className }: ADLViewProps) {
         "inline-block rounded-xl bg-slate-100 p-4", 
         className 
       )}>
-        <ADLCanvas ADLData={ADLData} devices={devices} onSubmit={onSubmitSettings} />
+        <ADLCanvas ADLData={ADLData} R = {R} P = {P} devices={devices} onSubmit={onSubmitSettings} />
       </div>
 
     </>
