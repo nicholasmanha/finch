@@ -19,12 +19,11 @@ function RelatedDisp({
 
     const handleCreateTab = () => {
         const tabContent = (
-            <ADLView fileName={fileArray![0].file}/>
+            <ADLView fileName={fileArray![0].file} />
         );
 
         addTab('Dynamic Tab', tabContent);
     };
-    console.log(fileArray)
     return (
         <button
             onClick={handleCreateTab}

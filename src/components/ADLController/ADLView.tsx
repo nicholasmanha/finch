@@ -60,17 +60,9 @@ export default function ADLView({ className, fileName }: ADLViewProps) {
     // Return what remains (or original string if no patterns were found)
     return withoutPrefix || input;
   }
-
-  // useState to dynamically render tabs
-  const [tabs, setTabs] = useState<TabData[]>([
-    { id: 'tab1', label: 'Overview', content: null } // placeholder
-  ]);
-
-  // placeholder to render ADBase
-  const renderTabContent = (tabId: string) => {
-    if (tabId === 'tab1') {
-      return (
-        <div className={cn(
+  return (
+    <>
+      <div className={cn(
           "inline-block rounded-xl bg-slate-100 p-4",
           className
         )}>
@@ -82,63 +74,6 @@ export default function ADLView({ className, fileName }: ADLViewProps) {
             onSubmit={onSubmitSettings}
           />
         </div>
-      );
-    }
-
-    // Find the tab and return its content if it isnt the first tab
-    const tab = tabs.find(t => t.id === tabId);
-    return tab?.content || null;
-  };
-
-  const removeTab = (tabId: string) => {
-    setTabs(tabs.filter(tab => tab.id !== tabId));
-  };
-
-  const addTabWithContent = (label: string, content: React.ReactNode) => {
-    const newId = `tab${Date.now()}`;
-    const newTab: TabData = {
-      id: newId,
-      label,
-      content
-    };
-    setTabs([...tabs, newTab]);
-  };
-
-  const tabManagementValue = {
-    addTab: addTabWithContent,
-    removeTab,
-    tabs
-  };
-
-
-  return (
-    <>
-      <TabManagementProvider value={tabManagementValue}>
-        <TabsGroup defaultValue={tabs[0]?.id || 'tab1'}>
-          <TabsList>
-            {tabs.map((tab) => (
-              <div key={tab.id} className="flex items-center">
-                <Tab value={tab.id}>{tab.label}</Tab>
-                {tabs.length > 1 && (
-                  <button
-                    onClick={() => removeTab(tab.id)}
-                    className="ml-2 text-red-500 hover:text-red-700"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-            ))}
-          </TabsList>
-
-          {tabs.map((tab) => (
-            <TabsPanel key={tab.id} value={tab.id}>
-              {renderTabContent(tab.id)}
-            </TabsPanel>
-          ))}
-        </TabsGroup>
-
-      </TabManagementProvider>
     </>
   )
 

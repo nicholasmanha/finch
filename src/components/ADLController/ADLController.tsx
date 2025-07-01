@@ -25,53 +25,18 @@ export default function ADLController({ className, fileName }: ADLControllerProp
 
   const P = "13SIM1"
   const R = "cam1"
-  const fileNameNoADL: string = fileName.split('.')[0];
-  const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
-  const ADLData = ADLParser(parseCustomFormat(component))
-  const createDeviceNameArray = (Data: Entry[]) => {
-
-    var pvArray: string[] = [];
-    Data.forEach((group) => {
-      let pv = `${P}:${R}:${extractPVName(group.name)}`
-      pvArray.push(pv);
-
-    })
-
-    return pvArray;
-  };
-
-  // array of ex. "13SIM1:cam1:GainRed"
-  // settings is cameraDeviceData which is json of data fro PV's for the camera
-  var deviceNames = useMemo(() => createDeviceNameArray(ADLData), []);
-  const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
-
-  //we need a ws just for the control PV, since a user may only want that one
-  //we need another ws just for the settings PVs, in case the user wants those options.
-  //or can we just combine them into one?
-
-  const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
-  const onSubmitSettings = useCallback(handleSetValueRequest, []);
-
-  function extractPVName(input: string): string {
-    if (!input) return '';
-
-    // Remove all $(...) patterns
-    const withoutPrefix = input.replace(/\$\(.*?\)/g, '');
-
-    // Return what remains (or original string if no patterns were found)
-    return withoutPrefix || input;
-  }
 
   // useState to dynamically render tabs
   const [tabs, setTabs] = useState<TabData[]>([
     { id: 'tab1', label: 'Overview', content: null } // placeholder
   ]);
+  const [activeTab, setActiveTab] = useState(tabs[0]?.id || 'tab1');
 
   // placeholder to render ADBase
   const renderTabContent = (tabId: string) => {
     if (tabId === 'tab1') {
       return (
-        <ADLView fileName="simDetector.adl"/>
+        <ADLView fileName={fileName}/>
       );
     }
 
@@ -81,7 +46,13 @@ export default function ADLController({ className, fileName }: ADLControllerProp
   };
 
   const removeTab = (tabId: string) => {
-    setTabs(tabs.filter(tab => tab.id !== tabId));
+    const newTabs = tabs.filter(tab => tab.id !== tabId);
+    setTabs(newTabs);
+    
+    // If we're removing the active tab, switch to the first remaining tab
+    if (activeTab === tabId && newTabs.length > 0) {
+      setActiveTab(newTabs[0].id);
+    }
   };
 
   const addTabWithContent = (label: string, content: React.ReactNode) => {
@@ -92,19 +63,22 @@ export default function ADLController({ className, fileName }: ADLControllerProp
       content
     };
     setTabs([...tabs, newTab]);
+    setActiveTab(newId); // Set new tab as active
   };
 
   const tabManagementValue = {
     addTab: addTabWithContent,
     removeTab,
-    tabs
+    tabs,
+    activeTab,
+    setActiveTab
   };
 
 
   return (
     <>
       <TabManagementProvider value={tabManagementValue}>
-        <TabsGroup defaultValue={tabs[0]?.id || 'tab1'}>
+        <TabsGroup value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
             {tabs.map((tab) => (
               <div key={tab.id} className="flex items-center">
