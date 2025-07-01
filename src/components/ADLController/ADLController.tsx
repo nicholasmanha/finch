@@ -28,7 +28,7 @@ export default function ADLController({ className, fileName }: ADLControllerProp
 
   // useState to dynamically render tabs
   const [tabs, setTabs] = useState<TabData[]>([
-    { id: 'tab1', label: 'Overview', content: null } // placeholder
+    { id: 'tab1', label: fileName, content: null } // placeholder
   ]);
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || 'tab1');
 
@@ -83,14 +83,14 @@ export default function ADLController({ className, fileName }: ADLControllerProp
             {tabs.map((tab) => (
               <div key={tab.id} className="flex items-center">
                 <Tab value={tab.id}>{tab.label}</Tab>
-                {tabs.length > 1 && (
+                
                   <button
                     onClick={() => removeTab(tab.id)}
-                    className="ml-2 text-red-500 hover:text-red-700"
+                    className="ml-2 text-red-500 hover:text-red-700 text-4xl"
                   >
-                    ×
+                    x
                   </button>
-                )}
+                
               </div>
             ))}
           </TabsList>

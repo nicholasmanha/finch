@@ -22,7 +22,7 @@ function RelatedDisp({
             <ADLView fileName={fileArray![0].file} />
         );
 
-        addTab('Dynamic Tab', tabContent);
+        addTab(fileArray![0].file, tabContent);
     };
     return (
         <button
