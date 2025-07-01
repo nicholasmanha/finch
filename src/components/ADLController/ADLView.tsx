@@ -1,4 +1,4 @@
-import { useMemo, useCallback, CSSProperties, useState } from "react";
+import { useMemo, useCallback, CSSProperties, useState, useEffect } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
 import { simDetector } from './utils/adl';
 import { Entry } from "./types/ADLEntry";
@@ -24,16 +24,6 @@ export default function ADLView({ className }: ADLViewProps) {
   const R = "cam1"
   const ADLData = ADLParser(parseCustomFormat(simDetector))
 
-  function extractPVName(input: string): string {
-    if (!input) return '';
-
-    // Remove all $(...) patterns
-    const withoutPrefix = input.replace(/\$\(.*?\)/g, '');
-
-    // Return what remains (or original string if no patterns were found)
-    return withoutPrefix || input;
-  }
-
   const createDeviceNameArray = (Data: Entry[]) => {
 
     var pvArray: string[] = [];
@@ -44,41 +34,6 @@ export default function ADLView({ className }: ADLViewProps) {
     })
 
     return pvArray;
-  };
-
-  const [tabs, setTabs] = useState<TabData[]>([
-    { id: 'tab1', label: 'Overview', content: 'Overview content' },
-    { id: 'tab2', label: 'Details', content: 'Details content' }
-  ]);
-
-  const addTab = () => {
-    const newId = `tab${tabs.length + 1}`;
-    const newTab: TabData = {
-      id: newId,
-      label: `Tab ${tabs.length + 1}`,
-      content: `Content for ${newId}`
-    };
-    setTabs([...tabs, newTab]);
-  };
-
-  const removeTab = (tabId: string) => {
-    setTabs(tabs.filter(tab => tab.id !== tabId));
-  };
-
-  const addTabWithContent = (label: string, content: React.ReactNode) => {
-    const newId = `tab${Date.now()}`;
-    const newTab: TabData = {
-      id: newId,
-      label,
-      content
-    };
-    setTabs([...tabs, newTab]);
-  };
-
-  const tabManagementValue = {
-    addTab: addTabWithContent,
-    removeTab,
-    tabs
   };
 
   // array of ex. "13SIM1:cam1:GainRed"
@@ -92,20 +47,67 @@ export default function ADLView({ className }: ADLViewProps) {
 
   const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
   const onSubmitSettings = useCallback(handleSetValueRequest, []);
-  return (
-    <>
-      <TabManagementProvider value={tabManagementValue}>
-        <div className="max-w-2xl mx-auto p-6">
-          <div className="max-w-2xl mx-auto p-6">
-            <div className="mb-4">
-              <button
-                onClick={addTab}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Add Tab
-              </button>
-            </div>
-          </div>
+  function extractPVName(input: string): string {
+    if (!input) return '';
+
+    // Remove all $(...) patterns
+    const withoutPrefix = input.replace(/\$\(.*?\)/g, '');
+
+    // Return what remains (or original string if no patterns were found)
+    return withoutPrefix || input;
+  }
+
+
+
+  const [tabs, setTabs] = useState<TabData[]>([
+    { id: 'tab1', label: 'Overview', content: null } // placeholder
+  ]);
+  const renderTabContent = (tabId: string) => {
+  if (tabId === 'tab1') {
+    return (
+      <div className={cn(
+        "inline-block rounded-xl bg-slate-100 p-4",
+        className
+      )}>
+        <ADLCanvas 
+          ADLData={ADLData} 
+          R={R} 
+          P={P} 
+          devices={devices} 
+          onSubmit={onSubmitSettings} 
+        />
+      </div>
+    );
+  }
+  
+  // Find the tab and return its content
+  const tab = tabs.find(t => t.id === tabId);
+  return tab?.content || null;
+};
+    const removeTab = (tabId: string) => {
+      setTabs(tabs.filter(tab => tab.id !== tabId));
+    };
+
+    const addTabWithContent = (label: string, content: React.ReactNode) => {
+      const newId = `tab${Date.now()}`;
+      const newTab: TabData = {
+        id: newId,
+        label,
+        content
+      };
+      setTabs([...tabs, newTab]);
+    };
+
+    const tabManagementValue = {
+      addTab: addTabWithContent,
+      removeTab,
+      tabs
+    };
+
+
+    return (
+      <>
+        <TabManagementProvider value={tabManagementValue}>
           <TabsGroup defaultValue={tabs[0]?.id || 'tab1'}>
             <TabsList>
               {tabs.map((tab) => (
@@ -125,19 +127,13 @@ export default function ADLView({ className }: ADLViewProps) {
 
             {tabs.map((tab) => (
               <TabsPanel key={tab.id} value={tab.id}>
-                {tab.content}
+                {renderTabContent(tab.id)}
               </TabsPanel>
             ))}
           </TabsGroup>
-        </div>
-        <div className={cn(
-          "inline-block rounded-xl bg-slate-100 p-4",
-          className
-        )}>
-          <ADLCanvas ADLData={ADLData} R={R} P={P} devices={devices} onSubmit={onSubmitSettings} />
-        </div>
-      </TabManagementProvider>
-    </>
-  )
+          
+        </TabManagementProvider>
+      </>
+    )
 
-}
+  }
