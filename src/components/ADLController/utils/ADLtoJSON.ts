@@ -21,11 +21,15 @@ export function parseCustomFormat(input: string): CustomFormatObject[] {
 
             // handles key value pairs
             if (line.includes('=')) {
-                const [key, value] = line.split('=').map(part => part.trim());
+                const equalIndex = line.indexOf('=');
+                const key = line.substring(0, equalIndex).trim();
+                const value = line.substring(equalIndex + 1).trim();
+
                 const cleanKey = removeQuotes(key);
                 obj[cleanKey] = value.startsWith('"') ? value.slice(1, -1) : Number(value) || value;
                 index++;
             }
+            
             // handles nested objects
             else if (line.endsWith('{')) {
                 const rawKey = line.split('{')[0].trim();
