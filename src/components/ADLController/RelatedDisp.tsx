@@ -17,16 +17,16 @@ function RelatedDisp({
 }: RelatedDispProps) {
     const { addTab } = useTabManagement();
     console.log(fileArray)
-    const handleCreateTab = () => {
+    const handleCreateTab = (index: number) => {
         const tabContent = (
-            <ADLView fileName={fileArray![0].file} />
+            <ADLView fileName={fileArray![index].file} />
         );
 
-        addTab(fileArray![0].file, tabContent);
+        addTab(fileArray![index].file, tabContent);
     };
 
-
     const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [dropdownWidth, setDropdownWidth] = useState<number | undefined>(undefined);
     const containerRef = useRef<null | HTMLDivElement>(null);
 
     useEffect(() => {
@@ -42,17 +42,41 @@ function RelatedDisp({
         };
     }, []);
 
+    // Calculate the width needed for the longest option
+    useEffect(() => {
+        if (fileArray && fileArray.length > 1) {
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.visibility = 'hidden';
+            tempDiv.style.whiteSpace = 'nowrap';
+            tempDiv.style.padding = '8px'; 
+            tempDiv.style.fontSize = '14px';
+            
+            document.body.appendChild(tempDiv);
+            
+            let maxWidth = 0;
+            fileArray.forEach(item => {
+                tempDiv.textContent = item.label;
+                const width = tempDiv.offsetWidth;
+                if (width > maxWidth) {
+                    maxWidth = width;
+                }
+            });
+            
+            document.body.removeChild(tempDiv);
+            setDropdownWidth(maxWidth + 16); // Add some padding
+        }
+    }, [fileArray]);
+
     const handleInputClick = () => {
         setDropdownVisible(!dropdownVisible);
     };
 
     return (
         <>
-
             {fileArray?.length === 1 ?
-
                 <button
-                    onClick={handleCreateTab}
+                    onClick={() => handleCreateTab(0)}
                     className={`
                 bg-blue-500 text-white hover:bg-blue-600
                 rounded border border-slate-300 transition-all duration-100
@@ -62,11 +86,10 @@ function RelatedDisp({
                     style={style}
                 >
                     {label ? <small className="text-xs">{label}</small> : <small className="text-xs flex justify-center"><Browsers size={16} /></small>}
-
                 </button>
                 :
                 <div ref={containerRef} className={'w-1/2 border bg-white border-slate-300 flex w-full max-w-64'} style={style}>
-                    <div className={` flex flex-col w-full`} onClick={handleInputClick}>
+                    <div className={`flex flex-col w-full`} onClick={handleInputClick}>
                         <div className="bg-blue-500 text-white hover:bg-blue-600
                 rounded border border-slate-300 transition-all duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300
@@ -75,12 +98,16 @@ function RelatedDisp({
                         </div>
                         <span className="relative w-full">
                             {dropdownVisible && (
-                                <ul className="z-10 absolute w-full top-0 bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-auto">
+                                <ul className="z-10 absolute top-0 bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-auto"
+                                    style={{ 
+                                        width: dropdownWidth ? `${dropdownWidth}px` : 'auto',
+                                        minWidth: '100%'
+                                    }}>
                                     {fileArray!.map((item, index) => (
                                         <li
                                             key={index}
-                                            onClick={handleCreateTab}
-                                            className={`p-2 cursor-pointer hover:bg-gray-200 `}
+                                            onClick={() => handleCreateTab(index)}
+                                            className={`p-2 cursor-pointer hover:bg-gray-200 whitespace-nowrap`}
                                         >
                                             {item.label}
                                         </li>
