@@ -1,18 +1,12 @@
-import { useMemo, useCallback, CSSProperties, useState, useEffect } from "react";
+import { useMemo, useCallback } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
 import * as ADLs from './utils/adl';
-import { simDetector } from './utils/adl';
 import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
 import ADLCanvas from "./ADLCanvas";
 import { cn } from "@/lib/utils";
 import { parseCustomFormat } from "./utils/ADLtoJSON";
-import { TabsGroup } from '@/components/Tabs/TabsGroup';
-import { TabsList } from '@/components/Tabs/TabsList';
-import { Tab } from '@/components/Tabs/Tab';
-import { TabsPanel } from '@/components/Tabs/TabsPanel';
-import { TabData } from "../Tabs/types/tabs";
-import { TabManagementProvider } from "../Tabs/context/TabsContext";
+
 
 
 export type ADLViewProps = {
