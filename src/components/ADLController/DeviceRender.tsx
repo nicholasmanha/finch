@@ -58,7 +58,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
             case "button":
                 return <ADLButton label={ADLEntry.label} val={parseInt(ADLEntry.press_msg!)} onSubmit={handleSubmitWithPV} style={positionStyle} />
             case "related display":
-                return <RelatedDisp label={ADLEntry.label} style={positionStyle} />
+                return <RelatedDisp fileArray={ADLEntry.display} label={ADLEntry.label} style={positionStyle} />
             default:
                 return <p></p>;
         }

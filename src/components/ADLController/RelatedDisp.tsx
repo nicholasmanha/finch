@@ -1,13 +1,17 @@
 import { Browsers } from '@phosphor-icons/react';
 import React, { CSSProperties, useState } from 'react'
 import { useTabManagement } from '../Tabs/context/TabsContext';
+import { Entry } from "./types/ADLEntry";
+import ADLView from './ADLView';
 
 type RelatedDispProps = {
     label?: string;
     style?: CSSProperties;
+    fileArray: Entry["display"]
 }
 
 function RelatedDisp({
+    fileArray,
     label = '',
     style
 }: RelatedDispProps) {
@@ -15,15 +19,12 @@ function RelatedDisp({
 
     const handleCreateTab = () => {
         const tabContent = (
-            <div>
-                <h3 className="text-lg font-semibold">New Tab Content</h3>
-                <p>This tab was created from a deep component!</p>
-            </div>
+            <ADLView fileName={fileArray![0].file}/>
         );
 
         addTab('Dynamic Tab', tabContent);
     };
-
+    console.log(fileArray)
     return (
         <button
             onClick={handleCreateTab}

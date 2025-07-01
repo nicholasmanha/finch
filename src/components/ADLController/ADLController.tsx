@@ -13,14 +13,15 @@ import { Tab } from '@/components/Tabs/Tab';
 import { TabsPanel } from '@/components/Tabs/TabsPanel';
 import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
+import ADLView from "./ADLView";
 
 
-export type ADLViewProps = {
+export type ADLControllerProps = {
   className?: string;
   fileName: string;
 }
 
-export default function ADLView({ className, fileName }: ADLViewProps) {
+export default function ADLController({ className, fileName }: ADLControllerProps) {
 
   const P = "13SIM1"
   const R = "cam1"
@@ -70,18 +71,7 @@ export default function ADLView({ className, fileName }: ADLViewProps) {
   const renderTabContent = (tabId: string) => {
     if (tabId === 'tab1') {
       return (
-        <div className={cn(
-          "inline-block rounded-xl bg-slate-100 p-4",
-          className
-        )}>
-          <ADLCanvas
-            ADLData={ADLData}
-            R={R}
-            P={P}
-            devices={devices}
-            onSubmit={onSubmitSettings}
-          />
-        </div>
+        <ADLView fileName="simDetector.adl"/>
       );
     }
 
