@@ -27,7 +27,7 @@ export default function About() {
         <>
 
 
-            <ADLView/>
+            <ADLView fileName="simDetector.adl"/>
         </>
 
     )

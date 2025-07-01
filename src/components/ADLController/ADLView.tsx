@@ -1,5 +1,6 @@
 import { useMemo, useCallback, CSSProperties, useState, useEffect } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
+import * as ADLs from './utils/adl';
 import { simDetector } from './utils/adl';
 import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
@@ -16,13 +17,16 @@ import { TabManagementProvider } from "../Tabs/context/TabsContext";
 
 export type ADLViewProps = {
   className?: string;
+  fileName: string;
 }
 
-export default function ADLView({ className }: ADLViewProps) {
+export default function ADLView({ className, fileName }: ADLViewProps) {
 
   const P = "13SIM1"
   const R = "cam1"
-  const ADLData = ADLParser(parseCustomFormat(simDetector))
+  const fileNameNoADL: string = fileName.split('.')[0];
+  const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
+  const ADLData = ADLParser(parseCustomFormat(component))
 
   const createDeviceNameArray = (Data: Entry[]) => {
 
@@ -86,7 +90,7 @@ export default function ADLView({ className }: ADLViewProps) {
     const tab = tabs.find(t => t.id === tabId);
     return tab?.content || null;
   };
-  
+
   const removeTab = (tabId: string) => {
     setTabs(tabs.filter(tab => tab.id !== tabId));
   };
