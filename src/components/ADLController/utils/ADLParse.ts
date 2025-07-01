@@ -41,7 +41,7 @@ export function ADLParser(config: any[]): Entry[] {
                     name: text.textix
                 };
 
-                if(text["dynamic attribute"]) {
+                if (text["dynamic attribute"]) {
                     txt.dynamic_attribute = text["dynamic attribute"]
                 }
 
@@ -94,6 +94,21 @@ export function ADLParser(config: any[]): Entry[] {
                 };
                 if (rel.label) {
                     relDisplay.label = rel.label;
+                }
+                const displayEntries = [];
+                for (const key in rel) {
+                    if (key.startsWith("display")) {
+                        const displayItem = rel[key];
+                        displayEntries.push({
+                            label: displayItem.label || "",
+                            file: displayItem.name || "",
+                            args: displayItem.args || ""
+                        });
+                    }
+                }
+
+                if (displayEntries.length > 0) {
+                    relDisplay.display = displayEntries;
                 }
                 entries.push(relDisplay);
                 break;

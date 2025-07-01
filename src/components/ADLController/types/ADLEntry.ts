@@ -19,4 +19,9 @@ export interface Entry {
     calc: string
     chan: string
   }
+  display?: {
+    label: string
+    file: string
+    args: string
+  }[]
 };

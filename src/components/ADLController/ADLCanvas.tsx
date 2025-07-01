@@ -88,7 +88,7 @@ function renderDeviceComponent(
 }
 
 function renderCompositeDevice(
-    device: any, // Replace with your actual device type
+    device: Entry,
     index: number,
     detectorSetup: any, // Replace with your actual detectorSetup type
     P: string,
@@ -115,7 +115,7 @@ function renderCompositeDevice(
         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
         const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
         const onSubmitSettings = useCallback(handleSetValueRequest, []);
-
+        
         return (
             <React.Fragment key={index}>
                 <ADLCanvas
@@ -131,6 +131,7 @@ function renderCompositeDevice(
     }
     // if the composite just has children components and not another ADL file
     else if (device.children !== undefined) {
+        
         const deviceNames = useMemo(() => createDeviceNameArray(device.children!, P, R), []);
         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
         const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
@@ -165,7 +166,7 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, P, R }: ADLC
     }, [ADLData]);
 
     const renderDevices = () => {
-
+        
         return ADLData.map((device: Entry, index: number) => {
             switch (device.var_type) {
                 case "text":

@@ -27,7 +27,7 @@ export default function ADLView({ className, fileName }: ADLViewProps) {
   const fileNameNoADL: string = fileName.split('.')[0];
   const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
   const ADLData = ADLParser(parseCustomFormat(component))
-
+console.log(parseCustomFormat(component))
   const createDeviceNameArray = (Data: Entry[]) => {
 
     var pvArray: string[] = [];
@@ -51,7 +51,7 @@ export default function ADLView({ className, fileName }: ADLViewProps) {
 
   const { devices, handleSetValueRequest, } = useOphydSocket(wsUrl, deviceNames);
   const onSubmitSettings = useCallback(handleSetValueRequest, []);
-
+  
   function extractPVName(input: string): string {
     if (!input) return '';
 
