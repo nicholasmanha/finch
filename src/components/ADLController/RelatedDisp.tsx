@@ -1,5 +1,6 @@
 import { Browsers } from '@phosphor-icons/react';
 import React, { CSSProperties, useState } from 'react'
+import { useTabManagement } from '../Tabs/context/TabsContext';
 
 type RelatedDispProps = {
     label?: string;
@@ -10,20 +11,25 @@ function RelatedDisp({
     label = '',
     style
 }: RelatedDispProps) {
+    const { addTab } = useTabManagement();
 
-    const [isPressed, setIsPressed] = useState(false);
+    const handleCreateTab = () => {
+        const tabContent = (
+            <div>
+                <h3 className="text-lg font-semibold">New Tab Content</h3>
+                <p>This tab was created from a deep component!</p>
+            </div>
+        );
 
-    const handleClick = () => {
-        setIsPressed(true);
-        setTimeout(() => setIsPressed(false), 200);
+        addTab('Dynamic Tab', tabContent);
     };
 
     return (
         <button
-            onClick={handleClick}
+            onClick={handleCreateTab}
             className={`
                 
-                ${isPressed ? 'transform scale-95' : ''}
+                
                 bg-blue-500 text-white hover:bg-blue-600
                 rounded border border-slate-300 transition-all duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300

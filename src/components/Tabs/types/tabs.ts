@@ -27,3 +27,9 @@ export interface TabsPanelProps {
   children: ReactNode;
   className?: string;
 }
+
+export interface TabData {
+  id: string;
+  label: string;
+  content: React.ReactNode;
+}
