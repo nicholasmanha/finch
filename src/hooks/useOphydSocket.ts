@@ -8,11 +8,11 @@ import {
 } from 'src/types/ophydSocketTypes';
 
 export default function useOphydSocket(deviceNameList: string[], wsUrl?: string) {
-    const apiUrl:string = wsUrl ? wsUrl : (import.meta.env.VITE_OPHYD_WS || "ws://localhost:8000/ophydSocket");
+    const address = window.location.hostname;
+    const apiPort:string = (import.meta.env.VITE_OPHYD_WS_PORT || `8000`);
+    const apiUrl:string = wsUrl ? wsUrl : `ws://${address}:${apiPort}/ophydSocket`;
     const [devices, setDevices] = useState<Devices>({});
     const wsRef = useRef<WebSocket | null>(null);
-    console.log('running hook')
-
     // Toggle device lock
     const toggleDeviceLock = useCallback((deviceName: string) => {
         setDevices((prevDevices) => ({
