@@ -22,6 +22,7 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
   const fileNameNoADL: string = fileName.split('.')[0];
   const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
   const ADLData = ADLParser(parseCustomFormat(component))
+  console.log(parseCustomFormat(component))
   const createDeviceNameArray = (Data: Entry[]) => {
 
     var pvArray: string[] = [];

@@ -16,7 +16,6 @@ function RelatedDisp({
     style
 }: RelatedDispProps) {
     const { addTab } = useTabManagement();
-    console.log(fileArray)
     const handleCreateTab = (index: number) => {
         const tabContent = (
             <ADLView fileName={fileArray![index].file} />

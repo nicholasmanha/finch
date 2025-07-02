@@ -23,13 +23,36 @@ export function parseCustomFormat(input: string): CustomFormatObject[] {
             if (line.includes('=')) {
                 const equalIndex = line.indexOf('=');
                 const key = line.substring(0, equalIndex).trim();
-                const value = line.substring(equalIndex + 1).trim();
+                let value = line.substring(equalIndex + 1).trim();
 
                 const cleanKey = removeQuotes(key);
-                obj[cleanKey] = value.startsWith('"') ? value.slice(1, -1) : Number(value) || value;
-                index++;
+                if (key === 'args') {
+                    const result: Record<string, string> = {};
+
+                    // Split by comma and process each key-value pair
+                    value.split(',').forEach(pair => {
+                        const trimmedPair = pair.trim();
+                        const cleanPair=trimmedPair.replace(/"/g, '');
+                        const equalIndex = cleanPair.indexOf('=');
+
+                        if (equalIndex > 0) {
+                            const key = cleanPair.substring(0, equalIndex).trim();
+                            const value = cleanPair.substring(equalIndex + 1).trim();
+                            result[key] = value;
+                        }
+                    });
+
+                    obj[cleanKey] = result;
+                    index++
+
+                }
+                else {
+                    obj[cleanKey] = value.startsWith('"') ? value.slice(1, -1) : Number(value) || value;
+                    index++;
+                }
+
             }
-            
+
             // handles nested objects
             else if (line.endsWith('{')) {
                 const rawKey = line.split('{')[0].trim();
@@ -56,6 +79,7 @@ export function parseCustomFormat(input: string): CustomFormatObject[] {
                     }
                     obj[key] = childArr;
                 }
+
                 else {
                     obj[key] = parseObject(); // Recurse
                 }
