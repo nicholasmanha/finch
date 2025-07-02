@@ -11,12 +11,13 @@ import ADLView from "./ADLView";
 export type ADLControllerProps = {
   className?: string;
   fileName: string;
+  P: string;
+  R: string
 }
 
-export default function ADLController({ className, fileName }: ADLControllerProps) {
+export default function ADLController({ className, fileName, P, R }: ADLControllerProps) {
 
-  const P = "13SIM1"
-  const R = "cam1"
+
 
   // useState to dynamically render tabs
   const [tabs, setTabs] = useState<TabData[]>([
@@ -28,7 +29,7 @@ export default function ADLController({ className, fileName }: ADLControllerProp
   const renderTabContent = (tabId: string) => {
     if (tabId === 'tab1') {
       return (
-        <ADLView fileName={fileName}/>
+        <ADLView fileName={fileName} P={P} R={R}/>
       );
     }
 

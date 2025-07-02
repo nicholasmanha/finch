@@ -12,12 +12,13 @@ import { parseCustomFormat } from "./utils/ADLtoJSON";
 export type ADLViewProps = {
   className?: string;
   fileName: string;
+  [key: string]: any;
+
 }
 
-export default function ADLView({ className, fileName }: ADLViewProps) {
+export default function ADLView({ className, fileName, ...args }: ADLViewProps) {
 
-  const P = "13SIM1"
-  const R = "cam1"
+  const { P, R } = args;
   const fileNameNoADL: string = fileName.split('.')[0];
   const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
   const ADLData = ADLParser(parseCustomFormat(component))
