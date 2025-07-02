@@ -22,6 +22,6 @@ export interface Entry {
   display?: {
     label: string
     file: string
-    args: string
+    args: Record<string, string>
   }[]
 };
