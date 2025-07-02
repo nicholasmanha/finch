@@ -18,13 +18,11 @@ export type ADLViewProps = {
 
 export default function ADLView({ className, fileName, ...args }: ADLViewProps) {
 
-  console.log("view args: ", args)
 
   // Process the P and R values to remove $(...)  patterns
   const P = extractPVName(args.P || '');
   const R = extractPVName(args.R || '');
-  
-  console.log("view P: ", P, " view R: ", R)
+
 
   const fileNameNoADL: string = fileName.split('.')[0];
   const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
@@ -34,12 +32,46 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
 
     var pvArray: string[] = [];
     Data.forEach((group) => {
-      let pv = `${P}:${R}:${extractPVName(group.name)}`
-      pvArray.push(pv);
+      if (group.var_type !== 'text' && group.var_type !== 'display' && group.var_type !== 'composite') {
+        
+        //let pv = `${P}:${R}:${extractPVName(group.name)}`
+        
+        let pv = replacePlaceholders(group.name, args)
+        console.log(pv)
+        pvArray.push(pv);
+      }
+
 
     })
-
+    console.log(pvArray)
     return pvArray;
+  };
+
+  const replacePlaceholders = (templateString: string, args: Record<string, any>): string => {
+    // Split the string by placeholders while keeping the parts
+    const parts: string[] = [];
+    let lastIndex = 0;
+
+    templateString.replace(/\$\(([^)]+)\)/g, (match, key, offset) => {
+      // Add any literal text before this placeholder
+      if (offset > lastIndex) {
+        parts.push(templateString.slice(lastIndex, offset));
+      }
+
+      // Add the replacement value
+      parts.push(args[key] !== undefined ? String(args[key]) : match);
+
+      lastIndex = offset + match.length;
+      return match;
+    });
+
+    // Add any remaining literal text after the last placeholder
+    if (lastIndex < templateString.length) {
+      parts.push(templateString.slice(lastIndex));
+    }
+
+    // Join all parts with ":"
+    return parts.filter(part => part.length > 0).join(":");
   };
 
   // array of ex. "13SIM1:cam1:GainRed"
