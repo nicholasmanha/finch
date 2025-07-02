@@ -18,9 +18,9 @@ function RelatedDisp({
     const { addTab } = useTabManagement();
     const handleCreateTab = (index: number) => {
         const tabContent = (
-            <ADLView fileName={fileArray![index].file} />
+            <ADLView fileName={fileArray![index].file} {...fileArray![index].args} />
         );
-
+        console.log("args: ", fileArray![index].args)
         addTab(fileArray![index].file, tabContent);
     };
 
@@ -48,11 +48,11 @@ function RelatedDisp({
             tempDiv.style.position = 'absolute';
             tempDiv.style.visibility = 'hidden';
             tempDiv.style.whiteSpace = 'nowrap';
-            tempDiv.style.padding = '8px'; 
+            tempDiv.style.padding = '8px';
             tempDiv.style.fontSize = '14px';
-            
+
             document.body.appendChild(tempDiv);
-            
+
             let maxWidth = 0;
             fileArray.forEach(item => {
                 tempDiv.textContent = item.label;
@@ -61,7 +61,7 @@ function RelatedDisp({
                     maxWidth = width;
                 }
             });
-            
+
             document.body.removeChild(tempDiv);
             setDropdownWidth(maxWidth + 16); // Add some padding
         }
@@ -98,7 +98,7 @@ function RelatedDisp({
                         <span className="relative w-full">
                             {dropdownVisible && (
                                 <ul className="z-10 absolute top-0 bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-auto"
-                                    style={{ 
+                                    style={{
                                         width: dropdownWidth ? `${dropdownWidth}px` : 'auto',
                                         minWidth: '100%'
                                     }}>

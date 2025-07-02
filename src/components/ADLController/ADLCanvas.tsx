@@ -156,6 +156,7 @@ function renderCompositeDevice(
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, ...args }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const { P, R } = args;
+    console.log("canvas args: ", args)
     // get display dimensions
     useEffect(() => {
         const displayDevice = ADLData.find(device => device.var_type === "display");

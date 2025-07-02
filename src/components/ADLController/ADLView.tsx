@@ -18,7 +18,14 @@ export type ADLViewProps = {
 
 export default function ADLView({ className, fileName, ...args }: ADLViewProps) {
 
-  const { P, R } = args;
+  console.log("view args: ", args)
+
+  // Process the P and R values to remove $(...)  patterns
+  const P = extractPVName(args.P || '');
+  const R = extractPVName(args.R || '');
+  
+  console.log("view P: ", P, " view R: ", R)
+
   const fileNameNoADL: string = fileName.split('.')[0];
   const component = ADLs.default[fileNameNoADL as keyof typeof ADLs];
   const ADLData = ADLParser(parseCustomFormat(component))
@@ -59,17 +66,17 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
   return (
     <>
       <div className={cn(
-          "inline-block rounded-xl bg-slate-100 p-4",
-          className
-        )}>
-          <ADLCanvas
-            ADLData={ADLData}
-            R={R}
-            P={P}
-            devices={devices}
-            onSubmit={onSubmitSettings}
-          />
-        </div>
+        "inline-block rounded-xl bg-slate-100 p-4",
+        className
+      )}>
+        <ADLCanvas
+          ADLData={ADLData}
+          R={R}
+          P={P}
+          devices={devices}
+          onSubmit={onSubmitSettings}
+        />
+      </div>
     </>
   )
 
