@@ -20,8 +20,7 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
 
 
   // Process the P and R values to remove $(...)  patterns
-  const P = extractPVName(args.P || '');
-  const R = extractPVName(args.R || '');
+
 
 
   const fileNameNoADL: string = fileName.split('.')[0];
@@ -37,13 +36,11 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
         //let pv = `${P}:${R}:${extractPVName(group.name)}`
         
         let pv = replacePlaceholders(group.name, args)
-        console.log(pv)
         pvArray.push(pv);
       }
 
 
     })
-    console.log(pvArray)
     return pvArray;
   };
 
@@ -103,10 +100,10 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
       )}>
         <ADLCanvas
           ADLData={ADLData}
-          R={R}
-          P={P}
+          
           devices={devices}
           onSubmit={onSubmitSettings}
+          {...args}
         />
       </div>
     </>

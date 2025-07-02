@@ -27,13 +27,19 @@ function extractPVName(input: string): string {
 }
 
 
-const createDeviceNameArray = (Data: Entry[], P: string, R: string) => {
+const createDeviceNameArray = (Data: Entry[], args: { [key: string]: any }) => {
 
     var pvArray: string[] = [];
     Data.forEach((group) => {
-        let pv = `${P}:${R}:${extractPVName(group.name)}`
-        pvArray.push(pv);
+        if (group.var_type !== 'text' && group.var_type !== 'display' && group.var_type !== 'composite') {
 
+            //let pv = `${P}:${R}:${extractPVName(group.name)}`
+
+            let pv = replacePlaceholders(group.name, args)
+            pvArray.push(pv);
+        }
+
+        
     })
 
     return pvArray;
@@ -43,12 +49,12 @@ function renderTextComponent(
     device: Entry,
     index: number,
     devices: Devices,
-    P: string,
-    R: string
+    args: { [key: string]: any },
 ): React.ReactElement {
     if (device.dynamic_attribute) {
         // turn pv into "13SIM1:cam1:pv"
-        const pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
+        const pv = replacePlaceholders(device.dynamic_attribute.chan, args)
+        //const pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
         return (
             <React.Fragment key={index}>
                 <StyleRender
@@ -72,13 +78,13 @@ function renderDeviceComponent(
     ADLEntry: Entry,
     index: number,
     devices: Devices,
-    P: string,
-    R: string,
+    args: { [key: string]: any },
     onSubmit: (pv: string, value: string | boolean | number) => void
 
 ): React.ReactElement {
-    let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
-
+    let pv = replacePlaceholders(ADLEntry.name, args)
+    //let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
+    //console.log(pv)
     return (
         <React.Fragment key={index}>
             <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} />
@@ -90,8 +96,7 @@ function renderCompositeDevice(
     device: Entry,
     index: number,
     detectorSetup: any, // Replace with your actual detectorSetup type
-    P: string,
-    R: string,
+    args: { [key: string]: any },
 ): JSX.Element | undefined {
     const canvasStyle = {
         position: 'absolute' as const,  // The 'as const' ensures TypeScript knows it's a literal
@@ -110,7 +115,8 @@ function renderCompositeDevice(
         const data = ADLParser(parseCustomFormat(component));
 
         // ws call
-        const deviceNames = useMemo(() => createDeviceNameArray(data, P, R), []);
+        const deviceNames = useMemo(() => createDeviceNameArray(data, args), []);
+        
         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
         const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
         const onSubmitSettings = useCallback(handleSetValueRequest, []);
@@ -118,12 +124,12 @@ function renderCompositeDevice(
         return (
             <React.Fragment key={index}>
                 <ADLCanvas
-                    P={P}
-                    R={R}
+                    
                     ADLData={data}
                     devices={devices}
                     onSubmit={onSubmitSettings}
                     style={canvasStyle}
+                    {...args}
                 />
             </React.Fragment>
         );
@@ -131,7 +137,7 @@ function renderCompositeDevice(
     // if the composite just has children components and not another ADL file
     else if (device.children !== undefined) {
 
-        const deviceNames = useMemo(() => createDeviceNameArray(device.children!, P, R), []);
+        const deviceNames = useMemo(() => createDeviceNameArray(device.children!, args), []);
         const wsUrl = useMemo(() => 'ws://localhost:8000/ophydSocket', []);
         const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
         const onSubmitSettings = useCallback(handleSetValueRequest, []);
@@ -139,12 +145,12 @@ function renderCompositeDevice(
         return (
             <React.Fragment key={index}>
                 <ADLCanvas
-                    P={P}
-                    R={R}
+
                     ADLData={device.children!}
                     devices={devices}
                     onSubmit={onSubmitSettings}
                     style={{ position: 'absolute' }}
+                    {...args}
                 />
             </React.Fragment>
         );
@@ -153,9 +159,35 @@ function renderCompositeDevice(
     return undefined;
 }
 
+const replacePlaceholders = (templateString: string, args: Record<string, any>): string => {
+    // Split the string by placeholders while keeping the parts
+    const parts: string[] = [];
+    let lastIndex = 0;
+
+    templateString.replace(/\$\(([^)]+)\)/g, (match, key, offset) => {
+        // Add any literal text before this placeholder
+        if (offset > lastIndex) {
+            parts.push(templateString.slice(lastIndex, offset));
+        }
+
+        // Add the replacement value
+        parts.push(args[key] !== undefined ? String(args[key]) : match);
+
+        lastIndex = offset + match.length;
+        return match;
+    });
+
+    // Add any remaining literal text after the last placeholder
+    if (lastIndex < templateString.length) {
+        parts.push(templateString.slice(lastIndex));
+    }
+
+    // Join all parts with ":"
+    return parts.filter(part => part.length > 0).join(":");
+};
+
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, ...args }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-    const { P, R } = args;
     // get display dimensions
     useEffect(() => {
         const displayDevice = ADLData.find(device => device.var_type === "display");
@@ -163,17 +195,16 @@ function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, ...args }: A
             setDimensions(displayDevice.size);
         }
     }, [ADLData]);
-
     const renderDevices = () => {
 
         return ADLData.map((device: Entry, index: number) => {
             switch (device.var_type) {
                 case "text":
-                    return renderTextComponent(device, index, devices, P, R);
+                    return renderTextComponent(device, index, devices, args);
                 case "composite":
-                    return renderCompositeDevice(device, index, ADLs, P, R);
+                    return renderCompositeDevice(device, index, ADLs, args);
                 default:
-                    return renderDeviceComponent(device, index, devices, P, R, onSubmit)
+                    return renderDeviceComponent(device, index, devices, args, onSubmit)
             }
         });
     };
