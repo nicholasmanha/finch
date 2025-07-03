@@ -55,8 +55,13 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
         parts.push(templateString.slice(lastIndex, offset));
       }
 
-      // Add the replacement value
-      parts.push(args[key] !== undefined ? String(args[key]) : match);
+      // Add the replacement value with colons removed
+      if (args[key] !== undefined) {
+        const value = String(args[key]).replace(/:/g, ''); // Remove all colons
+        parts.push(value);
+      } else {
+        parts.push(match);
+      }
 
       lastIndex = offset + match.length;
       return match;
@@ -69,7 +74,7 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
 
     // Join all parts with ":"
     return parts.filter(part => part.length > 0).join(":");
-  };
+};
 
   // array of ex. "13SIM1:cam1:GainRed"
   // settings is cameraDeviceData which is json of data fro PV's for the camera
