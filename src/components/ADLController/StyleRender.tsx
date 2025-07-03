@@ -6,21 +6,44 @@ export type DeviceRenderProps = {
   val?: string | number | boolean;
   vis?: string;
   dynamic?: boolean;
+  [key: string]: any;
 };
 
-const P = "13SIM1";
-const R = "cam1";
 
-// Safe replacement function (handles undefined/null)
-function replacePVars(input: string | undefined): string {
-    if (!input) return ''; // Return empty string if input is undefined/null
-    
-    // Replace all occurrences of "$(P)$(R)" with `${P}:${R}`
-    return input.replace(/\$\(P\)\$\(R\)/g, `${P}:${R}`);
-}
+const replacePlaceholders = (templateString: string, args: Record<string, any>): string => {
+    // Split the string by placeholders while keeping the parts
+    if (!templateString) return '';
+    const parts: string[] = [];
+    let lastIndex = 0;
+    templateString.replace(/\$\(([^)]+)\)/g, (match, key, offset) => {
+        // Add any literal text before this placeholder
+        if (offset > lastIndex) {
+            parts.push(templateString.slice(lastIndex, offset));
+        }
 
-function StyleRender({ ADLEntry, val, vis, dynamic }: DeviceRenderProps) {
-  const name = replacePVars(ADLEntry.name); // replaces P and R with 13SIM1 and cam1 e.g.
+        // Add the replacement value
+        parts.push(args[key] !== undefined ? String(args[key]) : match);
+
+        lastIndex = offset + match.length;
+        return match;
+    });
+
+    // Add any remaining literal text after the last placeholder
+    if (lastIndex < templateString.length) {
+        parts.push(templateString.slice(lastIndex));
+    }
+
+    // Join all parts with ":"
+    let result = parts.filter(part => part.length > 0).join(":");
+
+    return result;
+};
+
+
+function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps) {
+  console.log("name: ", ADLEntry.name, "args: ", args)
+  const name = replacePlaceholders(ADLEntry.name, args); // replaces P and R with 13SIM1 and cam1 e.g.
+  console.log(name)
   const { x, y } = ADLEntry.location;
   const { width, height } = ADLEntry.size;
   
