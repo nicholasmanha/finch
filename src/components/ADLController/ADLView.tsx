@@ -92,6 +92,7 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
     // Return what remains (or original string if no patterns were found)
     return withoutPrefix || input;
   }
+  
   return (
     <>
       <div className={cn(

@@ -8,19 +8,38 @@ type RelatedDispProps = {
     label?: string;
     style?: CSSProperties;
     fileArray: Entry["display"]
+    [key: string]: any;
 }
 
 function RelatedDisp({
     fileArray,
     label = '',
-    style
+    style,
+    ...args
 }: RelatedDispProps) {
+    function substituteVariables(
+        targetArgs: Record<string, any>,
+        sourceArgs: Record<string, any>
+    ): Record<string, any> {
+        const result = { ...targetArgs };
+
+        for (const [key, value] of Object.entries(result)) {
+            if (typeof value === 'string') {
+                // Replace $(variableName) with the value from sourceArgs
+                result[key] = value.replace(/\$\(([^)]+)\)/g, (match, varName) => {
+                    return sourceArgs[varName] !== undefined ? sourceArgs[varName] : match;
+                });
+            }
+        }
+
+        return result;
+    }
     const { addTab } = useTabManagement();
     const handleCreateTab = (index: number) => {
         const tabContent = (
-            <ADLView fileName={fileArray![index].file} {...fileArray![index].args} />
+            <ADLView fileName={fileArray![index].file} {...substituteVariables(fileArray![index].args, args)} />
         );
-        console.log("args: ", fileArray![index].args)
+
         addTab(fileArray![index].file, tabContent);
     };
 

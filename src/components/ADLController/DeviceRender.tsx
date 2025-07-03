@@ -11,12 +11,12 @@ import RelatedDisp from './RelatedDisp';
 export type DeviceRenderProps = {
     PV: Device;
     ADLEntry: Entry;
+    [key: string]: any;
     onSubmit: (pv: string, value: string | boolean | number) => void
 }
 
-function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
+function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
     if (!PV) return;
-
     const pv = PV.name
     const handleSubmitWithPV = (newValue: string | number | boolean) => {
         onSubmit(pv, newValue); 
@@ -58,7 +58,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit }: DeviceRenderProps) {
             case "button":
                 return <ADLButton label={ADLEntry.label} val={parseInt(ADLEntry.press_msg!)} onSubmit={handleSubmitWithPV} style={positionStyle} />
             case "related display":
-                return <RelatedDisp fileArray={ADLEntry.display} label={ADLEntry.label} style={positionStyle} />
+                return <RelatedDisp fileArray={ADLEntry.display} label={ADLEntry.label} style={positionStyle} {...args}/>
             default:
                 return <p></p>;
         }

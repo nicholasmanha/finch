@@ -41,9 +41,8 @@ const replacePlaceholders = (templateString: string, args: Record<string, any>):
 
 
 function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps) {
-  console.log("name: ", ADLEntry.name, "args: ", args)
+
   const name = replacePlaceholders(ADLEntry.name, args); // replaces P and R with 13SIM1 and cam1 e.g.
-  console.log(name)
   const { x, y } = ADLEntry.location;
   const { width, height } = ADLEntry.size;
   

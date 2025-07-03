@@ -85,10 +85,9 @@ function renderDeviceComponent(
 ): React.ReactElement {
     let pv = replacePlaceholders(ADLEntry.name, args)
     //let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
-    //console.log(pv)
     return (
         <React.Fragment key={index}>
-            <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} />
+            <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} {...args}/>
         </React.Fragment>
     );
 }
@@ -125,7 +124,6 @@ function renderCompositeDevice(
         return (
             <React.Fragment key={index}>
                 <ADLCanvas
-                    
                     ADLData={data}
                     devices={devices}
                     onSubmit={onSubmitSettings}
