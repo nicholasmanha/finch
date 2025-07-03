@@ -27,7 +27,7 @@ function renderTextComponent(
     if (device.dynamic_attribute) {
         // turn pv into "13SIM1:cam1:pv"
         const pv = replaceArgs(device.dynamic_attribute.chan, args)
-        //const pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
+
         return (
             <React.Fragment key={index}>
                 <StyleRender
@@ -57,7 +57,7 @@ function renderDeviceComponent(
 
 ): React.ReactElement {
     let pv = replaceArgs(ADLEntry.name, args)
-    //let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
+
     return (
         <React.Fragment key={index}>
             <DeviceRender PV={devices[pv]} ADLEntry={ADLEntry} onSubmit={onSubmit} {...args}/>

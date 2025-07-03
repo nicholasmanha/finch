@@ -1,7 +1,6 @@
-import React, { CSSProperties, useContext, useState } from 'react'
+import { CSSProperties } from 'react'
 import { Device } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
-import InputField from '../Camera/InputField';
 import InputInteger from './InputNumber';
 import InputEnum from './InputEnum';
 import ADLButton from './ADLButton';

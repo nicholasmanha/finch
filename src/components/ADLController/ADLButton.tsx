@@ -1,4 +1,4 @@
-import { CSSProperties, useState, useEffect } from "react";
+import { CSSProperties, useState } from "react";
 
 type ADLButtonProps = {
     label?: string;

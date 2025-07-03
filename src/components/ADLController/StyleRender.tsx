@@ -1,4 +1,3 @@
-import React from 'react';
 import { Entry } from './types/ADLEntry';
 import { replaceArgs } from './utils/ArgsFill';
 

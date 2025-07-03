@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect, CSSProperties } from 'react';
 import { tailwindIcons } from '@/assets/icons';
-import { Device } from '@/types/deviceControllerTypes';
-import { Entry } from './types/ADLEntry';
 
 type InputEnumProps = {
     label?: string;
