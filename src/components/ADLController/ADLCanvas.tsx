@@ -62,6 +62,7 @@ function renderTextComponent(
                     dynamic={true}
                     val={devices[pv]?.value}
                     vis={device.dynamic_attribute.vis}
+                    {...args}
                 />
             </React.Fragment>
         );
@@ -69,7 +70,7 @@ function renderTextComponent(
 
     return (
         <React.Fragment key={index}>
-            <StyleRender ADLEntry={device} dynamic={false} />
+            <StyleRender ADLEntry={device} dynamic={false} {...args}/>
         </React.Fragment>
     );
 }
