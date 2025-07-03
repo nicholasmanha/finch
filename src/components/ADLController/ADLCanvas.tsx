@@ -17,32 +17,15 @@ export type ADLCanvasProps = {
     [key: string]: any;
 }
 
-function extractPVName(input: string): string {
-    if (!input) return '';
-
-    // Remove all $(...) patterns
-    const withoutPrefix = input.replace(/\$\(.*?\)/g, '');
-
-    // Return what remains (or original string if no patterns were found)
-    return withoutPrefix || input;
-}
-
-
 const createDeviceNameArray = (Data: Entry[], args: { [key: string]: any }) => {
 
     var pvArray: string[] = [];
     Data.forEach((group) => {
         if (group.var_type !== 'text' && group.var_type !== 'display' && group.var_type !== 'composite') {
-
-            //let pv = `${P}:${R}:${extractPVName(group.name)}`
-
             let pv = replaceArgs(group.name, args)
             pvArray.push(pv);
         }
-
-        
     })
-
     return pvArray;
 };
 

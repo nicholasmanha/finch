@@ -32,7 +32,8 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
         };
         switch (ADLEntry.var_type) {
             case "entry":
-                if (ADLEntry.format === 'string') {
+                console.log(PV, ADLEntry, args)
+                if (ADLEntry.format === 'string' || typeof PV.value === 'string') {
 
                     return <InputText val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
                 }
@@ -40,7 +41,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
                     return <InputInteger val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
                 }
             case "update":
-                console.log(PV, args)
+                
                 if (typeof PV.value === 'number') {
                     // if update value is for an enum
                     if (PV.enum_strs) {

@@ -28,14 +28,9 @@ export default function ADLView({ className, fileName, ...args }: ADLViewProps) 
     var pvArray: string[] = [];
     Data.forEach((group) => {
       if (group.var_type !== 'text' && group.var_type !== 'display' && group.var_type !== 'composite') {
-
-        //let pv = `${P}:${R}:${extractPVName(group.name)}`
-
         let pv = replaceArgs(group.name, args)
         pvArray.push(pv);
       }
-
-
     })
     return pvArray;
   };

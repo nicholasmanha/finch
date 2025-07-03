@@ -3,6 +3,7 @@ import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useTabManagement } from '../Tabs/context/TabsContext';
 import { Entry } from "./types/ADLEntry";
 import ADLView from './ADLView';
+import { replaceArgs } from './utils/ArgsFill';
 
 type RelatedDispProps = {
     label?: string;
@@ -25,10 +26,7 @@ function RelatedDisp({
 
         for (const [key, value] of Object.entries(result)) {
             if (typeof value === 'string') {
-                // Replace $(variableName) with the value from sourceArgs
-                result[key] = value.replace(/\$\(([^)]+)\)/g, (match, varName) => {
-                    return sourceArgs[varName] !== undefined ? sourceArgs[varName] : match;
-                });
+                result[key] = replaceArgs(value, sourceArgs);
             }
         }
 
