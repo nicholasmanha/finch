@@ -7,13 +7,10 @@ import { cn } from "@/lib/utils";
 import { parseCustomFormat } from "./utils/ADLtoJSON";
 import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
 
-
-
 export type ADLViewProps = {
   className?: string;
   fileName: string;
   [key: string]: any;
-
 }
 
 export default function ADLView({ className, fileName, ...args }: ADLViewProps) {
