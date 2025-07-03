@@ -8,6 +8,7 @@ import * as ADLs from './utils/adl';
 import useOphydSocket from '@/hooks/useOphydSocket';
 import { parseCustomFormat } from './utils/ADLtoJSON';
 import { replaceArgs } from './utils/ArgsFill';
+import { createDeviceNameArray } from './utils/CreateDeviceNameArray';
 
 export type ADLCanvasProps = {
     devices: Devices;
@@ -16,18 +17,6 @@ export type ADLCanvasProps = {
     style?: React.CSSProperties;
     [key: string]: any;
 }
-
-const createDeviceNameArray = (Data: Entry[], args: { [key: string]: any }) => {
-
-    var pvArray: string[] = [];
-    Data.forEach((group) => {
-        if (group.var_type !== 'text' && group.var_type !== 'display' && group.var_type !== 'composite') {
-            let pv = replaceArgs(group.name, args)
-            pvArray.push(pv);
-        }
-    })
-    return pvArray;
-};
 
 function renderTextComponent(
     device: Entry,

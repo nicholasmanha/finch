@@ -34,7 +34,6 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
             case "entry":
                 
                 if (ADLEntry.format === 'string' || typeof PV.value === 'string') {
-                    console.log(PV, ADLEntry)
                     return <InputText val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
                 }
                 else {
