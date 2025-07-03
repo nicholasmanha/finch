@@ -7,6 +7,7 @@ import { ADLParser } from './utils/ADLParse';
 import * as ADLs from './utils/adl';
 import useOphydSocket from '@/hooks/useOphydSocket';
 import { parseCustomFormat } from './utils/ADLtoJSON';
+import { replaceArgs } from './utils/ArgsFill';
 
 export type ADLCanvasProps = {
     devices: Devices;
@@ -35,7 +36,7 @@ const createDeviceNameArray = (Data: Entry[], args: { [key: string]: any }) => {
 
             //let pv = `${P}:${R}:${extractPVName(group.name)}`
 
-            let pv = replacePlaceholders(group.name, args)
+            let pv = replaceArgs(group.name, args)
             pvArray.push(pv);
         }
 
@@ -53,7 +54,7 @@ function renderTextComponent(
 ): React.ReactElement {
     if (device.dynamic_attribute) {
         // turn pv into "13SIM1:cam1:pv"
-        const pv = replacePlaceholders(device.dynamic_attribute.chan, args)
+        const pv = replaceArgs(device.dynamic_attribute.chan, args)
         //const pv = `${P}:${R}:${extractPVName(device.dynamic_attribute.chan)}`;
         return (
             <React.Fragment key={index}>
@@ -83,7 +84,7 @@ function renderDeviceComponent(
     onSubmit: (pv: string, value: string | boolean | number) => void
 
 ): React.ReactElement {
-    let pv = replacePlaceholders(ADLEntry.name, args)
+    let pv = replaceArgs(ADLEntry.name, args)
     //let pv = `${P}:${R}:${extractPVName(ADLEntry.name)}`;
     return (
         <React.Fragment key={index}>
@@ -157,38 +158,6 @@ function renderCompositeDevice(
 
     return undefined;
 }
-
-  const replacePlaceholders = (templateString: string, args: Record<string, any>): string => {
-    // Split the string by placeholders while keeping the parts
-    const parts: string[] = [];
-    let lastIndex = 0;
-
-    templateString.replace(/\$\(([^)]+)\)/g, (match, key, offset) => {
-      // Add any literal text before this placeholder
-      if (offset > lastIndex) {
-        parts.push(templateString.slice(lastIndex, offset));
-      }
-
-      // Add the replacement value with colons removed
-      if (args[key] !== undefined) {
-        const value = String(args[key]).replace(/:/g, ''); // Remove all colons
-        parts.push(value);
-      } else {
-        parts.push(match);
-      }
-
-      lastIndex = offset + match.length;
-      return match;
-    });
-
-    // Add any remaining literal text after the last placeholder
-    if (lastIndex < templateString.length) {
-      parts.push(templateString.slice(lastIndex));
-    }
-
-    // Join all parts with ":"
-    return parts.filter(part => part.length > 0).join(":");
-};
 
 function ADLCanvas({ ADLData, devices, onSubmit = () => { }, style, ...args }: ADLCanvasProps) {
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
