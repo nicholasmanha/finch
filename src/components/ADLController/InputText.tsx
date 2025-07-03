@@ -15,47 +15,43 @@ export default function InputText({
     style,
     val = ''
 }: InputTextProps) {
-    if (typeof val === 'string') {
+    const stringVal = String(val);
+    const [inputValue, setInputValue] = useState<string>(stringVal);
+    const inputRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        setInputValue(String(val));
+    }, [val]);
 
-        const [inputValue, setInputValue] = useState<string>(val);
-        const inputRef = useRef<HTMLInputElement>(null);
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+        e.target.select();
+    };
 
-        useEffect(() => {
-            if (val !== undefined) {
-                setInputValue(val);
-            }
-        }, [val]);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
+    };
 
-        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-            e.target.select();
-        };
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            onSubmit(inputValue);
+        }
+    };
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setInputValue(e.target.value);
-        };
-
-        const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter") {
-                onSubmit(inputValue);
-            }
-        };
-
-        return (
-            <label className={`${isDisabled ? 'text-slate-400' : 'text-black'} w-full max-w-64 flex justify-between`}>
-                {label}
-                <input
-                    ref={inputRef}
-                    disabled={isDisabled}
-                    type="text"
-                    value={inputValue}
-                    className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyPress}
-                    onFocus={handleFocus}
-                    style={style}
-                />
-            </label>
-        );
-    }
+    // Only render if val can be converted to a string (which it always can)
+    return (
+        <label className={`${isDisabled ? 'text-slate-400' : 'text-black'} w-full max-w-64 flex justify-between`}>
+            {label}
+            <input
+                ref={inputRef}
+                disabled={isDisabled}
+                type="text"
+                value={inputValue}
+                className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
+                onChange={handleChange}
+                onKeyDown={handleKeyPress}
+                onFocus={handleFocus}
+                style={style}
+            />
+        </label>
+    );
 }
