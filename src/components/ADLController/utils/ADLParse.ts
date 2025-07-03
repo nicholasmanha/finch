@@ -49,6 +49,17 @@ export function ADLParser(config: any[]): Entry[] {
                 break;
             }
 
+            case "rectangle":{
+                const rect = item["rectangle"];
+                entries.push({
+                    var_type: "menu",
+                    location: { x: rect.object.x, y: rect.object.y },
+                    size: { width: rect.object.width, height: rect.object.height },
+                    name: "rectangle"
+                });
+                break;
+            }
+
             case "display": {
                 const text = item["display"];
                 entries.push({
