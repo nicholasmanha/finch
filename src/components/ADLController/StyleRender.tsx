@@ -28,6 +28,11 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
 
   // Spreads out all key value pairs of the common props to an empty div if it isn't dynamic (its just static text)
   if (!dynamic) {
+    if(ADLEntry.var_type === 'rectangle'){
+      const { children, ...propsWithoutChildren } = commonProps;
+      console.log(commonProps)
+      return <div {...propsWithoutChildren} className="border-2 border-black"></div>
+    }
     return <div {...commonProps} />;
   }
 

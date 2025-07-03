@@ -21,8 +21,9 @@ export type ADLCanvasProps = {
 function renderTextComponent(
     device: Entry,
     index: number,
+    devices: Devices,
     args: { [key: string]: any },
-    devices?: Devices,
+    
 ): React.ReactElement {
     if (device.dynamic_attribute) {
         // turn pv into "13SIM1:cam1:pv"
@@ -33,7 +34,7 @@ function renderTextComponent(
                 <StyleRender
                     ADLEntry={device}
                     dynamic={true}
-                    val={devices![pv]?.value}
+                    val={devices[pv]?.value}
                     vis={device.dynamic_attribute.vis}
                     {...args}
                 />
