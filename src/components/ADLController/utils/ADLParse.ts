@@ -52,7 +52,7 @@ export function ADLParser(config: any[]): Entry[] {
             case "rectangle":{
                 const rect = item["rectangle"];
                 entries.push({
-                    var_type: "menu",
+                    var_type: "rectangle",
                     location: { x: rect.object.x, y: rect.object.y },
                     size: { width: rect.object.width, height: rect.object.height },
                     name: "rectangle"
