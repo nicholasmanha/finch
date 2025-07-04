@@ -1,6 +1,6 @@
 import { CSSProperties, useState, useEffect, useRef } from "react";
 
-type InputIntegerProps = {
+type InputNumberProps = {
     label?: string;
     onSubmit?: (value: number) => void;
     isDisabled?: boolean;
@@ -9,13 +9,13 @@ type InputIntegerProps = {
     val?: number | string | boolean;
 };
 
-export default function InputInteger({
+export default function InputNumber({
     label = '',
     onSubmit = (input) => { console.log('submit ' + input) },
     isDisabled = false,
     style,
     val
-}: InputIntegerProps) {
+}: InputNumberProps) {
     const [inputValue, setInputValue] = useState<string>('');
     const inputRef = useRef<HTMLInputElement>(null);
 
