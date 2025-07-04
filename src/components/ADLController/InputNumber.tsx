@@ -4,6 +4,7 @@ type InputIntegerProps = {
     label?: string;
     onSubmit?: (value: number) => void;
     isDisabled?: boolean;
+    precision?: number | null
     style?: CSSProperties;
     val?: number | string | boolean;
 };

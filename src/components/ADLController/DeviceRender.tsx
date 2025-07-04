@@ -18,7 +18,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
     if (!PV) return;
     const pv = PV.name
     const handleSubmitWithPV = (newValue: string | number | boolean) => {
-        onSubmit(pv, newValue); 
+        onSubmit(pv, newValue);
     };
 
     const renderInput = () => {
@@ -30,24 +30,30 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
             fontSize: '0.85rem',
             position: 'absolute'
         };
+        console.log(PV)
         switch (ADLEntry.var_type) {
             case "entry":
-                
+
                 if (ADLEntry.format === 'string' || typeof PV.value === 'string') {
                     return <InputText val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
                 }
                 else {
-                    return <InputInteger val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
+                    return <InputInteger val={PV.value} onSubmit={handleSubmitWithPV} precision={PV.precision} style={positionStyle} />;
                 }
             case "update":
-                
+
                 if (typeof PV.value === 'number') {
                     // if update value is for an enum
                     if (PV.enum_strs) {
                         return <div style={positionStyle} className="text-blue-900">{PV.enum_strs[PV.value]}</div>
                     }
                     // if update value is just a number
-                    return <div style={positionStyle} className="text-blue-900">{PV.value.toFixed(2)}</div>
+                    if (PV.precision === null) {
+                        return <div style={positionStyle} className="text-blue-900">{PV.value}</div>
+                    }
+                    else{
+                        return <div style={positionStyle} className="text-blue-900">{PV.value.toFixed(PV.precision)}</div>
+                    }
                 }
                 // if update value is a string
                 else {
@@ -59,7 +65,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
             case "button":
                 return <ADLButton label={ADLEntry.label} val={parseInt(ADLEntry.press_msg!)} onSubmit={handleSubmitWithPV} style={positionStyle} />
             case "related display":
-                return <RelatedDisp fileArray={ADLEntry.display} label={ADLEntry.label} style={positionStyle} {...args}/>
+                return <RelatedDisp fileArray={ADLEntry.display} label={ADLEntry.label} style={positionStyle} {...args} />
             default:
                 return <p></p>;
         }

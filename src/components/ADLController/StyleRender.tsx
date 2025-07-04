@@ -30,7 +30,6 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
   if (!dynamic) {
     if (ADLEntry.var_type === 'rectangle') {
       const { children, ...propsWithoutChildren } = commonProps;
-      console.log(commonProps);
       return <div {...propsWithoutChildren} className="border-2 border-gray-300" />;
     }
 
