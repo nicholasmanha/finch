@@ -30,7 +30,6 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
             fontSize: '0.85rem',
             position: 'absolute'
         };
-        console.log(PV)
         switch (ADLEntry.var_type) {
             case "entry":
 
