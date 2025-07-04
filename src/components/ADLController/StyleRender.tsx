@@ -14,24 +14,37 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
   const name = replaceArgs(ADLEntry.name, args); // replaces P and R with 13SIM1 and cam1 e.g.
   const { x, y } = ADLEntry.location;
   const { width, height } = ADLEntry.size;
-  
+
   const commonProps = {
-    style: { 
+    style: {
       position: 'absolute' as const,
-      left: `${x}px`, 
-      top: `${y}px`, 
-      width: `${width}px`, 
-      height: `${height}px` 
+      left: `${x}px`,
+      top: `${y}px`,
+      width: `${width}px`,
+      height: `${height}px`
     },
     children: name // automatically gets put inside div
   };
 
   // Spreads out all key value pairs of the common props to an empty div if it isn't dynamic (its just static text)
   if (!dynamic) {
-    if(ADLEntry.var_type === 'rectangle'){
+    if (ADLEntry.var_type === 'rectangle') {
       const { children, ...propsWithoutChildren } = commonProps;
       console.log(commonProps)
       return <div {...propsWithoutChildren} className="border-2 border-gray-300"></div>
+    }
+    if (ADLEntry.align) {
+      switch (ADLEntry.align) {
+        case "horiz. right": {
+          return <div {...commonProps} className='text-right'/>
+        }
+        case "horiz. centered": {
+          return <div {...commonProps} className='text-center'/>
+        }
+        case "horiz. left": {
+          return <div {...commonProps} className='text-left'/>
+        }
+      }
     }
     return <div {...commonProps} />;
   }
@@ -43,7 +56,7 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
 
   // visibilityConditions[vis] takes in vis, which is either "if zero" or "if not zero", so this line asks if
   // vis is defined and either val === 0 or val !== 0 thru visibilityConditions
-  
+
   if (vis && visibilityConditions[vis]) {
     return <div {...commonProps} />;
   }
