@@ -17,6 +17,7 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
 
   const commonProps = {
     style: {
+      fontSize: '0.85rem',
       position: 'absolute' as const,
       left: `${x}px`,
       top: `${y}px`,

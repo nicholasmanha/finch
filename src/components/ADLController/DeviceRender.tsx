@@ -27,6 +27,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
             top: `${ADLEntry.location.y}px`,
             width: `${ADLEntry.size.width}px`,
             height: `${ADLEntry.size.height}px`,
+            fontSize: '0.85rem',
             position: 'absolute'
         };
         switch (ADLEntry.var_type) {
