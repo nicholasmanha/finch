@@ -16,8 +16,8 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
   const { width, height } = ADLEntry.size;
   
   const commonProps = {
-    className: "absolute",
     style: { 
+      position: 'absolute' as const,
       left: `${x}px`, 
       top: `${y}px`, 
       width: `${width}px`, 
@@ -31,7 +31,7 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
     if(ADLEntry.var_type === 'rectangle'){
       const { children, ...propsWithoutChildren } = commonProps;
       console.log(commonProps)
-      return <div {...propsWithoutChildren} className="border-2 border-black"></div>
+      return <div {...propsWithoutChildren} className="border-2 border-gray-300"></div>
     }
     return <div {...commonProps} />;
   }
