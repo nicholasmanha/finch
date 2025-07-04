@@ -26,27 +26,22 @@ function StyleRender({ ADLEntry, val, vis, dynamic, ...args }: DeviceRenderProps
     children: name // automatically gets put inside div
   };
 
-  // Spreads out all key value pairs of the common props to an empty div if it isn't dynamic (its just static text)
   if (!dynamic) {
     if (ADLEntry.var_type === 'rectangle') {
       const { children, ...propsWithoutChildren } = commonProps;
-      console.log(commonProps)
-      return <div {...propsWithoutChildren} className="border-2 border-gray-300"></div>
+      console.log(commonProps);
+      return <div {...propsWithoutChildren} className="border-2 border-gray-300" />;
     }
-    if (ADLEntry.align) {
-      switch (ADLEntry.align) {
-        case "horiz. right": {
-          return <div {...commonProps} className='text-right'/>
-        }
-        case "horiz. centered": {
-          return <div {...commonProps} className='text-center'/>
-        }
-        case "horiz. left": {
-          return <div {...commonProps} className='text-left'/>
-        }
-      }
-    }
-    return <div {...commonProps} />;
+
+    const alignmentClasses = {
+      "horiz. right": "text-right",
+      "horiz. centered": "text-center",
+      "horiz. left": "text-left"
+    } as const;
+
+    const alignmentClass = ADLEntry.align ? alignmentClasses[ADLEntry.align as keyof typeof alignmentClasses] : null;
+
+    return <div {...commonProps} className={alignmentClass || undefined} />;
   }
 
   const visibilityConditions: Record<string, boolean> = {
