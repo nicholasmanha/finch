@@ -13,6 +13,7 @@ export default function InputNumber({
     label = '',
     onSubmit = (input) => { console.log('submit ' + input) },
     isDisabled = false,
+    precision,
     style,
     val
 }: InputNumberProps) {
@@ -21,11 +22,15 @@ export default function InputNumber({
 
     useEffect(() => {
         if (typeof val === 'number') {
-            setInputValue(val.toFixed(2));
+            if (precision === null) {
+                setInputValue(Math.round(val).toString());
+            } else {
+                setInputValue(val.toFixed(precision));
+            }
         } else {
             setInputValue('');
         }
-    }, [val]);
+    }, [val, precision]);
 
     if (typeof val !== 'number') {
         return null; 
@@ -37,19 +42,36 @@ export default function InputNumber({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        if (/^$|^[0-9]*\.?[0-9]*$/.test(newValue)) {
-            setInputValue(newValue);
+        
+        if (precision === null) {
+            // Only allow integers (whole numbers)
+            if (/^$|^[0-9]*$/.test(newValue)) {
+                setInputValue(newValue);
+            }
+        } else {
+            // Allow decimals for float input
+            if (/^$|^[0-9]*\.?[0-9]*$/.test(newValue)) {
+                setInputValue(newValue);
+            }
         }
     };
 
-    const formatToTwoDecimals = () => {
+    const formatValue = () => {
         if (inputValue === '') {
             setInputValue('');
             return;
         }
+        
         const num = parseFloat(inputValue);
         if (!isNaN(num)) {
-            setInputValue(num.toFixed(2));
+            if (precision === null) {
+                // Round to nearest integer
+                const rounded = Math.round(num);
+                setInputValue(rounded.toString());
+            } else {
+                // Format to specified precision
+                setInputValue(num.toFixed(precision));
+            }
         } else {
             setInputValue('');
         }
@@ -57,10 +79,14 @@ export default function InputNumber({
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            formatToTwoDecimals();
+            formatValue();
             const num = parseFloat(inputValue);
             if (!isNaN(num)) {
-                onSubmit(num);
+                if (precision === null) {
+                    onSubmit(Math.round(num));
+                } else {
+                    onSubmit(parseFloat(num.toFixed(precision)));
+                }
             }
         }
     };
@@ -76,7 +102,7 @@ export default function InputNumber({
                 className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
                 onChange={handleChange}
                 onKeyDown={handleKeyPress}
-                onBlur={formatToTwoDecimals}
+                onBlur={formatValue}
                 onFocus={handleFocus}
                 style={style}
             />

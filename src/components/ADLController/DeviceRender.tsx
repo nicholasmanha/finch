@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react'
 import { Device } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
-import InputInteger from './InputNumber';
+import InputNumber from './InputNumber';
 import InputEnum from './InputEnum';
 import ADLButton from './ADLButton';
 import InputText from './InputText';
@@ -38,7 +38,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
                     return <InputText val={PV.value} onSubmit={handleSubmitWithPV} style={positionStyle} />;
                 }
                 else {
-                    return <InputInteger val={PV.value} onSubmit={handleSubmitWithPV} precision={PV.precision} style={positionStyle} />;
+                    return <InputNumber val={PV.value} onSubmit={handleSubmitWithPV} precision={PV.precision} style={positionStyle} />;
                 }
             case "update":
 
