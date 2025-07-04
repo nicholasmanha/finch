@@ -40,7 +40,9 @@ export function ADLParser(config: any[]): Entry[] {
                     size: { width: text.object.width, height: text.object.height },
                     name: text.textix
                 };
-
+                if(text["align"]) {
+                    txt.align = text["align"]
+                }
                 if (text["dynamic attribute"]) {
                     txt.dynamic_attribute = text["dynamic attribute"]
                 }

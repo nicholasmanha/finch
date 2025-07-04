@@ -24,5 +24,5 @@ export interface Entry {
     file: string
     args: Record<string, string>
   }[]
-  align?: 'right' | 'left' | 'center'
+  align?: string
 };
