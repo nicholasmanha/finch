@@ -43,14 +43,14 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
                 if (typeof PV.value === 'number') {
                     // if update value is for an enum
                     if (PV.enum_strs) {
-                        return <div style={positionStyle}>{PV.enum_strs[PV.value]}</div>
+                        return <div style={positionStyle} className="text-blue-900">{PV.enum_strs[PV.value]}</div>
                     }
                     // if update value is just a number
-                    return <div style={positionStyle}>{PV.value.toFixed(2)}</div>
+                    return <div style={positionStyle} className="text-blue-900">{PV.value.toFixed(2)}</div>
                 }
                 // if update value is a string
                 else {
-                    return <div style={positionStyle}>{PV.value}</div>
+                    return <div style={positionStyle} className="text-blue-900">{PV.value}</div>
                 }
 
             case "menu":
