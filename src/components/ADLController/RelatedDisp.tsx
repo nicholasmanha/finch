@@ -110,7 +110,12 @@ function RelatedDisp({
                 rounded border border-slate-300 transition-all duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300
                 flex flex-col justify-center">
-                            {label ? <small className="text-xs">{label}</small> : <small className="text-xs flex justify-center"><Browsers size={16} /></small>}
+                            {label ? <small className="text-xs">
+                            <div className="flex items-center">
+                                <Browsers size={16} />
+                                {label}
+                            </div>
+                            </small> : <small className="text-xs flex justify-center"><Browsers size={16} /></small>}
                         </div>
                         <span className="relative w-full">
                             {dropdownVisible && (
