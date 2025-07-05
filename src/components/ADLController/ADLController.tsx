@@ -16,9 +16,6 @@ export type ADLControllerProps = {
 }
 
 export default function ADLController({ className, fileName, P, R }: ADLControllerProps) {
-
-
-
   // useState to dynamically render tabs
   const [tabs, setTabs] = useState<TabData[]>([
     { id: 'tab1', label: fileName, content: null } // placeholder
@@ -69,34 +66,36 @@ export default function ADLController({ className, fileName, P, R }: ADLControll
 
 
   return (
-    <>
-      <TabManagementProvider value={tabManagementValue}>
-        <TabsGroup value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            {tabs.map((tab) => (
-              <div key={tab.id} className="flex items-center">
-                <Tab value={tab.id}>{tab.label}</Tab>
-                
-                  <button
-                    onClick={() => removeTab(tab.id)}
-                    className="ml-2 text-red-500 hover:text-red-700 text-4xl"
-                  >
-                    x
-                  </button>
-                
-              </div>
-            ))}
-          </TabsList>
+  <TabManagementProvider value={tabManagementValue}>
+    <TabsGroup value={activeTab} onValueChange={setActiveTab}>
+      <TabsList>
+        {tabs.map((tab) => (
+          <div key={tab.id} className="flex items-center">
+            <Tab value={tab.id}>{tab.label}</Tab>
+            <button
+              onClick={() => removeTab(tab.id)}
+              className="ml-2 text-red-500 hover:text-red-700 text-4xl"
+            >
+              x
+            </button>
+          </div>
+        ))}
+      </TabsList>
 
-          {tabs.map((tab) => (
-            <TabsPanel key={tab.id} value={tab.id}>
-              {renderTabContent(tab.id)}
-            </TabsPanel>
-          ))}
-        </TabsGroup>
-
-      </TabManagementProvider>
-    </>
-  )
+      {tabs.map((tab) => (
+        <div 
+          key={tab.id} 
+          style={{ display: activeTab === tab.id ? 'block' : 'none' }}
+        >
+          {tab.id === 'tab1' ? (
+            <ADLView className="mt-4" fileName={fileName} P={P} R={R}/>
+          ) : (
+            tab.content
+          )}
+        </div>
+      ))}
+    </TabsGroup>
+  </TabManagementProvider>
+);
 
 }
