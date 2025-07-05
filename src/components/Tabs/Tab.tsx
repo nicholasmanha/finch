@@ -34,7 +34,10 @@ export const Tab: React.FC<TabProps> = ({
           </div>
           <div className="flex flex-col justify-center align-center">
             <button
-              onClick={() => removeTab(value)}
+              onClick={(e) => {
+                e.stopPropagation();
+                removeTab(value);
+              }}
               className="ml-2 text-white hover:text-red-500 transition-colors duration-200 text-4xl"
             >
               <XCircle size={24} />
