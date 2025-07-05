@@ -20,6 +20,7 @@ export interface TabProps {
   value: string;
   children: ReactNode;
   removeTab: (tabId: string) => void
+  mainTab?: boolean;
   className?: string;
 }
 
