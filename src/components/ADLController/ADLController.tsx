@@ -30,7 +30,7 @@ export default function ADLController({
       if (storedTabs) {
         // map stored tabs in localstorage to ADLViews
         const parsedTabs: TabData[] = JSON.parse(storedTabs);
-        return parsedTabs.map((tab) => ({
+        const mappedTabs = parsedTabs.map((tab) => ({
           id: tab.id,
           label: tab.label,
           fileName: tab.fileName,
@@ -40,6 +40,24 @@ export default function ADLController({
             <ADLView fileName={tab.fileName!} {...tab.args} />
           ),
         }));
+
+        // Check if a tab with the current fileName exists
+        const hasMainTab = mappedTabs.some(tab => tab.fileName === fileName);
+        
+        if (!hasMainTab) {
+          // Add the main tab if it doesn't exist
+          const mainTab: TabData = {
+            id: "tab1",
+            label: fileName,
+            content: <ADLView fileName={fileName} P={P} R={R} />,
+            fileName,
+            args: { P, R },
+            isMainTab: true,
+          };
+          return [mainTab, ...mappedTabs];
+        }
+
+        return mappedTabs;
       }
     } catch (error) {
       console.error("Error loading tabs from localStorage:", error);
