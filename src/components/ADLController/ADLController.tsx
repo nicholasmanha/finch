@@ -42,8 +42,7 @@ export default function ADLController({
         }));
 
         // Check if a tab with the current fileName exists
-        const hasMainTab = mappedTabs.some(tab => tab.fileName === fileName);
-        
+        const hasMainTab = mappedTabs.some((tab) => tab.fileName === fileName);
         if (!hasMainTab) {
           // Add the main tab if it doesn't exist
           const mainTab: TabData = {
@@ -185,11 +184,21 @@ export default function ADLController({
       <TabsGroup value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           {tabs.map((tab) => (
-            <div key={tab.id} className="flex items-center">
-              <Tab value={tab.id} removeTab={removeTab}>
-                {tab.label}
-              </Tab>
-            </div>
+            <>
+              {tab.isMainTab ? (
+                <div key={tab.id} className="flex items-center">
+                  <Tab value={tab.id} removeTab={removeTab} mainTab={true}>
+                    {tab.label}
+                  </Tab>
+                </div>
+              ) : (
+                <div key={tab.id} className="flex items-center">
+                  <Tab value={tab.id} removeTab={removeTab}>
+                    {tab.label}
+                  </Tab>
+                </div>
+              )}
+            </>
           ))}
         </TabsList>
 
