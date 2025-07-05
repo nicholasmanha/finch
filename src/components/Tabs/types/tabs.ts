@@ -32,5 +32,8 @@ export interface TabsPanelProps {
 export interface TabData {
   id: string;
   label: string;
-  content: React.ReactNode;
+  content?: React.ReactNode;
+  fileName?: string;
+  args?: Record<string, any>;
+  isMainTab?: boolean;
 }

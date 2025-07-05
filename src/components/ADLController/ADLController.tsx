@@ -14,15 +14,6 @@ export type ADLControllerProps = {
   R: string;
 };
 
-// Type for storing tab data in localStorage (without React content)
-type StoredTabData = {
-  id: string;
-  label: string;
-  fileName?: string;
-  args?: Record<string, any>;
-  isMainTab?: boolean;
-};
-
 export default function ADLController({
   className,
   fileName,
@@ -37,66 +28,66 @@ export default function ADLController({
     try {
       const storedTabs = localStorage.getItem(STORAGE_KEY);
       if (storedTabs) {
-        const parsedTabs: StoredTabData[] = JSON.parse(storedTabs);
-        return parsedTabs.map(tab => ({
+        // map stored tabs in localstorage to ADLViews
+        const parsedTabs: TabData[] = JSON.parse(storedTabs);
+        return parsedTabs.map((tab) => ({
           id: tab.id,
           label: tab.label,
+          fileName: tab.fileName,
+          args: tab.args,
+          isMainTab: tab.isMainTab,
           content: tab.isMainTab ? null : (
-            <ADLView fileName={tab.fileName!} {...(tab.args || {})} />
-          )
+            <ADLView fileName={tab.fileName!} {...tab.args} />
+          ),
         }));
       }
     } catch (error) {
-      console.error('Error loading tabs from localStorage:', error);
+      console.error("Error loading tabs from localStorage:", error);
     }
-    
+
     // Return default tab if no stored tabs or error
-    return [{ id: "tab1", label: fileName, content: null }];
+    return [
+      {
+        id: "tab1",
+        label: fileName,
+        content: <ADLView fileName={fileName} P={P} R={R} />,
+        fileName,
+        args: { P, R },
+        isMainTab: true,
+      },
+    ];
   };
 
   // Function to save tabs to localStorage
   const saveTabsToStorage = (tabsToSave: TabData[]) => {
     try {
-      const storedTabs: StoredTabData[] = tabsToSave.map(tab => {
-        // For the main tab (tab1), we don't need to store args
-        if (tab.id === "tab1") {
-          return {
-            id: tab.id,
-            label: tab.label,
-            isMainTab: true
-          };
-        }
-        
-        // For other tabs, we need to extract the fileName and args from the content
-        // This is a bit tricky since we need to reverse-engineer from the React element
-        // We'll store this info when creating tabs
-        return {
-          id: tab.id,
-          label: tab.label,
-          fileName: (tab as any).fileName || tab.label, // fallback to label
-          args: (tab as any).args || {},
-          isMainTab: false
-        };
-      });
-      
+      const storedTabs: TabData[] = tabsToSave.map((tab) => ({
+        id: tab.id,
+        label: tab.label,
+        fileName: tab.fileName,
+        args: tab.args,
+        isMainTab: tab.isMainTab,
+      }));
+
       localStorage.setItem(STORAGE_KEY, JSON.stringify(storedTabs));
     } catch (error) {
-      console.error('Error saving tabs to localStorage:', error);
+      console.error("Error saving tabs to localStorage:", error);
     }
   };
 
   // Initialize tabs from localStorage
   const [tabs, setTabs] = useState<TabData[]>(() => loadTabsFromStorage());
-  
+
   // Load active tab from localStorage
   const [activeTab, setActiveTab] = useState(() => {
     try {
       const storedActiveTab = localStorage.getItem(ACTIVE_TAB_KEY);
-      if (storedActiveTab && tabs.some(tab => tab.id === storedActiveTab)) {
+      // returns true if at least one element is the active tab
+      if (storedActiveTab && tabs.some((tab) => tab.id === storedActiveTab)) {
         return storedActiveTab;
       }
     } catch (error) {
-      console.error('Error loading active tab from localStorage:', error);
+      console.error("Error loading active tab from localStorage:", error);
     }
     return tabs[0]?.id || "tab1";
   });
@@ -111,11 +102,18 @@ export default function ADLController({
     try {
       localStorage.setItem(ACTIVE_TAB_KEY, activeTab);
     } catch (error) {
-      console.error('Error saving active tab to localStorage:', error);
+      console.error("Error saving active tab to localStorage:", error);
     }
   }, [activeTab]);
 
   const removeTab = (tabId: string) => {
+    const tabToRemove = tabs.find((tab) => tab.id === tabId);
+
+    // Prevent deletion if the tab filename matches the component's prop filename
+    if (tabToRemove && tabToRemove.fileName === fileName) {
+      return;
+    }
+
     const currentTabIndex = tabs.findIndex((tab) => tab.id === tabId);
     const newTabs = tabs.filter((tab) => tab.id !== tabId);
     setTabs(newTabs);
@@ -137,14 +135,20 @@ export default function ADLController({
     }
   };
 
-  const addTabWithContent = (label: string, content: React.ReactNode, fileName?: string, args?: Record<string, any>) => {
+  const addTabWithContent = (
+    label: string,
+    content: React.ReactNode,
+    fileName?: string,
+    args?: Record<string, any>
+  ) => {
     const newId = `tab${Date.now()}`;
-    const newTab: TabData & { fileName?: string; args?: Record<string, any> } = {
+    const newTab: TabData = {
       id: newId,
       label,
       content,
       fileName,
       args,
+      isMainTab: false,
     };
     setTabs([...tabs, newTab]);
     setActiveTab(newId); // Set new tab as active
@@ -176,7 +180,7 @@ export default function ADLController({
             key={tab.id}
             style={{ display: activeTab === tab.id ? "block" : "none" }}
           >
-            {tab.id === "tab1" ? (
+            {tab.isMainTab ? (
               <ADLView fileName={fileName} P={P} R={R} />
             ) : (
               tab.content
