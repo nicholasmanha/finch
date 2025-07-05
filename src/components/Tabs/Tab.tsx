@@ -12,7 +12,6 @@ export const Tab: React.FC<TabProps> = ({
 }) => {
   const { activeTab, setActiveTab } = useTabsContext();
   const isActive = activeTab === value;
-
   return (
     <>
       <button
@@ -38,7 +37,9 @@ export const Tab: React.FC<TabProps> = ({
                 e.stopPropagation();
                 removeTab(value);
               }}
-              className="ml-2 text-white hover:text-red-500 transition-colors duration-200 text-4xl"
+              className={`ml-2  transition-colors duration-200 text-4xl  ${
+                mainTab ? "text-gray-500" : "text-white hover:text-red-500"
+              }`}
             >
               <XCircle size={24} />
             </button>
