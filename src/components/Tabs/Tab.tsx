@@ -7,6 +7,7 @@ export const Tab: React.FC<TabProps> = ({
   value,
   children,
   removeTab,
+  mainTab,
   className = "",
 }) => {
   const { activeTab, setActiveTab } = useTabsContext();
@@ -27,7 +28,6 @@ export const Tab: React.FC<TabProps> = ({
               ? "text-blue-400 border-blue-600 bg-white/10"
               : "text-white border-transparent hover:text-gray-400 hover:border-gray-300"
           } ${className}`}
-          onClick={() => setActiveTab(value)}
         >
           <div className="flex flex-col justify-center">
             <div>{children}</div>
