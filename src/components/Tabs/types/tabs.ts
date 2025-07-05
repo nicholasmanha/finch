@@ -19,6 +19,7 @@ export interface TabsListProps {
 export interface TabProps {
   value: string;
   children: ReactNode;
+  removeTab: (tabId: string) => void
   className?: string;
 }
 

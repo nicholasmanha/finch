@@ -58,13 +58,8 @@ export default function ADLController({ className, fileName, P, R }: ADLControll
       <TabsList>
         {tabs.map((tab) => (
           <div key={tab.id} className="flex items-center">
-            <Tab value={tab.id}>{tab.label}</Tab>
-            <button
-              onClick={() => removeTab(tab.id)}
-              className="ml-2 text-red-500 hover:text-red-700 text-4xl"
-            >
-              x
-            </button>
+            <Tab value={tab.id} removeTab={removeTab}>{tab.label}</Tab>
+            
           </div>
         ))}
       </TabsList>
@@ -75,7 +70,7 @@ export default function ADLController({ className, fileName, P, R }: ADLControll
           style={{ display: activeTab === tab.id ? 'block' : 'none' }}
         >
           {tab.id === 'tab1' ? (
-            <ADLView className="mt-4" fileName={fileName} P={P} R={R}/>
+            <ADLView fileName={fileName} P={P} R={R}/>
           ) : (
             tab.content
           )}
