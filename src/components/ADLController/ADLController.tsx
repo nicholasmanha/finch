@@ -22,19 +22,6 @@ export default function ADLController({ className, fileName, P, R }: ADLControll
   ]);
   const [activeTab, setActiveTab] = useState(tabs[0]?.id || 'tab1');
 
-  // placeholder to render ADBase
-  const renderTabContent = (tabId: string) => {
-    if (tabId === 'tab1') {
-      return (
-        <ADLView fileName={fileName} P={P} R={R}/>
-      );
-    }
-
-    // Find the tab and return its content if it isnt the first tab
-    const tab = tabs.find(t => t.id === tabId);
-    return tab?.content || null;
-  };
-
   const removeTab = (tabId: string) => {
     const newTabs = tabs.filter(tab => tab.id !== tabId);
     setTabs(newTabs);
