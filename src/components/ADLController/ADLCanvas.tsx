@@ -4,11 +4,12 @@ import { Entry } from "./types/ADLEntry";
 import StyleRender from "./StyleRender";
 import DeviceRender from "./DeviceRender";
 import { ADLParser } from "./utils/ADLParse";
-import * as ADLs from "./utils/adl";
 import useOphydSocket from "@/hooks/useOphydSocket";
+import * as ADLs from "./utils/adl";
 import { parseCustomFormat } from "./utils/ADLtoJSON";
 import { replaceArgs } from "./utils/ArgsFill";
 import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
+import { CompositeDeviceRenderer } from "./CompositeDeviceRenderer";
 
 export type ADLCanvasProps = {
   devices: Devices;
@@ -69,7 +70,7 @@ function renderDeviceComponent(
   );
 }
 
-function renderCompositeDevice(
+function renderCompositeDeviceLocal(
   device: Entry,
   index: number,
   detectorSetup: any, // Replace with your actual detectorSetup type
@@ -143,6 +144,20 @@ function renderCompositeDevice(
   return undefined;
 }
 
+function renderCompositeDevice(
+  device: Entry,
+  index: number,
+  args: { [key: string]: any }
+): JSX.Element | undefined {
+  return (
+    <CompositeDeviceRenderer
+      device={device}
+      index={index}
+      args={args}
+    />
+  );
+}
+
 function ADLCanvas({
   ADLData,
   devices,
@@ -151,6 +166,7 @@ function ADLCanvas({
   ...args
 }: ADLCanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const local = true
   // get display dimensions
   useEffect(() => {
     const displayDevice = ADLData.find(
@@ -160,6 +176,7 @@ function ADLCanvas({
       setDimensions(displayDevice.size);
     }
   }, [ADLData]);
+  
   const renderDevices = () => {
     return ADLData.map((device: Entry, index: number) => {
       switch (device.var_type) {
@@ -168,12 +185,16 @@ function ADLCanvas({
         case "rectangle":
           return renderTextComponent(device, index, devices, args);
         case "composite":
-          return renderCompositeDevice(device, index, ADLs, args);
+          if(local){
+            return renderCompositeDeviceLocal(device, index, ADLs, args);
+          }
+          return renderCompositeDevice(device, index, args);
         default:
           return renderDeviceComponent(device, index, devices, args, onSubmit);
       }
     });
   };
+  
   return (
     <div
       style={{
