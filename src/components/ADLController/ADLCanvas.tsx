@@ -99,7 +99,6 @@ function renderCompositeDevice(
 
     const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
     const { devices, handleSetValueRequest } = useOphydSocket(
-      wsUrl,
       deviceNames
     );
     const onSubmitSettings = useCallback(handleSetValueRequest, []);
@@ -124,7 +123,6 @@ function renderCompositeDevice(
     );
     const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
     const { devices, handleSetValueRequest } = useOphydSocket(
-      wsUrl,
       deviceNames
     );
     const onSubmitSettings = useCallback(handleSetValueRequest, []);

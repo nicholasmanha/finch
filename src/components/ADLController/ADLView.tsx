@@ -34,7 +34,7 @@ export default function ADLView({
   //we need another ws just for the settings PVs, in case the user wants those options.
   //or can we just combine them into one?
 
-  const { devices, handleSetValueRequest } = useOphydSocket(wsUrl, deviceNames);
+  const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
   const onSubmitSettings = useCallback(handleSetValueRequest, []);
 
   return (
