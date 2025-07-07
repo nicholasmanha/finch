@@ -24,11 +24,8 @@ export default function About() {
 
     
     return (
-
         <>
-
-
-            <ADLController fileName="simDetector.adl" P="Basler5472" R="cam1"/>
+            <ADLController fileName="simDetector.adl" P="13SIM1" R="cam1"/>
         </>
 
     )
