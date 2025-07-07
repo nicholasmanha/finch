@@ -1,15 +1,13 @@
-// hooks/useTabPersistence.ts
-import { useState, useEffect } from "react";
 import { TabData } from "@/components/Tabs/types/tabs";
 
-export function useTabPersistence(fileName: string, P: string, R: string) {
+export function useTabLS(fileName: string, P: string, R: string) {
   const STORAGE_KEY = `adl-tabs-${fileName}`;
   const ACTIVE_TAB_KEY = `adl-active-tab-${fileName}`;
 
   const createDefaultTab = (): TabData => ({
     id: "tab1",
     label: fileName,
-    content: null, // Will be handled in component
+    content: null, // gets populated from component that calls it
     fileName,
     args: { P, R },
     isMainTab: true,

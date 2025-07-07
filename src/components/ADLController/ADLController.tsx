@@ -5,7 +5,7 @@ import { Tab } from "@/components/Tabs/Tab";
 import { TabsPanel } from "@/components/Tabs/TabsPanel";
 import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
-import { useTabPersistence } from "./hooks/useTabsLS";
+import { useTabLS } from "./hooks/useTabsLS";
 import ADLView from "./ADLView";
 
 export type ADLControllerProps = {
@@ -21,14 +21,15 @@ export default function ADLController({
   P,
   R,
 }: ADLControllerProps) {
+  // grab localstorage tab functions from webhook
   const {
     loadTabsFromStorage,
     saveTabsToStorage,
     loadActiveTabFromStorage,
     saveActiveTabToStorage,
-  } = useTabPersistence(fileName, P, R);
+  } = useTabLS(fileName, P, R);
 
-  // Helper function to add content to tabs
+  // populates tab content based on the tab filename and args
   const addContentToTabs = (tabsData: TabData[]): TabData[] => {
     return tabsData.map((tab) => ({
       ...tab,
@@ -49,12 +50,12 @@ export default function ADLController({
     loadActiveTabFromStorage(tabs)
   );
 
-  // Persist tabs when they change
+  // store tab info to localstorage when they change
   useEffect(() => {
     saveTabsToStorage(tabs);
   }, [tabs, saveTabsToStorage]);
 
-  // Persist active tab when it changes
+  // store active tab to localstorage when it changes
   useEffect(() => {
     saveActiveTabToStorage(activeTab);
   }, [activeTab, saveActiveTabToStorage]);
@@ -83,6 +84,7 @@ export default function ADLController({
     }
   };
 
+  // used when opening a related display (a new tab)
   const addTabWithContent = (
     label: string,
     content: React.ReactNode,
