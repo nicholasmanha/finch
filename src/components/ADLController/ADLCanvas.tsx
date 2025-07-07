@@ -166,7 +166,10 @@ function ADLCanvas({
   ...args
 }: ADLCanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const local = true
+  
+  // load adl files from the local finch repo
+  const local = false
+
   // get display dimensions
   useEffect(() => {
     const displayDevice = ADLData.find(
