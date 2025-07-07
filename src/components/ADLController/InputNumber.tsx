@@ -99,7 +99,7 @@ export default function InputNumber({
                 disabled={isDisabled}
                 type="text"
                 value={inputValue}
-                className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-2`}
+                className={`${isDisabled ? 'hover:cursor-not-allowed' : ''} w-1/2 border border-slate-300 pl-1`}
                 onChange={handleChange}
                 onKeyDown={handleKeyPress}
                 onBlur={formatValue}
