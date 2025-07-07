@@ -115,7 +115,6 @@ export default function CameraContainer(
         )
     } else {
         var deviceNames = useMemo(()=>createDeviceNameArray(settings, prefix), []);
-        const wsUrl = useMemo(()=>'ws://localhost:8000/ophydSocket', []);
     
     
         //we need a ws just for the control PV, since a user may only want that one
@@ -127,7 +126,7 @@ export default function CameraContainer(
             devices,
             toggleExpand,
             toggleDeviceLock
-        } = useOphydSocket(wsUrl, deviceNames);
+        } = useOphydSocket(deviceNames);
     
         const startAcquire = useCallback( () => {
             handleSetValueRequest(`${prefix}:cam1:Acquire`, 1);
