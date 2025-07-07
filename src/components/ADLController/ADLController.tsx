@@ -46,7 +46,7 @@ export default function ADLController({
   });
 
   // Initialize active tab
-  const [activeTab, setActiveTab] = useState(() => 
+  const [activeTab, setActiveTab] = useState(() =>
     loadActiveTabFromStorage(tabs)
   );
 
@@ -91,6 +91,29 @@ export default function ADLController({
     fileName?: string,
     args?: Record<string, any>
   ) => {
+    // Check if a tab with the same fileName and args already exists
+    const existingTab = tabs.find((tab) => {
+      if (tab.fileName !== fileName) return false;
+
+      // comparison of args objects
+      if (!tab.args && !args) return true;
+      if (!tab.args || !args) return false;
+
+      const tabArgsKeys = Object.keys(tab.args);
+      const argsKeys = Object.keys(args);
+
+      if (tabArgsKeys.length !== argsKeys.length) return false;
+
+      return tabArgsKeys.every(key => tab.args![key] === args[key]);
+    });
+
+    // if the tab exists, make it active
+    if (existingTab) {
+      setActiveTab(existingTab.id);
+      return;
+    }
+
+    // Tab doesn't exist, create a new one
     const newId = `tab${Date.now()}`;
     const newTab: TabData = {
       id: newId,
@@ -118,9 +141,9 @@ export default function ADLController({
         <TabsList>
           {tabs.map((tab) => (
             <div key={tab.id} className="flex items-center">
-              <Tab 
-                value={tab.id} 
-                removeTab={removeTab} 
+              <Tab
+                value={tab.id}
+                removeTab={removeTab}
                 mainTab={tab.isMainTab}
               >
                 {tab.label}
