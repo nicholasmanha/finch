@@ -56,7 +56,7 @@ function DeviceRender({ PV, ADLEntry, onSubmit, ...args }: DeviceRenderProps) {
                 }
                 // if update value is a string
                 else {
-                    return <div style={positionStyle} className="text-blue-900">{PV.value}</div>
+                    return <div style={positionStyle} className="text-blue-900 truncate">{PV.value}</div>
                 }
 
             case "menu":
