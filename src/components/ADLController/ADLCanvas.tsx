@@ -96,7 +96,7 @@ function renderCompositeDeviceLocal(
     const data = ADLParser(parseCustomFormat(component));
 
     // ws call
-    const deviceNames = useMemo(() => createDeviceNameArray(data, args), []);
+    const deviceNames = useMemo(() => createDeviceNameArray(data, args), [data, JSON.stringify(args)]);
 
     const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
     const { devices, handleSetValueRequest } = useOphydSocket(

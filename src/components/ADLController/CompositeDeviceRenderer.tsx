@@ -62,10 +62,10 @@ export function CompositeDeviceRenderer({ device, index, args }: {
     const deviceNames = useMemo(() => {
         if (!adlData) return [];
         return createDeviceNameArray(adlData, args);
-    }, [adlData, args]);
+    }, [adlData, JSON.stringify(args)]);
 
     const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
-    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+    const onSubmitSettings = useCallback(handleSetValueRequest, [handleSetValueRequest]);
 
     if (loading) {
         return (
