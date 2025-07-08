@@ -122,6 +122,7 @@ export function CompositeDeviceRenderer({
 
             loadADLFile();
         } else if (device.children !== undefined) {
+            // if the composite has children, ignore the device.location (set left and top to 0px) because it is already covered by the location of the canvas component
             setCanvasStyle({
                 position: "absolute" as const,
                 left: "0px",
