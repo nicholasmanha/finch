@@ -70,79 +70,79 @@ function renderDeviceComponent(
   );
 }
 
-function renderCompositeDeviceLocal(
-  device: Entry,
-  index: number,
-  detectorSetup: any, // Replace with your actual detectorSetup type
-  args: { [key: string]: any }
-): JSX.Element | undefined {
-  const canvasStyle = {
-    position: "absolute" as const, // The 'as const' ensures TypeScript knows it's a literal
-    left: `${device.location.x}px`,
-    top: `${device.location.y}px`,
-  };
-  // if the composite links to another adl file
-  if (device.comp_file !== undefined) {
-    // if given ADSetup.adl, this returns ADSetup
-    const fileNameNoADL: string = device.comp_file.split(".")[0];
-    if (!(fileNameNoADL in ADLs.default)) {
-      return <div className="text-black" style={canvasStyle}>{device.comp_file} not found</div>;
-    }
-    // this is the actual ADL file from detecetorSetup (which represents all contents of the adl folder)
-    const component =
-      detectorSetup.default[fileNameNoADL as keyof typeof detectorSetup];
+// function renderCompositeDeviceLocal(
+//   device: Entry,
+//   index: number,
+//   detectorSetup: any, // Replace with your actual detectorSetup type
+//   args: { [key: string]: any }
+// ): JSX.Element | undefined {
+//   const canvasStyle = {
+//     position: "absolute" as const, // The 'as const' ensures TypeScript knows it's a literal
+//     left: `${device.location.x}px`,
+//     top: `${device.location.y}px`,
+//   };
+//   // if the composite links to another adl file
+//   if (device.comp_file !== undefined) {
+//     // if given ADSetup.adl, this returns ADSetup
+//     const fileNameNoADL: string = device.comp_file.split(".")[0];
+//     if (!(fileNameNoADL in ADLs.default)) {
+//       return <div className="text-black" style={canvasStyle}>{device.comp_file} not found</div>;
+//     }
+//     // this is the actual ADL file from detecetorSetup (which represents all contents of the adl folder)
+//     const component =
+//       detectorSetup.default[fileNameNoADL as keyof typeof detectorSetup];
 
-    // parsed version of the adl file
-    const data = ADLParser(parseCustomFormat(component));
+//     // parsed version of the adl file
+//     const data = ADLParser(parseCustomFormat(component));
 
-    // ws call
-    const deviceNames = useMemo(() => createDeviceNameArray(data, args), []);
+//     // ws call
+//     const deviceNames = useMemo(() => createDeviceNameArray(data, args), []);
 
-    const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
-    const { devices, handleSetValueRequest } = useOphydSocket(
-      deviceNames
-    );
-    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+//     const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
+//     const { devices, handleSetValueRequest } = useOphydSocket(
+//       deviceNames
+//     );
+//     const onSubmitSettings = useCallback(handleSetValueRequest, []);
 
-    return (
-      <React.Fragment key={index}>
-        <ADLCanvas
-          ADLData={data}
-          devices={devices}
-          onSubmit={onSubmitSettings}
-          style={canvasStyle}
-          {...args}
-        />
-      </React.Fragment>
-    );
-  }
-  // if the composite just has children components and not another ADL file
-  else if (device.children !== undefined) {
-    const deviceNames = useMemo(
-      () => createDeviceNameArray(device.children!, args),
-      []
-    );
-    const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
-    const { devices, handleSetValueRequest } = useOphydSocket(
-      deviceNames
-    );
-    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+//     return (
+//       <React.Fragment key={index}>
+//         <ADLCanvas
+//           ADLData={data}
+//           devices={devices}
+//           onSubmit={onSubmitSettings}
+//           style={canvasStyle}
+//           {...args}
+//         />
+//       </React.Fragment>
+//     );
+//   }
+//   // if the composite just has children components and not another ADL file
+//   else if (device.children !== undefined) {
+//     const deviceNames = useMemo(
+//       () => createDeviceNameArray(device.children!, args),
+//       []
+//     );
+//     const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
+//     const { devices, handleSetValueRequest } = useOphydSocket(
+//       deviceNames
+//     );
+//     const onSubmitSettings = useCallback(handleSetValueRequest, []);
 
-    return (
-      <React.Fragment key={index}>
-        <ADLCanvas
-          ADLData={device.children!}
-          devices={devices}
-          onSubmit={onSubmitSettings}
-          style={{ position: "absolute" }}
-          {...args}
-        />
-      </React.Fragment>
-    );
-  }
+//     return (
+//       <React.Fragment key={index}>
+//         <ADLCanvas
+//           ADLData={device.children!}
+//           devices={devices}
+//           onSubmit={onSubmitSettings}
+//           style={{ position: "absolute" }}
+//           {...args}
+//         />
+//       </React.Fragment>
+//     );
+//   }
 
-  return undefined;
-}
+//   return undefined;
+// }
 
 function renderCompositeDevice(
   device: Entry,
@@ -188,9 +188,7 @@ function ADLCanvas({
         case "rectangle":
           return renderTextComponent(device, index, devices, args);
         case "composite":
-          if(local){
-            return renderCompositeDeviceLocal(device, index, ADLs, args);
-          }
+          
           return renderCompositeDevice(device, index, args);
         default:
           return renderDeviceComponent(device, index, devices, args, onSubmit);
