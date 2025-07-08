@@ -39,6 +39,7 @@ export default function ADLView({
         }
         
         const parsedData = ADLParser(parseCustomFormat(adlContent));
+        console.log(JSON.stringify(parsedData))
         setADLData(parsedData);
       } catch (err) {
         setError(`Error loading ${fileName}`);
