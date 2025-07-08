@@ -13,11 +13,28 @@ export function useTabLS(fileName: string, P: string, R: string) {
     isMainTab: true,
   });
 
+  const clearTabStorage = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(ACTIVE_TAB_KEY);
+    } catch (error) {
+      console.error("Error clearing tab storage:", error);
+    }
+  };
+
   const loadTabsFromStorage = (): TabData[] => {
     try {
       const storedTabs = localStorage.getItem(STORAGE_KEY);
       if (storedTabs) {
         const parsedTabs: TabData[] = JSON.parse(storedTabs);
+        
+        // Check if main tab exists and has the correct filename
+        const mainTab = parsedTabs.find((tab) => tab.isMainTab);
+        if (mainTab && mainTab.fileName !== fileName) {
+          // Filename changed, clear storage and return default
+          clearTabStorage();
+          return [createDefaultTab()];
+        }
         
         // Check if main tab exists
         const hasMainTab = parsedTabs.some((tab) => tab.fileName === fileName);
@@ -74,5 +91,6 @@ export function useTabLS(fileName: string, P: string, R: string) {
     saveTabsToStorage,
     loadActiveTabFromStorage,
     saveActiveTabToStorage,
+    clearTabStorage,
   };
 }
