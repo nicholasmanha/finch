@@ -1,0 +1,93 @@
+import { useMemo, useCallback, useState, useEffect } from "react";
+import useOphydSocket from "@/hooks/useOphydSocket";
+import { ADLParser } from "./ADLParse";
+import { parseCustomFormat } from "./ADLtoJSON";
+import { createDeviceNameArray } from "./CreateDeviceNameArray";
+import { fetchADLFile } from "./GithubFetch";
+import { Entry } from "../types/ADLEntry";
+import { parseXMLToEntries } from "./BobParser";
+import * as BOBs from "./bob";
+
+export interface UseADLDataOptions {
+  fileName?: string;
+  children?: Entry[];
+  args: { [key: string]: any };
+}
+
+export interface UseADLDataReturn {
+  ADLData: Entry[] | null;
+  loading: boolean;
+  error: string | null;
+  devices: any;
+  onSubmitSettings: (deviceName: string, value: any) => void;
+}
+
+export function useADLData({ fileName, children, args }: UseADLDataOptions): UseADLDataReturn {
+  const [ADLData, setADLData] = useState<Entry[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // If children are provided directly, use them
+    if (children) {
+      setADLData(children);
+      return;
+    }
+
+    // If no fileName, nothing to load
+    if (!fileName) {
+      setADLData(null);
+      return;
+    }
+
+    const loadADLFile = async () => {
+      setLoading(true);
+      setError(null);
+
+      const fileNameNoADL: string = fileName.split(".")[0];
+      const fileType: string = fileName.split(".")[1];
+
+      try {
+        if (fileType === 'bob') {
+          const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
+          const entries = parseXMLToEntries(component);
+          setADLData(entries);
+        } else {
+          const adlContent = await fetchADLFile(fileNameNoADL);
+
+          if (!adlContent) {
+            setError(`${fileName} not found`);
+            return;
+          }
+
+          const parsedData = ADLParser(parseCustomFormat(adlContent));
+          setADLData(parsedData);
+        }
+      } catch (err) {
+        setError(`Error loading ${fileName}`);
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadADLFile();
+  }, [fileName, children]);
+
+  // Memoize deviceNames to prevent unnecessary websocket reconnections
+  const deviceNames = useMemo(() => {
+    if (!ADLData) return [];
+    return createDeviceNameArray(ADLData, args);
+  }, [ADLData, JSON.stringify(args)]);
+
+  const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
+  const onSubmitSettings = useCallback(handleSetValueRequest, [handleSetValueRequest]);
+
+  return {
+    ADLData,
+    loading,
+    error,
+    devices,
+    onSubmitSettings
+  };
+}

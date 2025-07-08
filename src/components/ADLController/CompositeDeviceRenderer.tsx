@@ -1,84 +1,36 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Entry } from "./types/ADLEntry";
-import { ADLParser } from "./utils/ADLParse";
-import { parseCustomFormat } from "./utils/ADLtoJSON";
-import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
-import { fetchADLFile } from "./utils/GithubFetch";
-import useOphydSocket from "@/hooks/useOphydSocket";
-import React from "react";
 import ADLCanvas from "./ADLCanvas";
-import { parseXMLToEntries } from "./utils/BobParser";
-import * as BOBs from "./utils/bob";
+import { useADLData } from "./utils/useADLData";
 
 export function CompositeDeviceRenderer({ device, index, args }: {
-    device: Entry; index: number; args: { [key: string]: any };
+    device: Entry; 
+    index: number; 
+    args: { [key: string]: any };
 }): JSX.Element {
-    const [adlData, setAdlData] = useState<Entry[] | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
     const [canvasStyle, setCanvasStyle] = useState({
         position: "absolute" as const,
         left: `${device.location.x}px`,
         top: `${device.location.y}px`,
     });
 
+    const { ADLData, loading, error, devices, onSubmitSettings } = useADLData({
+        fileName: device.comp_file,
+        children: device.children,
+        args
+    });
+
     useEffect(() => {
-        if (device.comp_file !== undefined) {
-            const fileNameNoADL: string = device.comp_file.split(".")[0];
-            const fileType: string = device.comp_file.split(".")[1];
-            const loadADLFile = async () => {
-                setLoading(true);
-                setError(null);
-                if (fileType === 'bob') {
-                    const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
-                    //const xmlString = `<?xml version="1.0" encoding="UTF-8"?>...`; // your XML
-                    const entries = parseXMLToEntries(component);
-
-                    setAdlData(entries);
-                    setLoading(false);
-
-                }
-                else {
-                    try {
-                        const adlContent = await fetchADLFile(fileNameNoADL);
-
-                        if (!adlContent) {
-                            setError(`${device.comp_file} not found`);
-                            return;
-                        }
-
-                        const parsedData = ADLParser(parseCustomFormat(adlContent));
-                        setAdlData(parsedData);
-                    } catch (err) {
-                        setError(`Error loading ${device.comp_file}`);
-                        console.error(err);
-                    } finally {
-                        setLoading(false);
-                    }
-                }
-
-            };
-
-            loadADLFile();
-        } else if (device.children !== undefined) {
-            // if the composite has children, ignore the device.location (set left and top to 0px) because it is already covered by the location of the canvas component
+        // If the composite has children, ignore the device.location 
+        // (set left and top to 0px) because it is already covered by the location of the canvas component
+        if (device.children !== undefined) {
             setCanvasStyle({
                 position: "absolute" as const,
                 left: "0px",
                 top: "0px"
             });
-            setAdlData(device.children);
         }
-    }, [device.comp_file, device.children]);
-
-    const deviceNames = useMemo(() => {
-        if (!adlData) return [];
-        return createDeviceNameArray(adlData, args);
-    }, [adlData, JSON.stringify(args)]);
-
-    const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
-    const onSubmitSettings = useCallback(handleSetValueRequest, [handleSetValueRequest]);
+    }, [device.children]);
 
     if (loading) {
         return (
@@ -96,14 +48,14 @@ export function CompositeDeviceRenderer({ device, index, args }: {
         );
     }
 
-    if (!adlData) {
+    if (!ADLData) {
         return <div style={canvasStyle}></div>;
     }
 
     return (
         <React.Fragment key={index}>
             <ADLCanvas
-                ADLData={adlData}
+                ADLData={ADLData}
                 devices={devices}
                 onSubmit={onSubmitSettings}
                 style={canvasStyle}
