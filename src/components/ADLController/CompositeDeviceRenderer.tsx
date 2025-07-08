@@ -19,150 +19,155 @@ const adlCache = new Map<string, string>();
 const STORAGE_PREFIX = "adl_file_";
 
 const fetchADLFile = async (fileName: string): Promise<string | null> => {
-  // Check in-memory cache first
-  if (adlCache.has(fileName)) {
-    return adlCache.get(fileName)!;
-  }
-
-  // Check localStorage
-  const storageKey = `${STORAGE_PREFIX}${fileName}`;
-  const cachedContent = localStorage.getItem(storageKey);
-  
-  if (cachedContent) {
-    // Store in memory cache for faster access during this session
-    adlCache.set(fileName, cachedContent);
-    return cachedContent;
-  }
-
-  try {
-    const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${fileName}.adl`;
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      console.error(`Failed to fetch ${fileName}.adl: ${response.status}`);
-      return null;
+    // Check in-memory cache first
+    if (adlCache.has(fileName)) {
+        return adlCache.get(fileName)!;
     }
-    
-    const content = await response.text();
-    
-    // Store in both caches
-    adlCache.set(fileName, content);
+
+    // Check localStorage
+    const storageKey = `${STORAGE_PREFIX}${fileName}`;
+    const cachedContent = localStorage.getItem(storageKey);
+
+    if (cachedContent) {
+        // Store in memory cache for faster access during this session
+        adlCache.set(fileName, cachedContent);
+        return cachedContent;
+    }
+
     try {
-      localStorage.setItem(storageKey, content);
-    } catch (storageError) {
-      console.warn(`Failed to save ${fileName} to localStorage:`, storageError);
-      // Continue execution even if localStorage fails
+        const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${fileName}.adl`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            console.error(`Failed to fetch ${fileName}.adl: ${response.status}`);
+            return null;
+        }
+
+        const content = await response.text();
+
+        // Store in both caches
+        adlCache.set(fileName, content);
+        try {
+            localStorage.setItem(storageKey, content);
+        } catch (storageError) {
+            console.warn(`Failed to save ${fileName} to localStorage:`, storageError);
+            // Continue execution even if localStorage fails
+        }
+
+        return content;
+    } catch (error) {
+        console.error(`Error fetching ADL file ${fileName}:`, error);
+        return null;
     }
-    
-    return content;
-  } catch (error) {
-    console.error(`Error fetching ADL file ${fileName}:`, error);
-    return null;
-  }
 };
 
 export const clearADLCache = () => {
-  const keysToRemove: string[] = [];
-  
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith(STORAGE_PREFIX)) {
-      keysToRemove.push(key);
+    const keysToRemove: string[] = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(STORAGE_PREFIX)) {
+            keysToRemove.push(key);
+        }
     }
-  }
-  
-  keysToRemove.forEach(key => localStorage.removeItem(key));
-  adlCache.clear();
+
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    adlCache.clear();
 };
 
 export function CompositeDeviceRenderer({
-  device,
-  index,
-  args,
+    device,
+    index,
+    args,
 }: {
-  device: Entry;
-  index: number;
-  args: { [key: string]: any };
+    device: Entry;
+    index: number;
+    args: { [key: string]: any };
 }): JSX.Element {
-  const [adlData, setAdlData] = useState<Entry[] | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+    const [adlData, setAdlData] = useState<Entry[] | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-  const canvasStyle = {
-    position: "absolute" as const,
-    left: `${device.location.x}px`,
-    top: `${device.location.y}px`,
-  };
+    const [canvasStyle, setCanvasStyle] = useState({
+        position: "absolute" as const,
+        left: `${device.location.x}px`,
+        top: `${device.location.y}px`,
+    });
 
-  useEffect(() => {
-    if (device.comp_file !== undefined) {
-      const fileNameNoADL: string = device.comp_file.split(".")[0];
-      
-      const loadADLFile = async () => {
-        setLoading(true);
-        setError(null);
-        
-        try {
-          const adlContent = await fetchADLFile(fileNameNoADL);
-          
-          if (!adlContent) {
-            setError(`${device.comp_file} not found`);
-            return;
-          }
-          
-          const parsedData = ADLParser(parseCustomFormat(adlContent));
-          setAdlData(parsedData);
-        } catch (err) {
-          setError(`Error loading ${device.comp_file}`);
-          console.error(err);
-        } finally {
-          setLoading(false);
+    useEffect(() => {
+        if (device.comp_file !== undefined) {
+            const fileNameNoADL: string = device.comp_file.split(".")[0];
+
+            const loadADLFile = async () => {
+                setLoading(true);
+                setError(null);
+
+                try {
+                    const adlContent = await fetchADLFile(fileNameNoADL);
+
+                    if (!adlContent) {
+                        setError(`${device.comp_file} not found`);
+                        return;
+                    }
+
+                    const parsedData = ADLParser(parseCustomFormat(adlContent));
+                    setAdlData(parsedData);
+                } catch (err) {
+                    setError(`Error loading ${device.comp_file}`);
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            loadADLFile();
+        } else if (device.children !== undefined) {
+            setCanvasStyle({
+                position: "absolute" as const,
+                left: "0px",
+                top: "0px"
+            });
+            setAdlData(device.children);
         }
-      };
+    }, [device.comp_file, device.children]);
 
-      loadADLFile();
-    } else if (device.children !== undefined) {
-      setAdlData(device.children);
+    const deviceNames = useMemo(() => {
+        if (!adlData) return [];
+        return createDeviceNameArray(adlData, args);
+    }, [adlData, args]);
+
+    const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
+    const onSubmitSettings = useCallback(handleSetValueRequest, []);
+
+    if (loading) {
+        return (
+            <div className="text-blue-500" style={canvasStyle}>
+                Loading {device.comp_file}...
+            </div>
+        );
     }
-  }, [device.comp_file, device.children]);
 
-  const deviceNames = useMemo(() => {
-    if (!adlData) return [];
-    return createDeviceNameArray(adlData, args);
-  }, [adlData, args]);
+    if (error) {
+        return (
+            <div className="text-red-500" style={canvasStyle}>
+                {error}
+            </div>
+        );
+    }
 
-  const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
-  const onSubmitSettings = useCallback(handleSetValueRequest, []);
+    if (!adlData) {
+        return <div style={canvasStyle}></div>;
+    }
 
-  if (loading) {
     return (
-      <div className="text-blue-500" style={canvasStyle}>
-        Loading {device.comp_file}...
-      </div>
+        <React.Fragment key={index}>
+            <ADLCanvas
+                ADLData={adlData}
+                devices={devices}
+                onSubmit={onSubmitSettings}
+                style={canvasStyle}
+                {...args}
+            />
+        </React.Fragment>
     );
-  }
-
-  if (error) {
-    return (
-      <div className="text-red-500" style={canvasStyle}>
-        {error}
-      </div>
-    );
-  }
-
-  if (!adlData) {
-    return <div style={canvasStyle}></div>;
-  }
-
-  return (
-    <React.Fragment key={index}>
-      <ADLCanvas
-        ADLData={adlData}
-        devices={devices}
-        onSubmit={onSubmitSettings}
-        style={canvasStyle}
-        {...args}
-      />
-    </React.Fragment>
-  );
 }
