@@ -149,6 +149,7 @@ function renderCompositeDevice(
   index: number,
   args: { [key: string]: any }
 ): JSX.Element | undefined {
+  console.log(JSON.stringify(device, null, 2));
   return (
     <CompositeDeviceRenderer
       device={device}
@@ -161,12 +162,12 @@ function renderCompositeDevice(
 function ADLCanvas({
   ADLData,
   devices,
-  onSubmit = () => {},
+  onSubmit = () => { },
   style,
   ...args
 }: ADLCanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  
+
   // load adl files from the local finch repo
   const local = true
 
@@ -179,7 +180,7 @@ function ADLCanvas({
       setDimensions(displayDevice.size);
     }
   }, [ADLData]);
-  
+
   const renderDevices = () => {
     return ADLData.map((device: Entry, index: number) => {
       switch (device.var_type) {
@@ -188,14 +189,13 @@ function ADLCanvas({
         case "rectangle":
           return renderTextComponent(device, index, devices, args);
         case "composite":
-          
           return renderCompositeDevice(device, index, args);
         default:
           return renderDeviceComponent(device, index, devices, args, onSubmit);
       }
     });
   };
-  
+
   return (
     <div
       style={{

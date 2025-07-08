@@ -36,10 +36,10 @@ export default function ADLView({
         const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
         //const xmlString = `<?xml version="1.0" encoding="UTF-8"?>...`; // your XML
         const entries = parseXMLToEntries(component);
-        console.log(JSON.stringify(entries, null, 2));
+
         setADLData(entries);
         setLoading(false);
-
+        
       }
       else {
         try {
@@ -55,7 +55,7 @@ export default function ADLView({
           // console.log(JSON.stringify(entries, null, 2));
 
           const parsedData = ADLParser(parseCustomFormat(adlContent));
-          console.log(JSON.stringify(parsedData))
+
           setADLData(parsedData);
         } catch (err) {
           setError(`Error loading ${fileName}`);
@@ -104,7 +104,6 @@ export default function ADLView({
       </div>
     );
   }
-
   return (
     <>
       <div

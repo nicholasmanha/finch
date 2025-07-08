@@ -7,6 +7,8 @@ import { fetchADLFile } from "./utils/GithubFetch";
 import useOphydSocket from "@/hooks/useOphydSocket";
 import React from "react";
 import ADLCanvas from "./ADLCanvas";
+import { parseXMLToEntries } from "./utils/BobParser";
+import * as BOBs from "./utils/bob";
 
 export function CompositeDeviceRenderer({ device, index, args }: {
     device: Entry; index: number; args: { [key: string]: any };
@@ -24,27 +26,38 @@ export function CompositeDeviceRenderer({ device, index, args }: {
     useEffect(() => {
         if (device.comp_file !== undefined) {
             const fileNameNoADL: string = device.comp_file.split(".")[0];
-
+            const fileType: string = device.comp_file.split(".")[1];
             const loadADLFile = async () => {
                 setLoading(true);
                 setError(null);
+                if (fileType === 'bob') {
+                    const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
+                    //const xmlString = `<?xml version="1.0" encoding="UTF-8"?>...`; // your XML
+                    const entries = parseXMLToEntries(component);
 
-                try {
-                    const adlContent = await fetchADLFile(fileNameNoADL);
-
-                    if (!adlContent) {
-                        setError(`${device.comp_file} not found`);
-                        return;
-                    }
-
-                    const parsedData = ADLParser(parseCustomFormat(adlContent));
-                    setAdlData(parsedData);
-                } catch (err) {
-                    setError(`Error loading ${device.comp_file}`);
-                    console.error(err);
-                } finally {
+                    setAdlData(entries);
                     setLoading(false);
+
                 }
+                else {
+                    try {
+                        const adlContent = await fetchADLFile(fileNameNoADL);
+
+                        if (!adlContent) {
+                            setError(`${device.comp_file} not found`);
+                            return;
+                        }
+
+                        const parsedData = ADLParser(parseCustomFormat(adlContent));
+                        setAdlData(parsedData);
+                    } catch (err) {
+                        setError(`Error loading ${device.comp_file}`);
+                        console.error(err);
+                    } finally {
+                        setLoading(false);
+                    }
+                }
+
             };
 
             loadADLFile();
