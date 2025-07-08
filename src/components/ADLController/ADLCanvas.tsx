@@ -149,7 +149,6 @@ function renderCompositeDevice(
   index: number,
   args: { [key: string]: any }
 ): JSX.Element | undefined {
-  console.log(JSON.stringify(device, null, 2));
   return (
     <CompositeDeviceRenderer
       device={device}
