@@ -96,7 +96,7 @@ function renderCompositeDeviceLocal(
     const data = ADLParser(parseCustomFormat(component));
 
     // ws call
-    const deviceNames = useMemo(() => createDeviceNameArray(data, args), [data, JSON.stringify(args)]);
+    const deviceNames = useMemo(() => createDeviceNameArray(data, args), []);
 
     const wsUrl = useMemo(() => "ws://localhost:8000/ophydSocket", []);
     const { devices, handleSetValueRequest } = useOphydSocket(
@@ -168,7 +168,7 @@ function ADLCanvas({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   
   // load adl files from the local finch repo
-  const local = false
+  const local = true
 
   // get display dimensions
   useEffect(() => {
