@@ -7,6 +7,8 @@ import { parseCustomFormat } from "./utils/ADLtoJSON";
 import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
 import { fetchADLFile } from "./utils/GithubFetch";
 import { Entry } from "./types/ADLEntry";
+import { parseXMLToEntries } from "./utils/BobParser";
+import * as BOBs from "./utils/bob";
 
 export type ADLViewProps = {
   className?: string;
@@ -24,29 +26,45 @@ export default function ADLView({
   const [error, setError] = useState<string | null>(null);
 
   const fileNameNoADL: string = fileName.split(".")[0];
+  const fileType: string = fileName.split(".")[1];
 
   useEffect(() => {
     const loadADLFile = async () => {
       setLoading(true);
       setError(null);
-      
-      try {
-        const adlContent = await fetchADLFile(fileNameNoADL);
-        
-        if (!adlContent) {
-          setError(`${fileName} not found`);
-          return;
-        }
-        
-        const parsedData = ADLParser(parseCustomFormat(adlContent));
-        console.log(JSON.stringify(parsedData))
-        setADLData(parsedData);
-      } catch (err) {
-        setError(`Error loading ${fileName}`);
-        console.error(err);
-      } finally {
+      if (fileType === 'bob') {
+        const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
+        //const xmlString = `<?xml version="1.0" encoding="UTF-8"?>...`; // your XML
+        const entries = parseXMLToEntries(component);
+        console.log(JSON.stringify(entries, null, 2));
+        setADLData(entries);
         setLoading(false);
+
       }
+      else {
+        try {
+          const adlContent = await fetchADLFile(fileNameNoADL);
+
+          if (!adlContent) {
+            setError(`${fileName} not found`);
+            return;
+          }
+          // const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
+          // //const xmlString = `<?xml version="1.0" encoding="UTF-8"?>...`; // your XML
+          // const entries = parseXMLToEntries(component);
+          // console.log(JSON.stringify(entries, null, 2));
+
+          const parsedData = ADLParser(parseCustomFormat(adlContent));
+          console.log(JSON.stringify(parsedData))
+          setADLData(parsedData);
+        } catch (err) {
+          setError(`Error loading ${fileName}`);
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      }
+
     };
 
     loadADLFile();
