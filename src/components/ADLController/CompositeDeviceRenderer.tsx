@@ -3,86 +3,13 @@ import { Entry } from "./types/ADLEntry";
 import { ADLParser } from "./utils/ADLParse";
 import { parseCustomFormat } from "./utils/ADLtoJSON";
 import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
+import { fetchADLFile } from "./utils/GithubFetch";
 import useOphydSocket from "@/hooks/useOphydSocket";
 import React from "react";
 import ADLCanvas from "./ADLCanvas";
 
-// GitHub repo configuration
-const GITHUB_OWNER = "nicholasmanha"; // Replace with your GitHub username
-const GITHUB_REPO = "AD_ADL_files"; // Replace with your repo name
-const GITHUB_BRANCH = "main"; // Replace with your branch name
-
-// Cache for ADL files to avoid repeated fetches
-const adlCache = new Map<string, string>();
-
-// localStorage key prefix for ADL files
-const STORAGE_PREFIX = "adl_file_";
-
-const fetchADLFile = async (fileName: string): Promise<string | null> => {
-    // Check in-memory cache first
-    if (adlCache.has(fileName)) {
-        return adlCache.get(fileName)!;
-    }
-
-    // Check localStorage
-    const storageKey = `${STORAGE_PREFIX}${fileName}`;
-    const cachedContent = localStorage.getItem(storageKey);
-
-    if (cachedContent) {
-        // Store in memory cache for faster access during this session
-        adlCache.set(fileName, cachedContent);
-        return cachedContent;
-    }
-
-    try {
-        const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${fileName}.adl`;
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            console.error(`Failed to fetch ${fileName}.adl: ${response.status}`);
-            return null;
-        }
-
-        const content = await response.text();
-
-        // Store in both caches
-        adlCache.set(fileName, content);
-        try {
-            localStorage.setItem(storageKey, content);
-        } catch (storageError) {
-            console.warn(`Failed to save ${fileName} to localStorage:`, storageError);
-            // Continue execution even if localStorage fails
-        }
-
-        return content;
-    } catch (error) {
-        console.error(`Error fetching ADL file ${fileName}:`, error);
-        return null;
-    }
-};
-
-export const clearADLCache = () => {
-    const keysToRemove: string[] = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(STORAGE_PREFIX)) {
-            keysToRemove.push(key);
-        }
-    }
-
-    keysToRemove.forEach(key => localStorage.removeItem(key));
-    adlCache.clear();
-};
-
-export function CompositeDeviceRenderer({
-    device,
-    index,
-    args,
-}: {
-    device: Entry;
-    index: number;
-    args: { [key: string]: any };
+export function CompositeDeviceRenderer({ device, index, args }: {
+    device: Entry; index: number; args: { [key: string]: any };
 }): JSX.Element {
     const [adlData, setAdlData] = useState<Entry[] | null>(null);
     const [loading, setLoading] = useState(false);
