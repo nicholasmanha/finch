@@ -23,9 +23,9 @@ export function parseXMLToEntries(xmlString: string): Entry[] {
         entries.push(displayEntry);
     }
 
-    // Parse all widgets
-    const widgets = xmlDoc.querySelectorAll('widget');
-    widgets.forEach(widget => {
+    // Parse all top-level widgets
+    const topLevelWidgets = xmlDoc.querySelectorAll('display > widget');
+    topLevelWidgets.forEach(widget => {
         const type = widget.getAttribute('type');
         if (!type) return;
 
@@ -58,6 +58,30 @@ function parseWidget(widget: Element, type: string): Entry | null {
                 name: "rectangle"
             };
 
+        case 'group':
+            // Parse child widgets
+            const childWidgets = Array.from(widget.children).filter(child =>
+                child.tagName === 'widget'
+            );
+
+            const children: Entry[] = [];
+            childWidgets.forEach(childWidget => {
+                const childType = childWidget.getAttribute('type');
+                if (childType) {
+                    const childEntry = parseWidget(childWidget as Element, childType);
+                    if (childEntry) {
+                        children.push(childEntry);
+                    }
+                }
+            });
+
+            return {
+                var_type: "composite",
+                ...baseEntry,
+                name: "",
+                children: children
+            };
+
         case 'embedded':
             const file = getElementText(widget, 'file') || '';
             return {
@@ -70,7 +94,7 @@ function parseWidget(widget: Element, type: string): Entry | null {
         case 'label':
             const text = getElementText(widget, 'text') || '';
             const horizontalAlignment = getElementText(widget, 'horizontal_alignment');
-            
+
             const labelEntry: Entry = {
                 var_type: "text",
                 ...baseEntry,
@@ -80,9 +104,19 @@ function parseWidget(widget: Element, type: string): Entry | null {
             // Map horizontal alignment values
             if (horizontalAlignment === '1') {
                 labelEntry.align = "horiz. centered";
+            } else if (horizontalAlignment === '2') {
+                labelEntry.align = "horiz. right";
             }
+            // Note: horizontalAlignment === '0' would be left-aligned (default), so no align property needed
 
             return labelEntry;
+        case 'textupdate':
+            const pvName = getElementText(widget, 'pv_name') || '';
+            return {
+                var_type: "update",
+                ...baseEntry,
+                name: pvName
+            };
 
         default:
             // For unknown widget types, create a generic entry
