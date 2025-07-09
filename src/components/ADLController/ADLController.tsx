@@ -31,6 +31,7 @@ export default function ADLController({
 
   // populates tab content based on the tab filename and args
   const addContentToTabs = (tabsData: TabData[]): TabData[] => {
+    // main tab is null because it is populated in the return statement at the bottom 
     return tabsData.map((tab) => ({
       ...tab,
       content: tab.isMainTab ? null : (
@@ -42,6 +43,7 @@ export default function ADLController({
   // Initialize tabs
   const [tabs, setTabs] = useState<TabData[]>(() => {
     const storedTabs = loadTabsFromStorage();
+    // this is because the tabs are stored without content in localstorage, they just have the filename and args, and this function populates the tab content
     return addContentToTabs(storedTabs);
   });
 
@@ -68,11 +70,15 @@ export default function ADLController({
       return;
     }
 
+    // The index of the tab being removed
     const currentTabIndex = tabs.findIndex((tab) => tab.id === tabId);
+
+    // set of tabs without the removed tab
     const newTabs = tabs.filter((tab) => tab.id !== tabId);
     setTabs(newTabs);
 
     // Handle active tab switching
+    // if the active tab is the one being removed and there are still tabs left
     if (activeTab === tabId && newTabs.length > 0) {
       if (currentTabIndex < newTabs.length) {
         setActiveTab(newTabs[currentTabIndex].id);
@@ -104,7 +110,7 @@ export default function ADLController({
 
       if (tabArgsKeys.length !== argsKeys.length) return false;
 
-      return tabArgsKeys.every(key => tab.args![key] === args[key]);
+      return tabArgsKeys.every((key) => tab.args![key] === args[key]);
     });
 
     // if the tab exists, make it active
@@ -138,20 +144,18 @@ export default function ADLController({
   return (
     <TabManagementProvider value={tabManagementValue}>
       <TabsGroup value={activeTab} onValueChange={setActiveTab}>
+        {/* the actual tab buttons */}
         <TabsList>
           {tabs.map((tab) => (
             <div key={tab.id} className="flex items-center">
-              <Tab
-                value={tab.id}
-                removeTab={removeTab}
-                mainTab={tab.isMainTab}
-              >
+              <Tab value={tab.id} removeTab={removeTab} mainTab={tab.isMainTab}>
                 {tab.label}
               </Tab>
             </div>
           ))}
         </TabsList>
 
+        {/* tab content */}
         {tabs.map((tab) => (
           <div
             key={tab.id}
