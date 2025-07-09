@@ -68,6 +68,22 @@ function parseWidget(widget: Element, type: string): Entry | null {
             childWidgets.forEach(childWidget => {
                 const childType = childWidget.getAttribute('type');
                 if (childType) {
+                    // Check if child has its own x/y coordinates
+                    const childX = getElementText(childWidget as Element, 'x');
+                    const childY = getElementText(childWidget as Element, 'y');
+
+                    // If child doesn't have x/y, inherit from parent
+                    if (!childX) {
+                        const xElement = (childWidget as Element).ownerDocument.createElement('x');
+                        xElement.textContent = x.toString();
+                        (childWidget as Element).appendChild(xElement);
+                    }
+                    if (!childY) {
+                        const yElement = (childWidget as Element).ownerDocument.createElement('y');
+                        yElement.textContent = y.toString();
+                        (childWidget as Element).appendChild(yElement);
+                    }
+
                     const childEntry = parseWidget(childWidget as Element, childType);
                     if (childEntry) {
                         children.push(childEntry);
@@ -116,6 +132,28 @@ function parseWidget(widget: Element, type: string): Entry | null {
                 var_type: "update",
                 ...baseEntry,
                 name: pvName
+            };
+        case 'combo':
+            const comboPvName = getElementText(widget, 'pv_name') || '';
+            return {
+                var_type: "menu",
+                ...baseEntry,
+                name: comboPvName
+            };
+        case 'action_button':
+            const buttonPvName = getElementText(widget, 'pv_name') || '';
+            const buttonText = getElementText(widget, 'text') || '';
+
+            // Extract the value from the write_pv action
+            const actionElement = widget.querySelector('action[type="write_pv"]');
+            const pressMsg = actionElement ? getElementText(actionElement, 'value') || '' : '';
+
+            return {
+                var_type: "button",
+                ...baseEntry,
+                name: buttonPvName,
+                label: buttonText,
+                press_msg: pressMsg
             };
 
         default:
