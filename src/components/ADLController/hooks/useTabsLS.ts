@@ -1,8 +1,8 @@
 import { TabData } from "@/components/Tabs/types/tabs";
 
 export function useTabLS(fileName: string, P: string, R: string) {
-  const STORAGE_KEY = `adl-tabs-${fileName}`;
-  const ACTIVE_TAB_KEY = `adl-active-tab-${fileName}`;
+  const STORAGE_KEY = `adl-tabs`;
+  const ACTIVE_TAB_KEY = `adl-active-tab`;
 
   const createDefaultTab = (): TabData => ({
     id: "tab1",
