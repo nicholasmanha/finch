@@ -22,7 +22,11 @@ export interface UseADLDataReturn {
   onSubmitSettings: (deviceName: string, value: any) => void;
 }
 
-export function useADLData({ fileName, children, args }: UseADLDataOptions): UseADLDataReturn {
+export function useADLData({
+  fileName,
+  children,
+  args,
+}: UseADLDataOptions): UseADLDataReturn {
   const [ADLData, setADLData] = useState<Entry[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +52,7 @@ export function useADLData({ fileName, children, args }: UseADLDataOptions): Use
       const fileType: string = fileName.split(".")[1];
 
       try {
-        if (fileType === 'bob') {
+        if (fileType === "bob") {
           const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
           const entries = parseXMLToEntries(component);
           setADLData(entries);
@@ -81,13 +85,15 @@ export function useADLData({ fileName, children, args }: UseADLDataOptions): Use
   }, [ADLData, JSON.stringify(args)]);
 
   const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
-  const onSubmitSettings = useCallback(handleSetValueRequest, [handleSetValueRequest]);
+  const onSubmitSettings = useCallback(handleSetValueRequest, [
+    handleSetValueRequest,
+  ]);
 
   return {
     ADLData,
     loading,
     error,
     devices,
-    onSubmitSettings
+    onSubmitSettings,
   };
 }

@@ -13,6 +13,7 @@ export default function ADLView({
   fileName,
   ...args
 }: ADLViewProps) {
+  // ADLData is Entry[] (aka from the ADL file), devices are the devices from the WS
   const { ADLData, loading, error, devices, onSubmitSettings } = useADLData({
     fileName,
     args
