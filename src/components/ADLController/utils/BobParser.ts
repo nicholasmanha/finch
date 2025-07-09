@@ -16,7 +16,7 @@ export function parseXMLToEntries(xmlString: string): Entry[] {
             },
             size: {
                 width: parseInt(getElementText(displayElement, 'width') || '0'),
-                height: parseInt(getElementText(displayElement, 'height') || '0')
+                height: parseInt(getElementText(displayElement, 'height') || '-1')
             },
             name: "display"
         };
@@ -42,8 +42,8 @@ function parseWidget(widget: Element, type: string): Entry | null {
     const name = getElementText(widget, 'name') || '';
     const x = parseInt(getElementText(widget, 'x') || '0');
     const y = parseInt(getElementText(widget, 'y') || '0');
-    const width = parseInt(getElementText(widget, 'width') || '0');
-    const height = parseInt(getElementText(widget, 'height') || '0');
+    const width = parseInt(getElementText(widget, 'width') || '-1');
+    const height = parseInt(getElementText(widget, 'height') || '-1');
 
     const baseEntry = {
         location: { x, y },
@@ -123,9 +123,34 @@ function parseWidget(widget: Element, type: string): Entry | null {
             } else if (horizontalAlignment === '2') {
                 labelEntry.align = "horiz. right";
             }
-            // Note: horizontalAlignment === '0' would be left-aligned (default), so no align property needed
+
+            // Handle rules for dynamic attributes
+            const rule = widget.querySelector('rule');
+            if (rule) {
+                const ruleName = rule.getAttribute('name');
+                const pvName = getElementText(rule, 'pv_name');
+
+                if (ruleName && pvName) {
+                    // Map rule names to vis values and set appropriate calc values
+                    if (ruleName === 'vis_if_zero') {
+                        labelEntry.dynamic_attribute = {
+                            vis: "if zero",
+                            calc: "0", // Default calc value
+                            chan: pvName
+                        };
+                    } else if (ruleName === 'vis_if_not_zero') {
+                        labelEntry.dynamic_attribute = {
+                            vis: "if not zero",
+                            calc: "0",
+                            chan: pvName
+                        };
+                    }
+                }
+            }
 
             return labelEntry;
+
+
         case 'textupdate':
             const pvName = getElementText(widget, 'pv_name') || '';
             return {
@@ -155,7 +180,22 @@ function parseWidget(widget: Element, type: string): Entry | null {
                 label: buttonText,
                 press_msg: pressMsg
             };
+        case 'textentry':
+            const entryPvName = getElementText(widget, 'pv_name') || '';
+            const format = getElementText(widget, 'format');
 
+            const entryEntry: Entry = {
+                var_type: "entry",
+                ...baseEntry,
+                name: entryPvName
+            };
+
+            // Map format values - format "6" appears to be string format
+            if (format === '6') {
+                entryEntry.format = "string";
+            }
+
+            return entryEntry;
         default:
             // For unknown widget types, create a generic entry
             return {
