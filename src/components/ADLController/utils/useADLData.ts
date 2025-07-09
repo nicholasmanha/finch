@@ -6,7 +6,6 @@ import { createDeviceNameArray } from "./CreateDeviceNameArray";
 import { fetchADLFile } from "./GithubFetch";
 import { Entry } from "../types/ADLEntry";
 import { parseXMLToEntries } from "./BobParser";
-import * as BOBs from "./bob";
 
 export interface UseADLDataOptions {
   fileName?: string;
@@ -47,26 +46,32 @@ export function useADLData({
     const loadADLFile = async () => {
       setLoading(true);
       setError(null);
-
       const fileNameNoADL: string = fileName.split(".")[0];
       const fileType: string = fileName.split(".")[1];
 
       try {
-        if (fileType === "bob") {
-          const component = BOBs.default[fileNameNoADL as keyof typeof BOBs];
-          const entries = parseXMLToEntries(component);
-          setADLData(entries);
-        } else {
-          const adlContent = await fetchADLFile(fileNameNoADL);
 
-          if (!adlContent) {
-            setError(`${fileName} not found`);
-            return;
-          }
+        const adlContent = await fetchADLFile(fileName, "nicholasmanha", `AD_${fileType.toUpperCase()}_files`);
 
-          const parsedData = ADLParser(parseCustomFormat(adlContent));
-          setADLData(parsedData);
+        if (!adlContent) {
+          setError(`${fileName} not found`);
+          return;
         }
+        let parsedData: Entry[]
+        switch (fileType.toLowerCase()) {
+          case "bob":
+            parsedData = parseXMLToEntries(adlContent)
+            break;
+          case "adl":
+            parsedData = ADLParser(parseCustomFormat(adlContent));
+            break;
+          default:
+            parsedData = []
+            break;
+        }
+        console.log(JSON.stringify(parsedData))
+        setADLData(parsedData);
+
       } catch (err) {
         setError(`Error loading ${fileName}`);
         console.error(err);

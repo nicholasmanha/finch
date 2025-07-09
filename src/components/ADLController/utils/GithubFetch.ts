@@ -9,7 +9,7 @@ const adlCache = new Map<string, string>();
 // localStorage key prefix for ADL files
 const STORAGE_PREFIX = "adl_file_";
 
-export const fetchADLFile = async (fileName: string): Promise<string | null> => {
+export const fetchADLFile = async (fileName: string, owner: string, repo: string): Promise<string | null> => {
     // Check in-memory cache first
     if (adlCache.has(fileName)) {
         return adlCache.get(fileName)!;
@@ -26,11 +26,11 @@ export const fetchADLFile = async (fileName: string): Promise<string | null> => 
     }
 
     try {
-        const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${fileName}.adl`;
+        const url = `https://raw.githubusercontent.com/${owner}/${repo}/${GITHUB_BRANCH}/${fileName}`;
         const response = await fetch(url);
 
         if (!response.ok) {
-            console.error(`Failed to fetch ${fileName}.adl: ${response.status}`);
+            console.error(`Failed to fetch ${fileName}: ${response.status}`);
             return null;
         }
 
