@@ -26,10 +26,13 @@ export default function About() {
     return (
 
         <>
+        <div className="flex">
 
-
+       
             <ADLController fileName="simDetector.adl" P="Basler5472" R="cam1"/>
+            <CameraContainer prefix="Basler5472" enableControlPanel={false} enableSettings={false}/>
+            </div>
         </>
-
+        
     )
 }
