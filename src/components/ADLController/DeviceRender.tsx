@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react'
 import { Device } from "@/types/deviceControllerTypes";
-import { Entry } from './types/ADLEntry';
+import { Entry } from './types/UIEntry';
 import InputNumber from './InputNumber';
 import InputEnum from './InputEnum';
 import ADLButton from './CSIButton';

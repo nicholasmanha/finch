@@ -5,7 +5,7 @@ import { Tab } from "@/components/Tabs/Tab";
 import { TabsPanel } from "@/components/Tabs/TabsPanel";
 import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
-import { useTabLS } from "./hooks/useTabsLS";
+import { useTabLS } from "./hooks/useTabsLocalStorage";
 import ADLView from "./CSIView";
 
 export type ADLControllerProps = {

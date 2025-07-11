@@ -1,7 +1,7 @@
 import { Browsers } from "@phosphor-icons/react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useTabManagement } from "../Tabs/context/TabsContext";
-import { Entry } from "./types/ADLEntry";
+import { Entry } from "./types/UIEntry";
 import ADLView from "./CSIView";
 import { replaceArgs } from "./utils/ArgsFill";
 

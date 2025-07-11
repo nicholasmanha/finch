@@ -1,4 +1,4 @@
-import { Entry } from "../types/ADLEntry";
+import { Entry } from "../types/UIEntry";
 
 export function parseXMLToEntries(xmlString: string): Entry[] {
     const parser = new DOMParser();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Entry } from "./types/ADLEntry";
+import { Entry } from "./types/UIEntry";
 import ADLCanvas from "./CSICanvas";
 import { useADLData } from "./utils/useUIData";
 

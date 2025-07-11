@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Devices } from "@/types/deviceControllerTypes";
-import { Entry } from "./types/ADLEntry";
+import { Entry } from "./types/UIEntry";
 import StyleRender from "./StyleRender";
 import DeviceRender from "./DeviceRender";
 import { ADLParser } from "./utils/ADLParse";

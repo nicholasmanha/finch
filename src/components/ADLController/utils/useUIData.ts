@@ -4,7 +4,7 @@ import { ADLParser } from "./ADLParse";
 import { parseCustomFormat } from "./ADLtoJSON";
 import { createDeviceNameArray } from "./CreateDeviceNameArray";
 import { fetchADLFile } from "./GithubFetch";
-import { Entry } from "../types/ADLEntry";
+import { Entry } from "../types/UIEntry";
 import { parseXMLToEntries } from "./BobParser";
 
 export interface UseADLDataOptions {
@@ -69,7 +69,6 @@ export function useADLData({
             parsedData = []
             break;
         }
-        console.log(JSON.stringify(parsedData))
         setADLData(parsedData);
 
       } catch (err) {

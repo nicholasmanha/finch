@@ -1,4 +1,4 @@
-import { Entry } from './types/ADLEntry';
+import { Entry } from './types/UIEntry';
 import { replaceArgs } from './utils/ArgsFill';
 
 export type DeviceRenderProps = {
