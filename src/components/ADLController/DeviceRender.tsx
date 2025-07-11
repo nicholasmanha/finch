@@ -3,7 +3,7 @@ import { Device } from "@/types/deviceControllerTypes";
 import { Entry } from './types/ADLEntry';
 import InputNumber from './InputNumber';
 import InputEnum from './InputEnum';
-import ADLButton from './ADLButton';
+import ADLButton from './CSIButton';
 import InputText from './InputText';
 import RelatedDisp from './RelatedDisp';
 

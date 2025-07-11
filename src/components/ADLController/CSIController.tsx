@@ -6,7 +6,7 @@ import { TabsPanel } from "@/components/Tabs/TabsPanel";
 import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
 import { useTabLS } from "./hooks/useTabsLS";
-import ADLView from "./ADLView";
+import ADLView from "./CSIView";
 
 export type ADLControllerProps = {
   className?: string;

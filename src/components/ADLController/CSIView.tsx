@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import ADLCanvas from "./CSICanvas";
-import { useADLData } from "./utils/useADLData";
+import { useADLData } from "./utils/useUIData";
 
 export type ADLViewProps = {
   className?: string;

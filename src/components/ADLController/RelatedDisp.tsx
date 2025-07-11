@@ -2,7 +2,7 @@ import { Browsers } from "@phosphor-icons/react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useTabManagement } from "../Tabs/context/TabsContext";
 import { Entry } from "./types/ADLEntry";
-import ADLView from "./ADLView";
+import ADLView from "./CSIView";
 import { replaceArgs } from "./utils/ArgsFill";
 
 type RelatedDispProps = {
