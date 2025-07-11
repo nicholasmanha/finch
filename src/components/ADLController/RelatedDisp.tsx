@@ -40,7 +40,7 @@ function RelatedDisp({
       const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
     const tabContent = (
       <ADLView
-        fileName={fileArray![index].file}
+        fileName={fileNameClean}
         {...substituteVariables(fileArray![index].args, args)}
       />
     );

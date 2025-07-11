@@ -70,6 +70,7 @@ export function useADLData({
             parsedData = []
             break;
         }
+        console.log(JSON.stringify(parsedData))
         setADLData(parsedData);
 
       } catch (err) {
@@ -79,7 +80,7 @@ export function useADLData({
         setLoading(false);
       }
     };
-
+    
     loadADLFile();
   }, [fileName, children]);
 

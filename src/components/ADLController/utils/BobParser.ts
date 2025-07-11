@@ -265,6 +265,7 @@ function parseWidget(widget: Element, type: string): Entry | null {
 }
 
 function getElementText(parent: Element, tagName: string): string | null {
-    const element = parent.querySelector(tagName);
+    // Use '> tagName' to only select direct children
+    const element = parent.querySelector(`:scope > ${tagName}`);
     return element ? element.textContent?.trim() || null : null;
 }

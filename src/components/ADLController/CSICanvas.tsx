@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from "./types/UIEntry";
 import StyleRender from "./StyleRender";
@@ -92,6 +92,7 @@ function ADLCanvas({
   ...args
 }: ADLCanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // load adl files from the local finch repo
   const local = true
@@ -105,6 +106,33 @@ function ADLCanvas({
       setDimensions(displayDevice.size);
     }
   }, [ADLData]);
+
+  // Calculate height from rendered children when no explicit height is set
+  useEffect(() => {
+    if (dimensions.height === 0 && containerRef.current) {
+      // Use a small delay to ensure all components are rendered
+      const timer = setTimeout(() => {
+        if (containerRef.current) {
+          const children = containerRef.current.children;
+          let maxBottom = 0;
+          
+          for (let i = 0; i < children.length; i++) {
+            const child = children[i] as HTMLElement;
+            const rect = child.getBoundingClientRect();
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const bottom = rect.bottom - containerRect.top;
+            maxBottom = Math.max(maxBottom, bottom);
+          }
+          
+          if (maxBottom > 0) {
+            setDimensions(prev => ({ ...prev, height: maxBottom }));
+          }
+        }
+      }, 0);
+
+      return () => clearTimeout(timer);
+    }
+  }, [ADLData, dimensions.height]);
 
   const renderDevices = () => {
     return ADLData.map((device: Entry, index: number) => {
@@ -123,9 +151,11 @@ function ADLCanvas({
 
   return (
     <div
+      ref={containerRef}
       style={{
         width: `${dimensions.width}px`,
-        height: `${dimensions.height}px`,
+        height: dimensions.height > 0 ? `${dimensions.height}px` : 'auto',
+        minHeight: dimensions.height === 0 ? '1px' : undefined,
         ...style,
       }}
       className="relative"
