@@ -3,7 +3,7 @@ import useOphydSocket from "@/hooks/useOphydSocket";
 import { ADLParser } from "./ADLParse";
 import { parseCustomFormat } from "./ADLtoJSON";
 import { createDeviceNameArray } from "./CreateDeviceNameArray";
-import { fetchADLFile } from "./GithubFetch";
+import { fetchFile } from "./GithubFetch";
 import { Entry } from "../types/UIEntry";
 import { parseXMLToEntries } from "./BobParser";
 
@@ -52,7 +52,7 @@ export function useADLData({
       const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
       try {
         
-        const adlContent = await fetchADLFile(fileNameClean, "nicholasmanha", `AD_${fileTypeClean.toUpperCase()}_files`);
+        const adlContent = await fetchFile(fileNameClean, "nicholasmanha", `AD_${fileTypeClean.toUpperCase()}_files`);
 
         if (!adlContent) {
           setError(`${fileName} not found`);
