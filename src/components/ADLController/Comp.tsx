@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Entry } from "./types/ADLEntry";
-import ADLCanvas from "./ADLCanvas";
+import ADLCanvas from "./CSICanvas";
 import { useADLData } from "./utils/useADLData";
 
 export function CompositeDeviceRenderer({ device, index, args }: {

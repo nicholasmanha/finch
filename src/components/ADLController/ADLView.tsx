@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import ADLCanvas from "./ADLCanvas";
+import ADLCanvas from "./CSICanvas";
 import { useADLData } from "./utils/useADLData";
 
 export type ADLViewProps = {

@@ -7,7 +7,7 @@ import Plot, { PlotParams } from 'react-plotly.js';
 import ADLView from "@/components/ADLController/ADLView";
 import { cameraDeviceData } from "@/components/Camera/utils/cameraDeviceData";
 import CameraContainer from "@/components/Camera/CameraContainer";
-import ADLController from "@/components/ADLController/ADLController";
+import ADLController from "@/components/ADLController/CSIController";
 
 
 
