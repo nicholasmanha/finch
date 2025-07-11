@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from "./types/UIEntry";
 import StyleRender from "./StyleRender";
@@ -11,7 +11,7 @@ import { replaceArgs } from "./utils/ArgsFill";
 import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
 import { CompositeDeviceRenderer } from "./Comp";
 
-export type CSICanvasProps = {
+export type UICanvasProps = {
   devices: Devices;
   UIData: Entry[];
   onSubmit?: (pv: string, value: string | boolean | number) => void;
@@ -90,7 +90,7 @@ function CSICanvas({
   onSubmit = () => { },
   style,
   ...args
-}: CSICanvasProps) {
+}: UICanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -100,55 +100,54 @@ function CSICanvas({
   // get display dimensions
   useEffect(() => {
     const displayDevice = UIData.find(
-      (device) => device.var_type === "display"
+      (device: Entry) => device.var_type === "display"
     );
     if (displayDevice?.size) {
       setDimensions(displayDevice.size);
     }
-    console.log(dimensions)
   }, [UIData]);
 
   // Calculate height from rendered children when no explicit height is set
   useEffect(() => {
-  if (dimensions.height === -1 && containerRef.current) {
-    const measureHeight = () => {
-      if (containerRef.current) {
-        const children = containerRef.current.children;
-        
-        // Check if all children are rendered (have non-zero dimensions)
-        const allChildrenRendered = Array.from(children).every(child => {
-          const rect = (child as HTMLElement).getBoundingClientRect();
-          return rect.width > 0 || rect.height > 0;
-        });
-        
-        if (allChildrenRendered && children.length > 0) {
-          let maxBottom = 0;
-          
-          for (let i = 0; i < children.length; i++) {
-            const child = children[i] as HTMLElement;
-            const rect = child.getBoundingClientRect();
-            const containerRect = containerRef.current.getBoundingClientRect();
-            const bottom = rect.bottom - containerRect.top;
-            maxBottom = Math.max(maxBottom, bottom);
-          }
-          
-          if (maxBottom > 0) {
-            setDimensions(prev => ({ ...prev, height: maxBottom }));
-          }
-        } else {
-          // Retry after a short delay if children aren't ready
-          setTimeout(measureHeight, 10);
-        }
-      }
-    };
+    if (dimensions.height === -1 && containerRef.current) {
+      const measureHeight = () => {
+        if (containerRef.current) {
+          const children = containerRef.current.children;
 
-    // Start with a small delay to allow initial render
-    setTimeout(measureHeight, 50);
-  }
-}, [UIData, dimensions.height]);
+          // Check if all children are rendered (have non-zero dimensions)
+          const allChildrenRendered = Array.from(children).every(child => {
+            const rect = (child as HTMLElement).getBoundingClientRect();
+            return rect.width > 0 || rect.height > 0;
+          });
+
+          if (allChildrenRendered && children.length > 0) {
+            let maxBottom = 0;
+
+            for (let i = 0; i < children.length; i++) {
+              const child = children[i] as HTMLElement;
+              const rect = child.getBoundingClientRect();
+              const containerRect = containerRef.current.getBoundingClientRect();
+              const bottom = rect.bottom - containerRect.top;
+              maxBottom = Math.max(maxBottom, bottom);
+            }
+
+            if (maxBottom > 0) {
+              setDimensions(prev => ({ ...prev, height: maxBottom }));
+            }
+          } else {
+            // Retry after a short delay if children aren't ready
+            setTimeout(measureHeight, 10);
+          }
+        }
+      };
+
+      // Start with a small delay to allow initial render
+      setTimeout(measureHeight, 50);
+    }
+  }, [UIData, dimensions.height]);
 
   const renderDevices = () => {
-    return UIData.map((device: Entry, index: number) => {
+    return UIData.map((device, index: number) => {
       switch (device.var_type) {
         case "text":
           return renderStyleComponent(device, index, devices, args);

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import UICanvas from "./CSICanvas";
+import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
 
 export type CSIViewProps = {
@@ -45,7 +45,7 @@ export default function CSIView({
 
   return (
     <div className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4", className)}>
-      <UICanvas
+      <CSICanvas
         UIData={UIData}
         devices={devices}
         onSubmit={onSubmitSettings}
