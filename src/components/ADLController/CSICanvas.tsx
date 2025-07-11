@@ -19,7 +19,7 @@ export type ADLCanvasProps = {
   [key: string]: any;
 };
 
-function renderTextComponent(
+function renderStyleComponent(
   device: Entry,
   index: number,
   devices: Devices,
@@ -110,9 +110,9 @@ function ADLCanvas({
     return ADLData.map((device: Entry, index: number) => {
       switch (device.var_type) {
         case "text":
-          return renderTextComponent(device, index, devices, args);
+          return renderStyleComponent(device, index, devices, args);
         case "rectangle":
-          return renderTextComponent(device, index, devices, args);
+          return renderStyleComponent(device, index, devices, args);
         case "composite":
           return renderCompComponent(device, index, args);
         default:
