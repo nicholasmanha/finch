@@ -34,6 +34,10 @@ function RelatedDisp({
   }
   const { addTab } = useTabManagement();
   const handleCreateTab = (index: number) => {
+    const fileNameNoADL: string = fileArray![index].file.split(".")[0];
+      const fileType: string = fileArray![index].file.split(".")[1];
+      const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoADL}.bob` : fileArray![index].file;
+      const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
     const tabContent = (
       <ADLView
         fileName={fileArray![index].file}
@@ -43,9 +47,9 @@ function RelatedDisp({
 
     // Pass fileName and args to addTab for localStorage persistence
     addTab(
-      fileArray![index].file,
+      fileNameClean,
       tabContent,
-      fileArray![index].file,
+      fileNameClean,
       substituteVariables(fileArray![index].args, args)
     );
   };
