@@ -169,16 +169,74 @@ function parseWidget(widget: Element, type: string): Entry | null {
             const buttonPvName = getElementText(widget, 'pv_name') || '';
             const buttonText = getElementText(widget, 'text') || '';
 
-            // Extract the value from the write_pv action
-            const actionElement = widget.querySelector('action[type="write_pv"]');
-            const pressMsg = actionElement ? getElementText(actionElement, 'value') || '' : '';
+            // Check if this has open_display actions (related display) or write_pv actions (button)
+            const openDisplayActions = widget.querySelectorAll('action[type="open_display"]');
+            const writePvAction = widget.querySelector('action[type="write_pv"]');
 
+            if (openDisplayActions.length > 0) {
+                // This is a related display
+                const displays: { label: string; file: string; args: Record<string, string> }[] = [];
+
+                openDisplayActions.forEach(action => {
+                    const description = getElementText(action, 'description') || '';
+                    const file = getElementText(action, 'file') || '';
+
+                    // Convert .opi extension to .adl
+                    // const adlFile = file.replace(/\.opi$/, '.adl');
+
+                    // Extract macros
+                    const args: Record<string, string> = {
+                        "P": "$(P)" // Default P macro
+                    };
+
+                    const macrosElement = action.querySelector('macros');
+                    if (macrosElement) {
+                        Array.from(macrosElement.children).forEach(macro => {
+                            const key = macro.tagName;
+                            const value = macro.textContent?.trim() || '';
+                            args[key] = value;
+                        });
+                    }
+
+                    displays.push({
+                        label: description,
+                        file: file,
+                        args: args
+                    });
+                });
+
+                const relatedDisplayEntry: any = {
+                    var_type: "related display",
+                    ...baseEntry,
+                    name: "related display",
+                    display: displays
+                };
+
+                // Add label if button has text
+                if (buttonText) {
+                    relatedDisplayEntry.label = buttonText;
+                }
+
+                return relatedDisplayEntry;
+            } else if (writePvAction) {
+                // This is a regular button
+                const pressMsg = getElementText(writePvAction, 'value') || '';
+
+                return {
+                    var_type: "button",
+                    ...baseEntry,
+                    name: buttonPvName,
+                    label: buttonText,
+                    press_msg: pressMsg
+                };
+            }
+
+            // Fallback for unknown action types
             return {
                 var_type: "button",
                 ...baseEntry,
-                name: buttonPvName,
-                label: buttonText,
-                press_msg: pressMsg
+                name: buttonPvName || "action_button",
+                label: buttonText
             };
         case 'textentry':
             const entryPvName = getElementText(widget, 'pv_name') || '';
