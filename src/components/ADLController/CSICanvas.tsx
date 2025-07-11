@@ -105,15 +105,23 @@ function ADLCanvas({
     if (displayDevice?.size) {
       setDimensions(displayDevice.size);
     }
+    console.log(dimensions)
   }, [ADLData]);
 
   // Calculate height from rendered children when no explicit height is set
   useEffect(() => {
-    if (dimensions.height === 0 && containerRef.current) {
-      // Use a small delay to ensure all components are rendered
-      const timer = setTimeout(() => {
-        if (containerRef.current) {
-          const children = containerRef.current.children;
+  if (dimensions.height === -1 && containerRef.current) {
+    const measureHeight = () => {
+      if (containerRef.current) {
+        const children = containerRef.current.children;
+        
+        // Check if all children are rendered (have non-zero dimensions)
+        const allChildrenRendered = Array.from(children).every(child => {
+          const rect = (child as HTMLElement).getBoundingClientRect();
+          return rect.width > 0 || rect.height > 0;
+        });
+        
+        if (allChildrenRendered && children.length > 0) {
           let maxBottom = 0;
           
           for (let i = 0; i < children.length; i++) {
@@ -127,12 +135,17 @@ function ADLCanvas({
           if (maxBottom > 0) {
             setDimensions(prev => ({ ...prev, height: maxBottom }));
           }
+        } else {
+          // Retry after a short delay if children aren't ready
+          setTimeout(measureHeight, 10);
         }
-      }, 0);
+      }
+    };
 
-      return () => clearTimeout(timer);
-    }
-  }, [ADLData, dimensions.height]);
+    // Start with a small delay to allow initial render
+    setTimeout(measureHeight, 50);
+  }
+}, [ADLData, dimensions.height]);
 
   const renderDevices = () => {
     return ADLData.map((device: Entry, index: number) => {
