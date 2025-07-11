@@ -14,7 +14,7 @@ export function CompositeDeviceRenderer({ device, index, args }: {
         top: `${device.location.y}px`,
     });
 
-    const { ADLData, loading, error, devices, onSubmitSettings } = useADLData({
+    const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
         fileName: device.comp_file,
         children: device.children,
         args
@@ -48,14 +48,14 @@ export function CompositeDeviceRenderer({ device, index, args }: {
         );
     }
 
-    if (!ADLData) {
+    if (!UIData) {
         return <div style={canvasStyle}></div>;
     }
 
     return (
         <React.Fragment key={index}>
             <ADLCanvas
-                ADLData={ADLData}
+                UIData={UIData}
                 devices={devices}
                 onSubmit={onSubmitSettings}
                 style={canvasStyle}

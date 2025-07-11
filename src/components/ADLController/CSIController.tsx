@@ -6,21 +6,21 @@ import { TabsPanel } from "@/components/Tabs/TabsPanel";
 import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
 import { useTabLS } from "./hooks/useTabsLocalStorage";
-import ADLView from "./CSIView";
+import CSIView from "./CSIView";
 
-export type ADLControllerProps = {
+export type CSIControllerProps = {
   className?: string;
   fileName: string;
   P: string;
   R: string;
 };
 
-export default function ADLController({
+export default function CSIController({
   className,
   fileName,
   P,
   R,
-}: ADLControllerProps) {
+}: CSIControllerProps) {
   // grab localstorage tab functions from webhook
   const {
     loadTabsFromStorage,
@@ -35,7 +35,7 @@ export default function ADLController({
     return tabsData.map((tab) => ({
       ...tab,
       content: tab.isMainTab ? null : (
-        <ADLView fileName={tab.fileName!} {...tab.args} />
+        <CSIView fileName={tab.fileName!} {...tab.args} />
       ),
     }));
   };
@@ -162,7 +162,7 @@ export default function ADLController({
             style={{ display: activeTab === tab.id ? "block" : "none" }}
           >
             {tab.isMainTab ? (
-              <ADLView fileName={fileName} P={P} R={R} />
+              <CSIView fileName={fileName} P={P} R={R} />
             ) : (
               tab.content
             )}

@@ -14,7 +14,7 @@ export interface UseUIDataOptions {
 }
 
 export interface UseUIDataReturn {
-  ADLData: Entry[] | null;
+  UIData: Entry[] | null;
   loading: boolean;
   error: string | null;
   devices: any;
@@ -26,24 +26,24 @@ export function useUIData({
   children,
   args,
 }: UseUIDataOptions): UseUIDataReturn {
-  const [ADLData, setADLData] = useState<Entry[] | null>(null);
+  const [UIData, setUIData] = useState<Entry[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // If children are provided directly, use them
     if (children) {
-      setADLData(children);
+      setUIData(children);
       return;
     }
 
     // If no fileName, nothing to load
     if (!fileName) {
-      setADLData(null);
+      setUIData(null);
       return;
     }
 
-    const loadADLFile = async () => {
+    const loadUIFile = async () => {
       setLoading(true);
       setError(null);
       const fileNameNoADL: string = fileName.split(".")[0];
@@ -71,7 +71,7 @@ export function useUIData({
             break;
         }
         console.log(JSON.stringify(parsedData))
-        setADLData(parsedData);
+        setUIData(parsedData);
 
       } catch (err) {
         setError(`Error loading ${fileName}`);
@@ -81,14 +81,14 @@ export function useUIData({
       }
     };
     
-    loadADLFile();
+    loadUIFile();
   }, [fileName, children]);
 
   // Memoize deviceNames to prevent unnecessary websocket reconnections
   const deviceNames = useMemo(() => {
-    if (!ADLData) return [];
-    return createDeviceNameArray(ADLData, args);
-  }, [ADLData, JSON.stringify(args)]);
+    if (!UIData) return [];
+    return createDeviceNameArray(UIData, args);
+  }, [UIData, JSON.stringify(args)]);
 
   const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
   const onSubmitSettings = useCallback(handleSetValueRequest, [
@@ -96,7 +96,7 @@ export function useUIData({
   ]);
 
   return {
-    ADLData,
+    UIData,
     loading,
     error,
     devices,

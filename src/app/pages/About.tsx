@@ -7,7 +7,7 @@ import Plot, { PlotParams } from 'react-plotly.js';
 import ADLView from "@/components/ADLController/CSIView";
 import { cameraDeviceData } from "@/components/Camera/utils/cameraDeviceData";
 import CameraContainer from "@/components/Camera/CameraContainer";
-import ADLController from "@/components/ADLController/CSIController";
+import CSIController from "@/components/ADLController/CSIController";
 
 
 
@@ -25,7 +25,7 @@ export default function About() {
     
     return (
         <>
-            <ADLController fileName="ADBase.adl" P="13SIM1" R="cam1"/>
+            <CSIController fileName="ADBase.adl" P="13SIM1" R="cam1"/>
         </>
 
     )

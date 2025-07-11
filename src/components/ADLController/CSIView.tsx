@@ -1,20 +1,20 @@
 import { cn } from "@/lib/utils";
-import ADLCanvas from "./CSICanvas";
+import UICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
 
-export type ADLViewProps = {
+export type CSIViewProps = {
   className?: string;
   fileName: string;
   [key: string]: any;
 };
 
-export default function ADLView({
+export default function CSIView({
   className,
   fileName,
   ...args
-}: ADLViewProps) {
+}: CSIViewProps) {
   // ADLData is Entry[] (aka from the ADL file), devices are the devices from the WS
-  const { ADLData, loading, error, devices, onSubmitSettings } = useADLData({
+  const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
     fileName,
     args
   });
@@ -35,7 +35,7 @@ export default function ADLView({
     );
   }
 
-  if (!ADLData) {
+  if (!UIData) {
     return (
       <div className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4", className)}>
         <div className="text-white">No data available</div>
@@ -45,8 +45,8 @@ export default function ADLView({
 
   return (
     <div className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4", className)}>
-      <ADLCanvas
-        ADLData={ADLData}
+      <UICanvas
+        UIData={UIData}
         devices={devices}
         onSubmit={onSubmitSettings}
         {...args}

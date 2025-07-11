@@ -11,9 +11,9 @@ import { replaceArgs } from "./utils/ArgsFill";
 import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
 import { CompositeDeviceRenderer } from "./Comp";
 
-export type ADLCanvasProps = {
+export type CSICanvasProps = {
   devices: Devices;
-  ADLData: Entry[];
+  UIData: Entry[];
   onSubmit?: (pv: string, value: string | boolean | number) => void;
   style?: React.CSSProperties;
   [key: string]: any;
@@ -84,13 +84,13 @@ function renderCompComponent(
   );
 }
 
-function ADLCanvas({
-  ADLData,
+function CSICanvas({
+  UIData,
   devices,
   onSubmit = () => { },
   style,
   ...args
-}: ADLCanvasProps) {
+}: CSICanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -99,14 +99,14 @@ function ADLCanvas({
 
   // get display dimensions
   useEffect(() => {
-    const displayDevice = ADLData.find(
+    const displayDevice = UIData.find(
       (device) => device.var_type === "display"
     );
     if (displayDevice?.size) {
       setDimensions(displayDevice.size);
     }
     console.log(dimensions)
-  }, [ADLData]);
+  }, [UIData]);
 
   // Calculate height from rendered children when no explicit height is set
   useEffect(() => {
@@ -145,10 +145,10 @@ function ADLCanvas({
     // Start with a small delay to allow initial render
     setTimeout(measureHeight, 50);
   }
-}, [ADLData, dimensions.height]);
+}, [UIData, dimensions.height]);
 
   const renderDevices = () => {
-    return ADLData.map((device: Entry, index: number) => {
+    return UIData.map((device: Entry, index: number) => {
       switch (device.var_type) {
         case "text":
           return renderStyleComponent(device, index, devices, args);
@@ -178,4 +178,4 @@ function ADLCanvas({
   );
 }
 
-export default ADLCanvas;
+export default CSICanvas;
