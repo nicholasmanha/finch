@@ -48,10 +48,11 @@ export function useADLData({
       setError(null);
       const fileNameNoADL: string = fileName.split(".")[0];
       const fileType: string = fileName.split(".")[1];
-
+      const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoADL}.bob` : fileName;
+      const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
       try {
-
-        const adlContent = await fetchADLFile(fileName, "nicholasmanha", `AD_${fileType.toUpperCase()}_files`);
+        
+        const adlContent = await fetchADLFile(fileNameClean, "nicholasmanha", `AD_${fileTypeClean.toUpperCase()}_files`);
 
         if (!adlContent) {
           setError(`${fileName} not found`);

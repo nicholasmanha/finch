@@ -10,6 +10,11 @@ const adlCache = new Map<string, string>();
 const STORAGE_PREFIX = "adl_file_";
 
 export const fetchADLFile = async (fileName: string, owner: string, repo: string): Promise<string | null> => {
+    const fileNameNoType: string = fileName.split(".")[0];
+    const fileType: string = fileName.split(".")[1];
+    if(fileType==='opi'){
+        fileName=fileNameNoType + '.' + fileType
+    }
     // Check in-memory cache first
     if (adlCache.has(fileName)) {
         return adlCache.get(fileName)!;
