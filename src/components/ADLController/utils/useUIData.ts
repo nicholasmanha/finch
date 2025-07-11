@@ -3,17 +3,17 @@ import useOphydSocket from "@/hooks/useOphydSocket";
 import { ADLParser } from "./ADLParse";
 import { parseCustomFormat } from "./ADLtoJSON";
 import { createDeviceNameArray } from "./CreateDeviceNameArray";
-import { fetchFile } from "./GithubFetch";
+import { fetchFile } from "./fetchFile";
 import { Entry } from "../types/UIEntry";
 import { parseXMLToEntries } from "./BobParser";
 
-export interface UseADLDataOptions {
+export interface UseUIDataOptions {
   fileName?: string;
   children?: Entry[];
   args: { [key: string]: any };
 }
 
-export interface UseADLDataReturn {
+export interface UseUIDataReturn {
   ADLData: Entry[] | null;
   loading: boolean;
   error: string | null;
@@ -21,11 +21,11 @@ export interface UseADLDataReturn {
   onSubmitSettings: (deviceName: string, value: any) => void;
 }
 
-export function useADLData({
+export function useUIData({
   fileName,
   children,
   args,
-}: UseADLDataOptions): UseADLDataReturn {
+}: UseUIDataOptions): UseUIDataReturn {
   const [ADLData, setADLData] = useState<Entry[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
