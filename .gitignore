@@ -29,6 +29,4 @@ dist-ssr
 
 storybook-static
 
-
-src/app/pages/About.tsx
 src/app/pages/About.tsx

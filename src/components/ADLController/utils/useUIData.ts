@@ -46,13 +46,11 @@ export function useUIData({
     const loadUIFile = async () => {
       setLoading(true);
       setError(null);
-      const fileNameNoADL: string = fileName.split(".")[0];
       const fileType: string = fileName.split(".")[1];
-      const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoADL}.bob` : fileName;
-      const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
+      
       try {
         
-        const adlContent = await fetchFile(fileNameClean, "nicholasmanha", `AD_${fileTypeClean.toUpperCase()}_files`);
+        const adlContent = await fetchFile(fileName, "nicholasmanha", `AD_${fileType.toUpperCase()}_files`);
 
         if (!adlContent) {
           setError(`${fileName} not found`);

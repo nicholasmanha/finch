@@ -25,7 +25,7 @@ export default function About() {
     
     return (
         <>
-            <CSIController fileName="ADBase.adl" P="13SIM1" R="cam1"/>
+            <CSIController fileName="ADBase.bob" P="13SIM1" R="cam1"/>
         </>
 
     )

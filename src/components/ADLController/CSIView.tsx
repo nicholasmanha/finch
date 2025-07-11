@@ -13,7 +13,7 @@ export default function CSIView({
   fileName,
   ...args
 }: CSIViewProps) {
-  // ADLData is Entry[] (aka from the ADL file), devices are the devices from the WS
+  // UIData is Entry[] (aka from the ADL file), devices are the devices from the WS
   const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
     fileName,
     args

@@ -10,50 +10,45 @@ const adlCache = new Map<string, string>();
 const STORAGE_PREFIX = "adl_file_";
 
 export const fetchFile = async (fileName: string, owner: string, repo: string): Promise<string | null> => {
-    const fileNameNoType: string = fileName.split(".")[0];
-    const fileType: string = fileName.split(".")[1];
-
-    const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoType}.bob` : fileName;
-    const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
 
     // Check in-memory cache first
-    if (adlCache.has(fileNameClean)) {
-        return adlCache.get(fileNameClean)!;
+    if (adlCache.has(fileName)) {
+        return adlCache.get(fileName)!;
     }
 
     // Check localStorage
-    const storageKey = `${STORAGE_PREFIX}${fileNameClean}`;
+    const storageKey = `${STORAGE_PREFIX}${fileName}`;
     const cachedContent = localStorage.getItem(storageKey);
 
     if (cachedContent) {
         // Store in memory cache for faster access during this session
-        adlCache.set(fileNameClean, cachedContent);
+        adlCache.set(fileName, cachedContent);
         return cachedContent;
     }
 
     try {
-        const url = `https://raw.githubusercontent.com/${owner}/${repo}/${GITHUB_BRANCH}/${fileNameClean}`;
+        const url = `https://raw.githubusercontent.com/${owner}/${repo}/${GITHUB_BRANCH}/${fileName}`;
         const response = await fetch(url);
 
         if (!response.ok) {
-            console.error(`Failed to fetch ${fileNameClean}: ${response.status}`);
+            console.error(`Failed to fetch ${fileName}: ${response.status}`);
             return null;
         }
 
         const content = await response.text();
 
         // Store in both caches
-        adlCache.set(fileNameClean, content);
+        adlCache.set(fileName, content);
         try {
             localStorage.setItem(storageKey, content);
         } catch (storageError) {
-            console.warn(`Failed to save ${fileNameClean} to localStorage:`, storageError);
+            console.warn(`Failed to save ${fileName} to localStorage:`, storageError);
             // Continue execution even if localStorage fails
         }
 
         return content;
     } catch (error) {
-        console.error(`Error fetching ADL file ${fileNameClean}:`, error);
+        console.error(`Error fetching ADL file ${fileName}:`, error);
         return null;
     }
 };

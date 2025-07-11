@@ -94,12 +94,15 @@ export default function CSIController({
   const addTabWithContent = (
     label: string,
     content: React.ReactNode,
-    fileName?: string,
-    args?: Record<string, any>
+    fileName: string,
+    args: Record<string, any>
   ) => {
+    const fileNameNoType: string = fileName.split(".")[0];
+    const fileType: string = fileName.split(".")[1];
+    const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoType}.bob` : fileName;
     // Check if a tab with the same fileName and args already exists
     const existingTab = tabs.find((tab) => {
-      if (tab.fileName !== fileName) return false;
+      if (tab.fileName !== fileNameClean) return false;
 
       // comparison of args objects
       if (!tab.args && !args) return true;
@@ -118,14 +121,14 @@ export default function CSIController({
       setActiveTab(existingTab.id);
       return;
     }
-
+    
     // Tab doesn't exist, create a new one
     const newId = `tab${Date.now()}`;
     const newTab: TabData = {
       id: newId,
       label,
       content,
-      fileName,
+      fileName: fileNameClean,
       args,
       isMainTab: false,
     };
@@ -140,7 +143,7 @@ export default function CSIController({
     activeTab,
     setActiveTab,
   };
-
+  console.log(fileName)
   return (
     <TabManagementProvider value={tabManagementValue}>
       <TabsGroup value={activeTab} onValueChange={setActiveTab}>
