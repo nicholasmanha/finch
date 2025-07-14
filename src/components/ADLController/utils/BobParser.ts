@@ -42,8 +42,8 @@ function parseWidget(widget: Element, type: string): Entry | null {
     const name = getElementText(widget, 'name') || '';
     const x = parseInt(getElementText(widget, 'x') || '0');
     const y = parseInt(getElementText(widget, 'y') || '0');
-    const width = parseInt(getElementText(widget, 'width') || '-1');
-    const height = parseInt(getElementText(widget, 'height') || '-1');
+    const width = parseInt(getElementText(widget, 'width') || '100');
+    const height = parseInt(getElementText(widget, 'height') || '20');
 
     const baseEntry = {
         location: { x, y },
