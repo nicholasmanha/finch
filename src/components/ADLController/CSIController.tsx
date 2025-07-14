@@ -7,12 +7,13 @@ import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
 import { useTabLS } from "./hooks/useTabsLocalStorage";
 import CSIView from "./CSIView";
+import PresentationLayer from "./PresentationLayer"; 
 
 export type CSIControllerProps = {
   className?: string;
-  fileName: string;
-  P: string;
-  R: string;
+  fileName?: string;
+  P?: string;
+  R?: string;
 };
 
 export default function CSIController({
@@ -21,6 +22,11 @@ export default function CSIController({
   P,
   R,
 }: CSIControllerProps) {
+  // If any required props are missing, render the dialog option component
+  if (!fileName || !P || !R) {
+    return <PresentationLayer />;
+  }
+
   // grab localstorage tab functions from webhook
   const {
     loadTabsFromStorage,
