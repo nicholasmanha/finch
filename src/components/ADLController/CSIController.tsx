@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PresentationLayer from "./PresentationLayer";
 import CSIControllerContent from "./CSIControllerContent";
 
@@ -7,6 +7,32 @@ export type CSIControllerProps = {
   fileName?: string;
   P?: string;
   R?: string;
+};
+
+// Helper function to extract config from adl-tabs localStorage
+const getConfigFromLocalStorage = () => {
+  try {
+    const adlTabsData = localStorage.getItem('adl-tabs');
+    if (adlTabsData) {
+      const tabs = JSON.parse(adlTabsData);
+      if (Array.isArray(tabs) && tabs.length > 0) {
+        // Find the main tab or use the first tab
+        const mainTab = tabs.find(tab => tab.isMainTab) || tabs[0];
+        
+        if (mainTab && mainTab.fileName && mainTab.args && mainTab.args.P && mainTab.args.R) {
+          return {
+            fileName: mainTab.fileName,
+            P: mainTab.args.P,
+            R: mainTab.args.R
+          };
+        }
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error('Error parsing adl-tabs from localStorage:', error);
+    return null;
+  }
 };
 
 export default function CSIController({
@@ -21,10 +47,30 @@ export default function CSIController({
     R: string;
   } | null>(null);
 
+  const [hasCheckedLocalStorage, setHasCheckedLocalStorage] = useState(false);
+
+  // Check localStorage for existing adl-tabs configuration
+  useEffect(() => {
+    if (!hasCheckedLocalStorage) {
+      const existingConfig = getConfigFromLocalStorage();
+      if (existingConfig) {
+        setConfiguredProps(existingConfig);
+      }
+      setHasCheckedLocalStorage(true);
+    }
+  }, [hasCheckedLocalStorage]);
+
+  // Use configured props if available, otherwise use the passed props
   const finalFileName = configuredProps?.fileName || fileName;
   const finalP = configuredProps?.P || P;
   const finalR = configuredProps?.R || R;
 
+  // Show loading state while checking localStorage
+  if (!hasCheckedLocalStorage) {
+    return <div>Loading...</div>;
+  }
+
+  // If any required props are missing, render the dialog
   if (!finalFileName || !finalP || !finalR) {
     return (
       <PresentationLayer
@@ -35,6 +81,7 @@ export default function CSIController({
     );
   }
 
+  // Once we have all props, render the actual controller
   return (
     <CSIControllerContent
       className={className}
