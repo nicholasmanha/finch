@@ -29,7 +29,7 @@ export function parseXMLToEntries(xmlString: string): Entry[] {
         const type = widget.getAttribute('type');
         if (!type) return;
 
-        const entry = parseWidget(widget, type);
+        const entry = parseWidget(widget, type, 0, 0); // Pass 0,0 as parent offset for top-level widgets
         if (entry) {
             entries.push(entry);
         }
@@ -38,15 +38,19 @@ export function parseXMLToEntries(xmlString: string): Entry[] {
     return entries;
 }
 
-function parseWidget(widget: Element, type: string): Entry | null {
+function parseWidget(widget: Element, type: string, parentX: number = 0, parentY: number = 0): Entry | null {
     const name = getElementText(widget, 'name') || '';
     const x = parseInt(getElementText(widget, 'x') || '0');
     const y = parseInt(getElementText(widget, 'y') || '0');
     const width = parseInt(getElementText(widget, 'width') || '100');
     const height = parseInt(getElementText(widget, 'height') || '20');
 
+    // For child widgets, add parent coordinates to get absolute position
+    const absoluteX = x + parentX;
+    const absoluteY = y + parentY;
+
     const baseEntry = {
-        location: { x, y },
+        location: { x: absoluteX, y: absoluteY },
         size: { width, height }
     };
 
@@ -72,19 +76,20 @@ function parseWidget(widget: Element, type: string): Entry | null {
                     const childX = getElementText(childWidget as Element, 'x');
                     const childY = getElementText(childWidget as Element, 'y');
 
-                    // If child doesn't have x/y, inherit from parent
+                    // If child doesn't have x/y, set them to 0 (not parent coordinates)
                     if (!childX) {
                         const xElement = (childWidget as Element).ownerDocument.createElement('x');
-                        xElement.textContent = x.toString();
+                        xElement.textContent = '0'; // Changed from x.toString() to '0'
                         (childWidget as Element).appendChild(xElement);
                     }
                     if (!childY) {
                         const yElement = (childWidget as Element).ownerDocument.createElement('y');
-                        yElement.textContent = y.toString();
+                        yElement.textContent = '0'; // Changed from y.toString() to '0'
                         (childWidget as Element).appendChild(yElement);
                     }
 
-                    const childEntry = parseWidget(childWidget as Element, childType);
+                    // Pass the current widget's absolute position as parent offset for children
+                    const childEntry = parseWidget(childWidget as Element, childType, absoluteX, absoluteY);
                     if (childEntry) {
                         children.push(childEntry);
                     }
@@ -149,7 +154,6 @@ function parseWidget(widget: Element, type: string): Entry | null {
             }
 
             return labelEntry;
-
 
         case 'textupdate':
             const pvName = getElementText(widget, 'pv_name') || '';
