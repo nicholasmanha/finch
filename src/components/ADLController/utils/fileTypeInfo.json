@@ -1,0 +1,18 @@
+{
+    "adl": [
+        {
+            "name": "ADBase",
+            "url": "https://github.com/nicholasmanha/AD_ADL_files"
+        },
+        {
+            "name": "simDetector", 
+            "url": "https://github.com/nicholasmanha/AD_ADL_files"
+        }
+    ],
+    "bob": [
+        {
+            "name": "ADBase",
+            "url": "https://github.com/nicholasmanha/AD_BOB_files"
+        }
+    ]
+}
