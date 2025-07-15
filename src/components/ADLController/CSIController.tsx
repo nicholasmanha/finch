@@ -42,12 +42,12 @@ export default function CSIController({
   P,
   R,
 }: CSIControllerProps) {
-  const instanceId = useId(); // uid used for localstorage
+  const instanceId = useId();
   const [configuredProps, setConfiguredProps] = useState<{
     fileName: string;
     P: string;
     R: string;
-  } | null>(null); // for dynamically setting args via presentation layer or localstorage
+  } | null>(null);
 
   const [hasCheckedLocalStorage, setHasCheckedLocalStorage] = useState(false);
 
@@ -55,12 +55,35 @@ export default function CSIController({
   useEffect(() => {
     if (!hasCheckedLocalStorage) {
       const existingConfig = getConfigFromLocalStorage(instanceId);
-      if (existingConfig) {
+      
+      // If props are provided and they differ from localStorage, clear localStorage
+      if (fileName && P && R && existingConfig) {
+        if (existingConfig.fileName !== fileName || 
+            existingConfig.P !== P || 
+            existingConfig.R !== R) {
+          // Clear localStorage when props differ
+          try {
+            const storageKey = `csi-tabs-${instanceId}`;
+            const activeTabKey = `csi-active-tab-${instanceId}`;
+            localStorage.removeItem(storageKey);
+            localStorage.removeItem(activeTabKey);
+          } catch (error) {
+            console.error('Error clearing localStorage:', error);
+          }
+          // Don't set configuredProps, let the component use the passed props
+          setConfiguredProps(null);
+        } else {
+          // Props match localStorage, use localStorage
+          setConfiguredProps(existingConfig);
+        }
+      } else if (existingConfig && !fileName && !P && !R) {
+        // No props provided, use localStorage
         setConfiguredProps(existingConfig);
       }
+      
       setHasCheckedLocalStorage(true);
     }
-  }, [hasCheckedLocalStorage, instanceId]);
+  }, [hasCheckedLocalStorage, instanceId, fileName, P, R]);
 
   // Use configured props if available, otherwise use the passed props
   const finalFileName = configuredProps?.fileName || fileName;
@@ -88,6 +111,7 @@ export default function CSIController({
     <CSIControllerContent
       className={className}
       fileName={finalFileName}
+      oldFileName={fileName} // Pass the original fileName as oldFileName
       P={finalP}
       R={finalR}
       instanceId={instanceId}
