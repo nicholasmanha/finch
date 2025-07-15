@@ -1,6 +1,6 @@
 import { TabData } from "@/components/Tabs/types/tabs";
 
-export function useTabLS(fileName: string, P: string, R: string, instanceId: string) {
+export function useTabLS(fileName: string, P: string, R: string, instanceId: string, oldFileName?: string) {
   const STORAGE_KEY = `csi-tabs-${instanceId}`;
   const ACTIVE_TAB_KEY = `csi-active-tab-${instanceId}`;
 
@@ -8,7 +8,7 @@ export function useTabLS(fileName: string, P: string, R: string, instanceId: str
     id: "tab1",
     label: fileName,
     content: null, // gets populated from component that calls it
-    fileName,
+    fileName: fileName, // Use current fileName instead of oldFileName
     args: { P, R },
     isMainTab: true,
   });
@@ -28,18 +28,29 @@ export function useTabLS(fileName: string, P: string, R: string, instanceId: str
       if (storedTabs) {
         const parsedTabs: TabData[] = JSON.parse(storedTabs);
         
-        // Check if main tab exists and has the correct filename
+        // Check if main tab exists
         const mainTab = parsedTabs.find((tab) => tab.isMainTab);
-        if (mainTab && mainTab.fileName !== fileName) {
-          // Filename changed, clear storage and return default
+        
+        // If oldFileName is provided and different from stored main tab filename, clear storage
+        if (oldFileName && mainTab && mainTab.fileName !== oldFileName) {
           clearTabStorage();
           return [createDefaultTab()];
         }
         
-        // Check if main tab exists
-        const hasMainTab = parsedTabs.some((tab) => tab.fileName === fileName);
+        // If no oldFileName provided but we have a fileName prop, check against that
+        if (!oldFileName && mainTab && mainTab.fileName !== fileName) {
+          clearTabStorage();
+          return [createDefaultTab()];
+        }
+        
+        // Check if main tab exists with current filename
+        const hasMainTab = parsedTabs.some((tab) => tab.isMainTab && tab.fileName === fileName);
         if (!hasMainTab) {
-          return [createDefaultTab(), ...parsedTabs];
+          // Update the main tab's filename if it exists but has wrong filename
+          const updatedTabs = parsedTabs.map(tab => 
+            tab.isMainTab ? { ...tab, fileName, label: fileName } : tab
+          );
+          return updatedTabs.some(tab => tab.isMainTab) ? updatedTabs : [createDefaultTab(), ...parsedTabs];
         }
         
         return parsedTabs;

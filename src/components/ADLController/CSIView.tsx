@@ -18,7 +18,6 @@ export default function CSIView({
     fileName,
     args
   });
-  console.log(fileName)
   if (loading) {
     return (
       <div className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4", className)}>

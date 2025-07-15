@@ -68,7 +68,6 @@ export function useUIData({
             parsedData = []
             break;
         }
-        console.log(JSON.stringify(parsedData))
         setUIData(parsedData);
 
       } catch (err) {
