@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Entry } from "./types/UIEntry";
-import ADLCanvas from "./CSICanvas";
+import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
 
 export function CompositeDeviceRenderer({ device, index, args }: {
@@ -54,7 +54,7 @@ export function CompositeDeviceRenderer({ device, index, args }: {
 
     return (
         <React.Fragment key={index}>
-            <ADLCanvas
+            <CSICanvas
                 UIData={UIData}
                 devices={devices}
                 onSubmit={onSubmitSettings}

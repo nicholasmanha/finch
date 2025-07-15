@@ -9,13 +9,13 @@ export type CSIControllerProps = {
   R?: string;
 };
 
-// Helper function to extract config from adl-tabs localStorage
+// if tab data is in localstorage, load that instead
 const getConfigFromLocalStorage = (instanceId: string) => {
   try {
-    const storageKey = `adl-tabs-${instanceId}`;
-    const adlTabsData = localStorage.getItem(storageKey);
-    if (adlTabsData) {
-      const tabs = JSON.parse(adlTabsData);
+    const storageKey = `csi-tabs-${instanceId}`;
+    const csiTabsData = localStorage.getItem(storageKey);
+    if (csiTabsData) {
+      const tabs = JSON.parse(csiTabsData);
       if (Array.isArray(tabs) && tabs.length > 0) {
         // Find the main tab or use the first tab
         const mainTab = tabs.find(tab => tab.isMainTab) || tabs[0];
@@ -31,7 +31,7 @@ const getConfigFromLocalStorage = (instanceId: string) => {
     }
     return null;
   } catch (error) {
-    console.error('Error parsing adl-tabs from localStorage:', error);
+    console.error('Error parsing csi-tabs from localStorage:', error);
     return null;
   }
 };
@@ -42,16 +42,16 @@ export default function CSIController({
   P,
   R,
 }: CSIControllerProps) {
-  const instanceId = useId();
+  const instanceId = useId(); // uid used for localstorage
   const [configuredProps, setConfiguredProps] = useState<{
     fileName: string;
     P: string;
     R: string;
-  } | null>(null);
+  } | null>(null); // for dynamically setting args via presentation layer or localstorage
 
   const [hasCheckedLocalStorage, setHasCheckedLocalStorage] = useState(false);
 
-  // Check localStorage for existing adl-tabs configuration
+  // Check localStorage for existing csi-tabs configuration
   useEffect(() => {
     if (!hasCheckedLocalStorage) {
       const existingConfig = getConfigFromLocalStorage(instanceId);

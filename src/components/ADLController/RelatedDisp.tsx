@@ -2,7 +2,7 @@ import { Browsers } from "@phosphor-icons/react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useTabManagement } from "../Tabs/context/TabsContext";
 import { Entry } from "./types/UIEntry";
-import ADLView from "./CSIView";
+import CSIView from "./CSIView";
 import { replaceArgs } from "./utils/ArgsFill";
 
 type RelatedDispProps = {
@@ -34,12 +34,12 @@ function RelatedDisp({
   }
   const { addTab } = useTabManagement();
   const handleCreateTab = (index: number) => {
-    const fileNameNoADL: string = fileArray![index].file.split(".")[0];
+    const fileNameRaw: string = fileArray![index].file.split(".")[0];
       const fileType: string = fileArray![index].file.split(".")[1];
-      const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoADL}.bob` : fileArray![index].file;
+      const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameRaw}.bob` : fileArray![index].file;
       const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
     const tabContent = (
-      <ADLView
+      <CSIView
         fileName={fileNameClean}
         {...substituteVariables(fileArray![index].args, args)}
       />

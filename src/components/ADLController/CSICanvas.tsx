@@ -27,7 +27,7 @@ function renderStyleComponent(
     return (
       <React.Fragment key={index}>
         <StyleRender
-          ADLEntry={device}
+          UIEntry={device}
           dynamic={true}
           val={devices[pv]?.value}
           vis={device.dynamic_attribute.vis}
@@ -39,25 +39,25 @@ function renderStyleComponent(
 
   return (
     <React.Fragment key={index}>
-      <StyleRender ADLEntry={device} dynamic={false} {...args} />
+      <StyleRender UIEntry={device} dynamic={false} {...args} />
     </React.Fragment>
   );
 }
 
 function renderDeviceComponent(
-  ADLEntry: Entry,
+  UIEntry: Entry,
   index: number,
   devices: Devices,
   args: { [key: string]: any },
   onSubmit: (pv: string, value: string | boolean | number) => void
 ): React.ReactElement {
-  let pv = replaceArgs(ADLEntry.name, args);
+  let pv = replaceArgs(UIEntry.name, args);
 
   return (
     <React.Fragment key={index}>
       <DeviceRender
         PV={devices[pv]}
-        ADLEntry={ADLEntry}
+        UIEntry={UIEntry}
         onSubmit={onSubmit}
         {...args}
       />

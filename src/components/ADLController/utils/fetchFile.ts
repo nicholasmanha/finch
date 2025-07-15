@@ -1,19 +1,17 @@
 // GitHub repo configuration
-const GITHUB_OWNER = "nicholasmanha";
-const GITHUB_REPO = "AD_ADL_files";
 const GITHUB_BRANCH = "main";
 
-// Cache for ADL files to avoid repeated fetches
-const adlCache = new Map<string, string>();
+// Cache for UI files to avoid repeated fetches
+const UICache = new Map<string, string>();
 
-// localStorage key prefix for ADL files
-const STORAGE_PREFIX = "adl_file_";
+// localStorage key prefix for UI files
+const STORAGE_PREFIX = "UI_file_";
 
 export const fetchFile = async (fileName: string, owner: string, repo: string): Promise<string | null> => {
 
     // Check in-memory cache first
-    if (adlCache.has(fileName)) {
-        return adlCache.get(fileName)!;
+    if (UICache.has(fileName)) {
+        return UICache.get(fileName)!;
     }
 
     // Check localStorage
@@ -22,7 +20,7 @@ export const fetchFile = async (fileName: string, owner: string, repo: string): 
 
     if (cachedContent) {
         // Store in memory cache for faster access during this session
-        adlCache.set(fileName, cachedContent);
+        UICache.set(fileName, cachedContent);
         return cachedContent;
     }
 
@@ -38,7 +36,7 @@ export const fetchFile = async (fileName: string, owner: string, repo: string): 
         const content = await response.text();
 
         // Store in both caches
-        adlCache.set(fileName, content);
+        UICache.set(fileName, content);
         try {
             localStorage.setItem(storageKey, content);
         } catch (storageError) {
@@ -48,12 +46,12 @@ export const fetchFile = async (fileName: string, owner: string, repo: string): 
 
         return content;
     } catch (error) {
-        console.error(`Error fetching ADL file ${fileName}:`, error);
+        console.error(`Error fetching UI file ${fileName}:`, error);
         return null;
     }
 };
 
-export const clearADLCache = () => {
+export const clearUICache = () => {
     const keysToRemove: string[] = [];
 
     for (let i = 0; i < localStorage.length; i++) {
@@ -64,5 +62,5 @@ export const clearADLCache = () => {
     }
 
     keysToRemove.forEach(key => localStorage.removeItem(key));
-    adlCache.clear();
+    UICache.clear();
 };

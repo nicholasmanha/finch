@@ -50,19 +50,19 @@ export function useUIData({
       
       try {
         
-        const adlContent = await fetchFile(fileName, "nicholasmanha", `AD_${fileType.toUpperCase()}_files`);
+        const UIContent = await fetchFile(fileName, "nicholasmanha", `AD_${fileType.toUpperCase()}_files`);
 
-        if (!adlContent) {
+        if (!UIContent) {
           setError(`${fileName} not found`);
           return;
         }
         let parsedData: Entry[]
         switch (fileType.toLowerCase()) {
           case "bob":
-            parsedData = parseXMLToEntries(adlContent)
+            parsedData = parseXMLToEntries(UIContent)
             break;
           case "adl":
-            parsedData = ADLParser(parseCustomFormat(adlContent));
+            parsedData = ADLParser(parseCustomFormat(UIContent));
             break;
           default:
             parsedData = []
