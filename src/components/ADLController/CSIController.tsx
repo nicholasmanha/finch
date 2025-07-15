@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import PresentationLayer from "./PresentationLayer";
 import CSIControllerContent from "./CSIControllerContent";
 
@@ -10,9 +10,10 @@ export type CSIControllerProps = {
 };
 
 // Helper function to extract config from adl-tabs localStorage
-const getConfigFromLocalStorage = () => {
+const getConfigFromLocalStorage = (instanceId: string) => {
   try {
-    const adlTabsData = localStorage.getItem('adl-tabs');
+    const storageKey = `adl-tabs-${instanceId}`;
+    const adlTabsData = localStorage.getItem(storageKey);
     if (adlTabsData) {
       const tabs = JSON.parse(adlTabsData);
       if (Array.isArray(tabs) && tabs.length > 0) {
@@ -41,6 +42,7 @@ export default function CSIController({
   P,
   R,
 }: CSIControllerProps) {
+  const instanceId = useId();
   const [configuredProps, setConfiguredProps] = useState<{
     fileName: string;
     P: string;
@@ -52,13 +54,13 @@ export default function CSIController({
   // Check localStorage for existing adl-tabs configuration
   useEffect(() => {
     if (!hasCheckedLocalStorage) {
-      const existingConfig = getConfigFromLocalStorage();
+      const existingConfig = getConfigFromLocalStorage(instanceId);
       if (existingConfig) {
         setConfiguredProps(existingConfig);
       }
       setHasCheckedLocalStorage(true);
     }
-  }, [hasCheckedLocalStorage]);
+  }, [hasCheckedLocalStorage, instanceId]);
 
   // Use configured props if available, otherwise use the passed props
   const finalFileName = configuredProps?.fileName || fileName;
@@ -88,6 +90,7 @@ export default function CSIController({
       fileName={finalFileName}
       P={finalP}
       R={finalR}
+      instanceId={instanceId}
     />
   );
 }

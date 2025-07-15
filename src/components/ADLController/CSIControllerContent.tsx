@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { TabsGroup } from "@/components/Tabs/TabsGroup";
 import { TabsList } from "@/components/Tabs/TabsList";
 import { Tab } from "@/components/Tabs/Tab";
-import { TabsPanel } from "@/components/Tabs/TabsPanel";
 import { TabData } from "../Tabs/types/tabs";
 import { TabManagementProvider } from "../Tabs/context/TabsContext";
 import { useTabLS } from "./hooks/useTabsLocalStorage";
@@ -13,6 +12,7 @@ export type CSIControllerContentProps = {
   fileName: string;
   P: string;
   R: string;
+  instanceId: string;
 };
 
 export default function CSIControllerContent({
@@ -20,6 +20,7 @@ export default function CSIControllerContent({
   fileName,
   P,
   R,
+  instanceId,
 }: CSIControllerContentProps) {
   // grab localstorage tab functions from webhook
   const {
@@ -27,7 +28,7 @@ export default function CSIControllerContent({
     saveTabsToStorage,
     loadActiveTabFromStorage,
     saveActiveTabToStorage,
-  } = useTabLS(fileName, P, R);
+  } = useTabLS(fileName, P, R, instanceId);
 
   // populates tab content based on the tab filename and args
   const addContentToTabs = (tabsData: TabData[]): TabData[] => {
