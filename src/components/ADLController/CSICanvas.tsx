@@ -1,14 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Devices } from "@/types/deviceControllerTypes";
 import { Entry } from "./types/UIEntry";
 import StyleRender from "./StyleRender";
 import DeviceRender from "./DeviceRender";
-import { ADLParser } from "./utils/ADLParse";
-import useOphydSocket from "@/hooks/useOphydSocket";
-import * as ADLs from "./utils/adl";
-import { parseCustomFormat } from "./utils/ADLtoJSON";
 import { replaceArgs } from "./utils/ArgsFill";
-import { createDeviceNameArray } from "./utils/CreateDeviceNameArray";
 import { CompositeDeviceRenderer } from "./Comp";
 
 export type UICanvasProps = {
