@@ -92,10 +92,6 @@ function CSICanvas({
   ...args
 }: UICanvasProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // load adl files from the local finch repo
-  const local = true
 
   // get display dimensions
   useEffect(() => {
@@ -104,45 +100,10 @@ function CSICanvas({
     );
     if (displayDevice?.size) {
       setDimensions(displayDevice.size);
-    }
-  }, [UIData]);
-
-  // Calculate height from rendered children when no explicit height is set
-  useEffect(() => {
-    if (dimensions.height === -1 && containerRef.current) {
-      const measureHeight = () => {
-        if (containerRef.current) {
-          const children = containerRef.current.children;
-
-          // Check if all children are rendered (have non-zero dimensions)
-          const allChildrenRendered = Array.from(children).every(child => {
-            const rect = (child as HTMLElement).getBoundingClientRect();
-            return rect.width > 0 || rect.height > 0;
-          });
-
-          if (allChildrenRendered && children.length > 0) {
-            let maxBottom = 0;
-
-            for (let i = 0; i < children.length; i++) {
-              const child = children[i] as HTMLElement;
-              const rect = child.getBoundingClientRect();
-              const containerRect = containerRef.current.getBoundingClientRect();
-              const bottom = rect.bottom - containerRect.top;
-              maxBottom = Math.max(maxBottom, bottom);
-            }
-
-            if (maxBottom > 0) {
-              setDimensions(prev => ({ ...prev, height: maxBottom }));
-            }
-          } else {
-            // Retry after a short delay if children aren't ready
-            setTimeout(measureHeight, 10);
-          }
-        }
-      };
-
-      // Start with a small delay to allow initial render
-      setTimeout(measureHeight, 50);
+      // if no display height is given (-1), set to default 600px
+      if (dimensions.height === -1) {
+        setDimensions(prev => ({ ...prev, height: 600 }));
+      }
     }
   }, [UIData, dimensions.height]);
 
@@ -163,11 +124,10 @@ function CSICanvas({
 
   return (
     <div
-      ref={containerRef}
       style={{
         width: `${dimensions.width}px`,
-        height: dimensions.height > 0 ? `${dimensions.height}px` : 'auto',
-        minHeight: dimensions.height === 0 ? '1px' : undefined,
+        height: `${dimensions.height}px`,
+
         ...style,
       }}
       className="relative"
