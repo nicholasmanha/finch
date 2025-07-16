@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Entry } from "./types/UIEntry";
 import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
+import { pxToEm } from "./utils/units";
 
 export function CompositeDeviceRenderer({ device, index, args }: {
     device: Entry; 
@@ -10,8 +11,8 @@ export function CompositeDeviceRenderer({ device, index, args }: {
 }): JSX.Element {
     const [canvasStyle, setCanvasStyle] = useState({
         position: "absolute" as const,
-        left: `${device.location.x}px`,
-        top: `${device.location.y}px`,
+        left: pxToEm(device.location.x),
+        top: pxToEm(device.location.y),
     });
 
     const { UIData, loading, error, devices, onSubmitSettings } = useUIData({

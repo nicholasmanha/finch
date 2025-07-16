@@ -1,5 +1,6 @@
 import { Entry } from './types/UIEntry';
 import { replaceArgs } from './utils/ArgsFill';
+import { pxToEm } from './utils/units';
 
 export type DeviceRenderProps = {
   UIEntry: Entry;
@@ -19,8 +20,8 @@ function StyleRender({ UIEntry, val, vis, dynamic, ...args }: DeviceRenderProps)
     style: {
       fontSize: '0.85rem',
       position: 'absolute' as const,
-      left: `${x}px`,
-      top: `${y}px`,
+      left: pxToEm(x),
+      top: pxToEm(y),
       width: `${width}px`,
       height: `${height}px`
     },

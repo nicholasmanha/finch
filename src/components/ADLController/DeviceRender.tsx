@@ -6,6 +6,7 @@ import InputEnum from './InputEnum';
 import ADLButton from './CSIButton';
 import InputText from './InputText';
 import RelatedDisp from './RelatedDisp';
+import { pxToEm } from './utils/units';
 
 export type DeviceRenderProps = {
     PV: Device;
@@ -23,8 +24,8 @@ function DeviceRender({ PV, UIEntry, onSubmit, ...args }: DeviceRenderProps) {
 
     const renderInput = () => {
         const positionStyle: CSSProperties = {
-            left: `${UIEntry.location.x}px`,
-            top: `${UIEntry.location.y}px`,
+            left: pxToEm(UIEntry.location.x),
+            top: pxToEm(UIEntry.location.y),
             width: `${UIEntry.size.width}px`,
             height: `${UIEntry.size.height}px`,
             fontSize: '0.85rem',
