@@ -18,12 +18,12 @@ function StyleRender({ UIEntry, val, vis, dynamic, ...args }: DeviceRenderProps)
 
   const commonProps = {
     style: {
-      fontSize: '0.85rem',
+      fontSize: '1em',
       position: 'absolute' as const,
       left: pxToEm(x),
       top: pxToEm(y),
-      width: `${width}px`,
-      height: `${height}px`
+      width: pxToEm(width),
+      height: pxToEm(height)
     },
     children: name // automatically gets put inside div
   };

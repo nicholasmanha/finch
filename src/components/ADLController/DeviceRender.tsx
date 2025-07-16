@@ -26,9 +26,9 @@ function DeviceRender({ PV, UIEntry, onSubmit, ...args }: DeviceRenderProps) {
         const positionStyle: CSSProperties = {
             left: pxToEm(UIEntry.location.x),
             top: pxToEm(UIEntry.location.y),
-            width: `${UIEntry.size.width}px`,
-            height: `${UIEntry.size.height}px`,
-            fontSize: '0.85rem',
+            width: pxToEm(UIEntry.size.width),
+            height: pxToEm(UIEntry.size.height),
+            fontSize: '1em',
             position: 'absolute'
         };
         switch (UIEntry.var_type) {

@@ -5,6 +5,7 @@ import StyleRender from "./StyleRender";
 import DeviceRender from "./DeviceRender";
 import { replaceArgs } from "./utils/ArgsFill";
 import { CompositeDeviceRenderer } from "./Comp";
+import { pxToEm } from "./utils/units";
 
 export type UICanvasProps = {
   devices: Devices;
@@ -120,8 +121,8 @@ function CSICanvas({
   return (
     <div
       style={{
-        width: `${dimensions.width}px`,
-        height: `${dimensions.height}px`,
+        width: pxToEm(dimensions.width),
+        height: pxToEm(dimensions.height),
 
         ...style,
       }}
