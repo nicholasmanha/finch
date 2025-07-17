@@ -39,11 +39,11 @@ export default function CSIButton({
                 ${isPressed ? 'transform scale-95' : ''}
                 rounded border border-slate-300 transition-colors duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300
-                flex flex-col justify-center
+                flex flex-col justify-center 
             `}
             style={style}
         >
-            <small className="text-xs">{label}</small>
+            <span className="text-[0.85em]">{label}</span>
         </button>
     );
 }

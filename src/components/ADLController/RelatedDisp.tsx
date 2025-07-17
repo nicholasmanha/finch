@@ -35,9 +35,9 @@ function RelatedDisp({
   const { addTab } = useTabManagement();
   const handleCreateTab = (index: number) => {
     const fileNameRaw: string = fileArray![index].file.split(".")[0];
-      const fileType: string = fileArray![index].file.split(".")[1];
-      const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameRaw}.bob` : fileArray![index].file;
-      const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
+    const fileType: string = fileArray![index].file.split(".")[1];
+    const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameRaw}.bob` : fileArray![index].file;
+    const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
     const tabContent = (
       <CSIView
         fileName={fileNameClean}
@@ -120,11 +120,19 @@ function RelatedDisp({
           style={style}
         >
           {label ? (
-            <small className="text-xs">{label}</small>
+            <span>
+              <div className="flex items-center justify-center">
+                {label}
+
+              </div>
+            </span>
           ) : (
-            <small className="text-xs flex justify-center">
-              <Browsers size={16} />
-            </small>
+            <span>
+              <div className="flex items-center justify-center">
+                <Browsers size="1.45em" />
+
+              </div>
+            </span>
           )}
         </button>
       ) : (
@@ -138,21 +146,25 @@ function RelatedDisp({
           <div className={`flex flex-col w-full`} onClick={handleInputClick}>
             <div
               className="bg-blue-500 text-white hover:bg-blue-600
-                rounded border border-slate-300 transition-all duration-100
+                rounded border border-slate-300 transition-colors duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300
                 flex flex-col justify-center"
             >
               {label ? (
-                <small className="text-xs">
+                <span>
                   <div className="flex items-center">
-                    <Browsers size={16} />
-                    {label}
+                    <Browsers size="1.45em" />
+                    <div className="text-[0.85em]">{label}</div>
+
                   </div>
-                </small>
+                </span>
               ) : (
-                <small className="text-xs flex justify-center">
-                  <Browsers size={16} />
-                </small>
+                <span>
+                  <div className="flex items-center justify-center">
+                    <Browsers size="1.45em" />
+
+                  </div>
+                </span>
               )}
             </div>
             <span className="relative w-full">
