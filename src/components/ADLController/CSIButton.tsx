@@ -37,7 +37,7 @@ export default function CSIButton({
             className={`
                 ${isDisabled ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}
                 ${isPressed ? 'transform scale-95' : ''}
-                 rounded border border-slate-300 transition-all duration-100
+                rounded border border-slate-300 transition-colors duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300
                 flex flex-col justify-center
             `}

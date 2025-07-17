@@ -113,7 +113,7 @@ function RelatedDisp({
           onClick={() => handleCreateTab(0)}
           className={`
                 bg-blue-500 text-white hover:bg-blue-600
-                rounded border border-slate-300 transition-all duration-100
+                rounded border border-slate-300 transition-colors duration-100
                 focus:outline-none focus:ring-2 focus:ring-blue-300
                 flex flex-col justify-center
             `}
