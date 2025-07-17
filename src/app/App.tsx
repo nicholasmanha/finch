@@ -13,7 +13,7 @@ import { deviceIcons } from "@/assets/icons";
 
 import { RouteItem } from '@/types/navigationRouterTypes';
 
-import { House, Joystick, StackPlus, ImageSquare, CameraPlus  } from "@phosphor-icons/react";
+import { House, Joystick, StackPlus, ImageSquare, Camera  } from "@phosphor-icons/react";
 
 function App() {
   const routes:RouteItem[] = [
@@ -27,7 +27,7 @@ function App() {
     label: "Data", 
     icon: <ImageSquare size={32} />
     },
-    {element: <CameraPage/>, path: '/camera', label: "Camera", icon: <CameraPlus size={32} />}
+    {element: <CameraPage/>, path: '/camera', label: "Camera", icon: <Camera size={32} />}
   ]
   return (
     <HubAppLayout routes={routes}/>

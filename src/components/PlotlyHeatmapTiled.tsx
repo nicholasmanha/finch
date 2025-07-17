@@ -113,7 +113,7 @@ export default function PlotlyHeatmapTiled({ url, className, size='medium' }: Pr
   }, [sliderIndex]);
 
   return (
-    <section className={cn(`flex flex-col items-center gap-4 max-h-full max-w-full border-slate-400 border bg-slate-500 ${sizeClassMap[size]}`, className)}>
+    <section className={cn(`flex flex-col items-center gap-4 max-h-full max-w-full p-2 rounded-md ${error ? "border-slate-400 border bg-slate-500" : "bg-white"}  ${sizeClassMap[size]}`, className)}>
       {error && 
         <div className="flex flex-col">
           <h2 className="text-5xl font-medium text-center mt-24">Select image from Tiled to display as a heatmap</h2>
