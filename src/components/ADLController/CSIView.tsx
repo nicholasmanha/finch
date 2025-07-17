@@ -36,6 +36,12 @@ export default function CSIView({
     console.log(scale)
   };
 
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setScale(0.85);
+  };
+
   const handleMouseMove = (e: MouseEvent) => {
     if (!isResizing) return;
     
@@ -108,6 +114,7 @@ export default function CSIView({
       <div
         className="absolute bottom-0 right-0 w-4 h-4 bg-gray-400 cursor-nw-resize opacity-50 hover:opacity-100"
         onMouseDown={handleMouseDown}
+        onDoubleClick={handleDoubleClick}
         style={{
           clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
           userSelect: 'none'
