@@ -109,7 +109,8 @@ export default function CSIView({
         className="absolute bottom-0 right-0 w-4 h-4 bg-gray-400 cursor-nw-resize opacity-50 hover:opacity-100"
         onMouseDown={handleMouseDown}
         style={{
-          clipPath: 'polygon(100% 0, 0 100%, 100% 100%)'
+          clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
+          userSelect: 'none'
         }}
       />
     </div>
