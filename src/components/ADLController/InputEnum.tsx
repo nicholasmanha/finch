@@ -59,7 +59,7 @@ export default function InputEnum({
             <div className={` flex flex-col w-full`} onClick={handleInputClick}>
                 <div className="flex w-full justify-between">
                     <div className="flex-grow">
-                        <p className='text-xs'>{getCurrentEnum()}</p>
+                        <p className='text-[0.85em]'>{getCurrentEnum()}</p>
                     </div>
                     <div className="flex-shrink-0">{dropdownVisible ? tailwindIcons.chevronUp : tailwindIcons.chevronDown}</div>
                 </div>
@@ -73,7 +73,7 @@ export default function InputEnum({
                                         onClick={() => handleEnumClick(index)}
                                         className={`p-2 cursor-pointer hover:bg-gray-200 ${val === index ? 'bg-gray-100 font-medium' : ''}`}
                                     >
-                                        {item}
+                                        <p className='text-[0.85em]'>{item}</p>
                                     </li>
                                 )) : null}
                         </ul>
