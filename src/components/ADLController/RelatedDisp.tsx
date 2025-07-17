@@ -4,6 +4,7 @@ import { useTabManagement } from "../Tabs/context/TabsContext";
 import { Entry } from "./types/UIEntry";
 import CSIView from "./CSIView";
 import { replaceArgs } from "./utils/ArgsFill";
+import { pxToEm } from "./utils/units";
 
 type RelatedDispProps = {
   label?: string;
@@ -84,7 +85,7 @@ function RelatedDisp({
       tempDiv.style.visibility = "hidden";
       tempDiv.style.whiteSpace = "nowrap";
       tempDiv.style.padding = "8px";
-      tempDiv.style.fontSize = "14px";
+      tempDiv.style.fontSize = "0.85em";
 
       document.body.appendChild(tempDiv);
 
@@ -172,7 +173,7 @@ function RelatedDisp({
                 <ul
                   className="z-10 absolute top-0 bg-white border border-gray-300 rounded mt-1 max-h-40 overflow-auto"
                   style={{
-                    width: dropdownWidth ? `${dropdownWidth}px` : "auto",
+                    width: dropdownWidth ? pxToEm(dropdownWidth) : "auto",
                     minWidth: "100%",
                   }}
                 >
@@ -182,7 +183,8 @@ function RelatedDisp({
                       onClick={() => handleCreateTab(index)}
                       className={`p-2 cursor-pointer hover:bg-gray-200 whitespace-nowrap`}
                     >
-                      {item.label}
+                      <p className='text-[0.85em]'>{item.label}</p>
+                      
                     </li>
                   ))}
                 </ul>
