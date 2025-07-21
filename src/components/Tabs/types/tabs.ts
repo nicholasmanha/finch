@@ -37,4 +37,5 @@ export interface TabData {
   fileName?: string;
   args?: Record<string, any>;
   isMainTab?: boolean;
+  scale: number;
 }

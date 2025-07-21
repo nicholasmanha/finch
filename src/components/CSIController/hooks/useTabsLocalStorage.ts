@@ -11,6 +11,7 @@ export function useTabLS(fileName: string, P: string, R: string, instanceId: str
     fileName: fileName, // Use current fileName instead of oldFileName
     args: { P, R },
     isMainTab: true,
+    scale: 0.85, // Add default scale
   });
 
   const clearTabStorage = () => {
@@ -53,7 +54,11 @@ export function useTabLS(fileName: string, P: string, R: string, instanceId: str
           return updatedTabs.some(tab => tab.isMainTab) ? updatedTabs : [createDefaultTab(), ...parsedTabs];
         }
         
-        return parsedTabs;
+        // Ensure all tabs have a scale property (for backward compatibility)
+        return parsedTabs.map(tab => ({
+          ...tab,
+          scale: tab.scale || 0.85 // Add default scale if missing
+        }));
       }
     } catch (error) {
       console.error("Error loading tabs from localStorage:", error);
@@ -70,6 +75,7 @@ export function useTabLS(fileName: string, P: string, R: string, instanceId: str
         fileName: tab.fileName,
         args: tab.args,
         isMainTab: tab.isMainTab,
+        scale: tab.scale || 0.85, // Include scale in saved data
       }));
       localStorage.setItem(STORAGE_KEY, JSON.stringify(storedTabs));
     } catch (error) {
