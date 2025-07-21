@@ -1,24 +1,51 @@
+import { useState, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
 import ScalableContainer from "./ScalableContainer";
+import { useTabManagement } from "../Tabs/context/TabsContext";
 
 export type CSIViewProps = {
   className?: string;
   fileName: string;
+  scale?: number; // Add scale prop
+  onScaleChange?: (scale: number) => void; // Add callback for scale changes
   [key: string]: any;
 };
 
 export default function CSIView({
   className,
   fileName,
+  scale = 0.85, // Default scale
+  onScaleChange,
   ...args
 }: CSIViewProps) {
-  // UIData is Entry[] (aka from the ADL/bob file), devices are the devices from the WS
+  const [currentScale, setCurrentScale] = useState(scale);
+  const { addTab } = useTabManagement();
+
+  // Update local scale when prop changes
+  useEffect(() => {
+    setCurrentScale(scale);
+  }, [scale]);
+
   const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
     fileName,
     args
   });
+
+  const handleScaleChange = useCallback((newScale: number) => {
+    setCurrentScale(newScale);
+    onScaleChange?.(newScale); // Notify parent of scale change
+  }, [onScaleChange]);
+
+  const addTabWithScale = useCallback((
+    label: string,
+    content: React.ReactNode,
+    fileName: string,
+    args: Record<string, any>
+  ) => {
+    addTab(label, content, fileName, args, currentScale);
+  }, [addTab, currentScale]);
 
   if (loading) {
     return (
@@ -47,16 +74,18 @@ export default function CSIView({
   return (
     <ScalableContainer 
       className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4", className)}
-      initialScale={0.85}
+      initialScale={currentScale}
       minScale={0.3}
       maxScale={3.0}
       onScaleReset={0.85}
       sensitivity={200}
+      onScaleChange={handleScaleChange}
     >
       <CSICanvas
         UIData={UIData}
         devices={devices}
         onSubmit={onSubmitSettings}
+        addTab={addTabWithScale}
         {...args}
       />
     </ScalableContainer>

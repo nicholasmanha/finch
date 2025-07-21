@@ -10,6 +10,7 @@ interface ScalableContainerProps {
   maxScale?: number;
   onScaleReset?: number;
   sensitivity?: number;
+  onScaleChange?: (scale: number) => void;
 }
 
 export default function ScalableContainer({
@@ -19,10 +20,12 @@ export default function ScalableContainer({
   minScale = 0.3,
   maxScale = 3.0,
   onScaleReset = 0.85,
-  sensitivity = 200
+  sensitivity = 200,
+  onScaleChange
 }: ScalableContainerProps) {
   const [scale, setScale] = useState(initialScale);
   const [isResizing, setIsResizing] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false); // Add this flag
   const containerRef = useRef<HTMLDivElement>(null);
   const startDataRef = useRef<{
     startX: number;
@@ -30,10 +33,30 @@ export default function ScalableContainer({
     startScale: number;
   } | null>(null);
 
+  // Only update scale from initialScale on first mount or when not actively scaling
+  React.useEffect(() => {
+    if (!hasInitialized) {
+      setScale(initialScale);
+      setHasInitialized(true);
+    } else if (!isResizing) {
+      // Only update if we're not currently resizing
+      setScale(initialScale);
+    }
+  }, [initialScale, hasInitialized, isResizing]);
+
+  // Call onScaleChange whenever scale changes, but debounce it slightly
+  React.useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onScaleChange?.(scale);
+    }, 50); // Small delay to prevent rapid updates
+
+    return () => clearTimeout(timeoutId);
+  }, [scale, onScaleChange]);
+
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     setIsResizing(true);
-    
+
     startDataRef.current = {
       startX: e.clientX,
       startY: e.clientY,
@@ -47,12 +70,11 @@ export default function ScalableContainer({
     const { startX, startY, startScale } = startDataRef.current;
     const deltaX = e.clientX - startX;
     const deltaY = e.clientY - startY;
-    
-    // Use the larger of the two deltas for scaling
+
     const delta = Math.max(deltaX, deltaY);
     const scaleFactor = 1 + (delta / sensitivity);
     const newScale = Math.max(minScale, Math.min(maxScale, startScale * scaleFactor));
-    
+
     setScale(newScale);
   }, [isResizing, minScale, maxScale, sensitivity]);
 
@@ -67,12 +89,11 @@ export default function ScalableContainer({
     setScale(onScaleReset);
   };
 
-  // Add global mouse event listeners
   React.useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
@@ -81,19 +102,18 @@ export default function ScalableContainer({
   }, [isResizing, handleMouseMove, handleMouseUp]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={cn("relative", className, {
         'select-none': isResizing
       })}
-      style={{ 
+      style={{
         '--component-scale': scale,
         fontSize: `${scale}em`
       } as React.CSSProperties}
     >
       {children}
-      
-      {/* Resize handle */}
+
       <div
         className={`absolute bottom-0 right-0 w-4 h-4 bg-gray-400 cursor-se-resize transition-opacity ${
           isResizing ? 'opacity-100 bg-gray-600' : 'opacity-50 hover:opacity-100'

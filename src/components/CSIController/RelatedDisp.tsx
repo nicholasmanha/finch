@@ -39,6 +39,7 @@ function RelatedDisp({
     const fileType: string = fileArray![index].file.split(".")[1];
     const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameRaw}.bob` : fileArray![index].file;
     const fileTypeClean: string = fileType.toLowerCase() === "opi" ? 'bob' : fileType
+    const scale = 0.85
     const tabContent = (
       <CSIView
         fileName={fileNameClean}
@@ -51,7 +52,8 @@ function RelatedDisp({
       fileNameClean,
       tabContent,
       fileNameClean,
-      substituteVariables(fileArray![index].args, args)
+      substituteVariables(fileArray![index].args, args),
+      scale
     );
   };
 
