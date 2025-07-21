@@ -1,6 +1,6 @@
 import { useState, useEffect, useId } from "react";
 import PresentationLayer from "./PresentationLayer";
-import CSIControllerContent from "./CSIControllerTabs";
+import CSIControllerTabs from "./CSIControllerTabs";
 
 export type CSIControllerProps = {
   className?: string;
@@ -108,7 +108,7 @@ export default function CSIController({
 
   // Once we have all props, render the actual controller
   return (
-    <CSIControllerContent
+    <CSIControllerTabs
       className={className}
       fileName={finalFileName}
       oldFileName={fileName} // Pass the original fileName as oldFileName

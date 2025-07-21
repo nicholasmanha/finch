@@ -33,9 +33,9 @@ export default function CSIControllerContent({
 
     // Function to update tab scale
     const updateTabScale = useCallback((tabId: string, newScale: number) => {
-        setTabs(prevTabs => 
-            prevTabs.map(tab => 
-                tab.id === tabId 
+        setTabs(prevTabs =>
+            prevTabs.map(tab =>
+                tab.id === tabId
                     ? { ...tab, scale: newScale }
                     : tab
             )
@@ -55,15 +55,16 @@ export default function CSIControllerContent({
 
     // Generate content for tabs - this needs to be a separate effect that runs when tabs change
     useEffect(() => {
-        setTabs(prevTabs => 
+        setTabs(prevTabs =>
             prevTabs.map(tab => ({
                 ...tab,
                 content: tab.isMainTab ? null : (
-                    <CSIView 
-                        fileName={tab.fileName!} 
+                    <CSIView
+                        className={className}
+                        fileName={tab.fileName!}
                         scale={tab.scale || 0.85}
                         onScaleChange={(newScale) => updateTabScale(tab.id, newScale)}
-                        {...tab.args} 
+                        {...tab.args}
                     />
                 )
             }))
@@ -112,7 +113,7 @@ export default function CSIControllerContent({
         const fileNameNoType: string = fileName.split(".")[0];
         const fileType: string = fileName.split(".")[1];
         const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoType}.bob` : fileName;
-        
+
         const existingTab = tabs.find((tab) => {
             if (tab.fileName !== fileNameClean) return false;
 
@@ -137,19 +138,20 @@ export default function CSIControllerContent({
             id: newId,
             label,
             content: (
-                <CSIView 
-                    fileName={fileNameClean} 
+                <CSIView
+                    className={className}
+                    fileName={fileNameClean}
                     scale={scale}
                     onScaleChange={(newScale) => updateTabScale(newId, newScale)}
-                    {...args} 
+                    {...args}
                 />
             ),
             fileName: fileNameClean,
             args,
             isMainTab: false,
-            scale: scale || 1 
+            scale: scale || 1
         };
-        
+
         setTabs(prevTabs => [...prevTabs, newTab]);
         setActiveTab(newId);
     };
@@ -181,10 +183,11 @@ export default function CSIControllerContent({
                         style={{ display: activeTab === tab.id ? "block" : "none" }}
                     >
                         {tab.isMainTab ? (
-                            <CSIView 
-                                fileName={fileName} 
-                                P={P} 
-                                R={R} 
+                            <CSIView
+                                className={className}
+                                fileName={fileName}
+                                P={P}
+                                R={R}
                                 scale={tab.scale || 0.85}
                                 onScaleChange={(newScale) => updateTabScale(tab.id, newScale)}
                             />
