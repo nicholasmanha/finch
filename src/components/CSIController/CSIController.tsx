@@ -1,6 +1,6 @@
 import { useState, useEffect, useId } from "react";
 import PresentationLayer from "./PresentationLayer";
-import CSIControllerContent from "./CSIControllerContent";
+import CSIControllerContent from "./CSIControllerTabs";
 
 export type CSIControllerProps = {
   className?: string;
