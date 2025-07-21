@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import React from "react";
 
 export type CSIViewProps = {
@@ -18,7 +18,11 @@ export default function CSIView({
   const [scale, setScale] = useState(0.85);
   const [isResizing, setIsResizing] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const startPos = useRef({ x: 0, y: 0, scale: 0.85 });
+  const startDataRef = useRef<{
+    startX: number;
+    startY: number;
+    startScale: number;
+  } | null>(null);
 
   // UIData is Entry[] (aka from the ADL/bob file), devices are the devices from the WS
   const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
@@ -26,15 +30,36 @@ export default function CSIView({
     args
   });
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
     setIsResizing(true);
-    startPos.current = {
-      x: e.clientX,
-      y: e.clientY,
-      scale: scale
+    
+    startDataRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      startScale: scale
     };
-    console.log(scale)
-  };
+  }, [scale]);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing || !startDataRef.current) return;
+
+    const { startX, startY, startScale } = startDataRef.current;
+    const deltaX = e.clientX - startX;
+    const deltaY = e.clientY - startY;
+    
+    // Use the larger of the two deltas for scaling
+    const delta = Math.max(deltaX, deltaY);
+    const scaleFactor = 1 + (delta / 200); // Adjust sensitivity here
+    const newScale = Math.max(0.3, Math.min(3.0, startScale * scaleFactor));
+    
+    setScale(newScale);
+  }, [isResizing]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsResizing(false);
+    startDataRef.current = null;
+  }, []);
 
   const handleDoubleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -42,33 +67,18 @@ export default function CSIView({
     setScale(0.85);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isResizing) return;
-    
-    const deltaX = e.clientX - startPos.current.x;
-    const deltaY = e.clientY - startPos.current.y;
-    const delta = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    const direction = deltaX + deltaY > 0 ? 1 : -1;
-    
-    const newScale = Math.max(0.5, Math.min(3, startPos.current.scale + (direction * delta * 0.005)));
-    setScale(newScale);
-  };
-
-  const handleMouseUp = () => {
-    setIsResizing(false);
-  };
-
   // Add global mouse event listeners
   React.useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+      
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isResizing]);
+  }, [isResizing, handleMouseMove, handleMouseUp]);
 
   if (loading) {
     return (
@@ -97,7 +107,9 @@ export default function CSIView({
   return (
     <div 
       ref={containerRef}
-      className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4 relative", className)}
+      className={cn("inline-block rounded-xl bg-slate-100 p-4 mt-4 relative", className, {
+        'select-none': isResizing
+      })}
       style={{ 
         '--component-scale': scale,
         fontSize: `${scale}em`
@@ -112,7 +124,9 @@ export default function CSIView({
       
       {/* Resize handle */}
       <div
-        className="absolute bottom-0 right-0 w-4 h-4 bg-gray-400 cursor-nw-resize opacity-50 hover:opacity-100"
+        className={`absolute bottom-0 right-0 w-4 h-4 bg-gray-400 cursor-se-resize transition-opacity ${
+          isResizing ? 'opacity-100 bg-gray-600' : 'opacity-50 hover:opacity-100'
+        }`}
         onMouseDown={handleMouseDown}
         onDoubleClick={handleDoubleClick}
         style={{

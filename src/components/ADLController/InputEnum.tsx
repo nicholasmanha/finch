@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, CSSProperties } from 'react';
 import { tailwindIcons } from '@/assets/icons';
+import { CaretDown, CaretUp } from "@phosphor-icons/react";
 
 type InputEnumProps = {
     label?: string;
@@ -10,13 +11,13 @@ type InputEnumProps = {
     enums?: string[] | null;
 };
 
-export default function InputEnum({ 
+export default function InputEnum({
     label = '',
     onSubmit = (input) => { console.log('submit ' + input) },
     isDisabled = false,
     style,
     val,
-    enums = ['blank1', 'blank2'] 
+    enums = ['blank1', 'blank2']
 }: InputEnumProps) {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const containerRef = useRef<null | HTMLDivElement>(null);
@@ -35,7 +36,7 @@ export default function InputEnum({
     }, []);
 
     if (typeof val !== 'number') {
-        return null; 
+        return null;
     }
 
     const getCurrentEnum = () => {
@@ -61,7 +62,10 @@ export default function InputEnum({
                     <div className="flex-grow">
                         <p className='text-[0.85em]'>{getCurrentEnum()}</p>
                     </div>
-                    <div className="flex-shrink-0">{dropdownVisible ? tailwindIcons.chevronUp : tailwindIcons.chevronDown}</div>
+
+                    {dropdownVisible ? <CaretUp size="1.45em" /> : <CaretDown size="1.45em" />}
+
+
                 </div>
                 <span className="relative w-full">
                     {dropdownVisible && (
