@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { TabsGroup } from "@/components/Tabs/TabsGroup";
 import { TabsList } from "@/components/Tabs/TabsList";
 import { Tab } from "@/components/Tabs/Tab";
@@ -10,7 +10,7 @@ import CSIView from "./CSIView";
 export type CSIControllerContentProps = {
     className?: string;
     fileName: string;
-    oldFileName?: string; // Make this optional
+    oldFileName?: string;
     P: string;
     R: string;
     instanceId: string;
@@ -24,7 +24,6 @@ export default function CSIControllerContent({
     R,
     instanceId,
 }: CSIControllerContentProps) {
-    // grab localstorage tab functions from webhook
     const {
         loadTabsFromStorage,
         saveTabsToStorage,
@@ -32,28 +31,44 @@ export default function CSIControllerContent({
         saveActiveTabToStorage,
     } = useTabLS(fileName, P, R, instanceId, oldFileName);
 
-    // populates tab content based on the tab filename and args
-    const addContentToTabs = (tabsData: TabData[]): TabData[] => {
-        // main tab is null because it is populated in the return statement at the bottom 
-        return tabsData.map((tab) => ({
-            ...tab,
-            content: tab.isMainTab ? null : (
-                <CSIView fileName={tab.fileName!} {...tab.args} />
-            ),
-        }));
-    };
+    // Function to update tab scale
+    const updateTabScale = useCallback((tabId: string, newScale: number) => {
+        setTabs(prevTabs => 
+            prevTabs.map(tab => 
+                tab.id === tabId 
+                    ? { ...tab, scale: newScale }
+                    : tab
+            )
+        );
+    }, []);
 
-    // Initialize tabs
+    // Initialize tabs without content first
     const [tabs, setTabs] = useState<TabData[]>(() => {
         const storedTabs = loadTabsFromStorage();
-        // this is because the tabs are stored without content in localstorage, they just have the filename and args, and this function populates the tab content
-        return addContentToTabs(storedTabs);
+        return storedTabs.map(tab => ({ ...tab, content: null }));
     });
 
     // Initialize active tab
     const [activeTab, setActiveTab] = useState(() =>
         loadActiveTabFromStorage(tabs)
     );
+
+    // Generate content for tabs - this needs to be a separate effect that runs when tabs change
+    useEffect(() => {
+        setTabs(prevTabs => 
+            prevTabs.map(tab => ({
+                ...tab,
+                content: tab.isMainTab ? null : (
+                    <CSIView 
+                        fileName={tab.fileName!} 
+                        scale={tab.scale || 0.85}
+                        onScaleChange={(newScale) => updateTabScale(tab.id, newScale)}
+                        {...tab.args} 
+                    />
+                )
+            }))
+        );
+    }, []); // Run once on mount to set up initial content
 
     // store tab info to localstorage when they change
     useEffect(() => {
@@ -68,20 +83,14 @@ export default function CSIControllerContent({
     const removeTab = (tabId: string) => {
         const tabToRemove = tabs.find((tab) => tab.id === tabId);
 
-        // Prevent deletion of main tab
         if (tabToRemove && tabToRemove.fileName === fileName) {
             return;
         }
 
-        // The index of the tab being removed
         const currentTabIndex = tabs.findIndex((tab) => tab.id === tabId);
-
-        // set of tabs without the removed tab
         const newTabs = tabs.filter((tab) => tab.id !== tabId);
         setTabs(newTabs);
 
-        // Handle active tab switching
-        // if the active tab is the one being removed and there are still tabs left
         if (activeTab === tabId && newTabs.length > 0) {
             if (currentTabIndex < newTabs.length) {
                 setActiveTab(newTabs[currentTabIndex].id);
@@ -93,21 +102,20 @@ export default function CSIControllerContent({
         }
     };
 
-    // used when opening a related display (a new tab)
     const addTabWithContent = (
         label: string,
         content: React.ReactNode,
         fileName: string,
-        args: Record<string, any>
+        args: Record<string, any>,
+        scale: number
     ) => {
         const fileNameNoType: string = fileName.split(".")[0];
         const fileType: string = fileName.split(".")[1];
         const fileNameClean = fileType.toLowerCase() === "opi" ? `${fileNameNoType}.bob` : fileName;
-        // Check if a tab with the same fileName and args already exists
+        
         const existingTab = tabs.find((tab) => {
             if (tab.fileName !== fileNameClean) return false;
 
-            // comparison of args objects
             if (!tab.args && !args) return true;
             if (!tab.args || !args) return false;
 
@@ -119,23 +127,30 @@ export default function CSIControllerContent({
             return tabArgsKeys.every((key) => tab.args![key] === args[key]);
         });
 
-        // if the tab exists, make it active
         if (existingTab) {
             setActiveTab(existingTab.id);
             return;
         }
 
-        // Tab doesn't exist, create a new one
         const newId = `tab${Date.now()}`;
         const newTab: TabData = {
             id: newId,
             label,
-            content,
+            content: (
+                <CSIView 
+                    fileName={fileNameClean} 
+                    scale={scale}
+                    onScaleChange={(newScale) => updateTabScale(newId, newScale)}
+                    {...args} 
+                />
+            ),
             fileName: fileNameClean,
             args,
             isMainTab: false,
+            scale: scale || 1 
         };
-        setTabs([...tabs, newTab]);
+        
+        setTabs(prevTabs => [...prevTabs, newTab]);
         setActiveTab(newId);
     };
 
@@ -150,7 +165,6 @@ export default function CSIControllerContent({
     return (
         <TabManagementProvider value={tabManagementValue}>
             <TabsGroup value={activeTab} onValueChange={setActiveTab}>
-                {/* the actual tab buttons */}
                 <TabsList>
                     {tabs.map((tab) => (
                         <div key={tab.id} className="flex items-center">
@@ -161,14 +175,19 @@ export default function CSIControllerContent({
                     ))}
                 </TabsList>
 
-                {/* tab content */}
                 {tabs.map((tab) => (
                     <div
                         key={tab.id}
                         style={{ display: activeTab === tab.id ? "block" : "none" }}
                     >
                         {tab.isMainTab ? (
-                            <CSIView fileName={fileName} P={P} R={R} />
+                            <CSIView 
+                                fileName={fileName} 
+                                P={P} 
+                                R={R} 
+                                scale={tab.scale || 0.85}
+                                onScaleChange={(newScale) => updateTabScale(tab.id, newScale)}
+                            />
                         ) : (
                             tab.content
                         )}
