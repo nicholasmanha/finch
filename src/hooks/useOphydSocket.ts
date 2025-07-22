@@ -212,9 +212,9 @@ export default function useOphydSocket(deviceNameList: string[], wsUrl?: string)
         setDevices(initialDevices);
 
         // Log the initialized devices
-        if (Object.keys(initialDevices).length !== 0) {
-            sendLogToServer(initialDevices, 'INITIALIZED DEVICES STATE');
-        }
+        // if (Object.keys(initialDevices).length !== 0) {
+        //     sendLogToServer(initialDevices, 'INITIALIZED DEVICES STATE');
+        // }
 
 
     }, [deviceNameList]);
@@ -248,7 +248,7 @@ export default function useOphydSocket(deviceNameList: string[], wsUrl?: string)
                 };
 
                 // Log each subscription message
-                sendLogToServer(subscribeMessage, 'OUTGOING SUBSCRIPTION REQUEST');
+                // sendLogToServer(subscribeMessage, 'OUTGOING SUBSCRIPTION REQUEST');
 
                 ws.send(JSON.stringify(subscribeMessage));
             });
