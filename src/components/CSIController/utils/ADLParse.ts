@@ -103,7 +103,7 @@ export function ADLParser(config: any[]): Entry[] {
                     var_type: "related display",
                     location: { x: rel.object.x, y: rel.object.y },
                     size: { width: rel.object.width, height: rel.object.height },
-                    name: "related display",
+                    name: "",
                 };
                 if (rel.label) {
                     relDisplay.label = rel.label;
