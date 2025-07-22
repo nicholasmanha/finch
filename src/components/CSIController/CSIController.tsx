@@ -7,6 +7,7 @@ export type CSIControllerProps = {
   fileName?: string;
   P?: string;
   R?: string;
+  mock?: boolean;
 };
 
 // if tab data is in localstorage, load that instead
