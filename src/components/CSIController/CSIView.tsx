@@ -4,6 +4,7 @@ import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
 import ScalableContainer from "./ScalableContainer";
 import { useTabManagement } from "../Tabs/context/TabsContext";
+import { useMock } from "./MockContext"; 
 
 export type CSIViewProps = {
   className?: string;
@@ -20,6 +21,7 @@ export default function CSIView({
   onScaleChange,
   ...args
 }: CSIViewProps) {
+  const { mock } = useMock();
   const [currentScale, setCurrentScale] = useState(scale);
   const { addTab } = useTabManagement();
 
@@ -30,7 +32,8 @@ export default function CSIView({
 
   const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
     fileName,
-    args
+    args,
+    mock
   });
 
   const handleScaleChange = useCallback((newScale: number) => {

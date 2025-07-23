@@ -1,13 +1,14 @@
 import { useState, useEffect, useId } from "react";
 import PresentationLayer from "./PresentationLayer";
 import CSIControllerTabs from "./CSIControllerTabs";
+import { MockProvider } from "./MockContext";
 
 export type CSIControllerProps = {
   className?: string;
   fileName?: string;
   P?: string;
   R?: string;
-  mock?: boolean;
+  mock?: boolean; 
 };
 
 // if tab data is in localstorage, load that instead
@@ -20,7 +21,7 @@ const getConfigFromLocalStorage = (instanceId: string) => {
       if (Array.isArray(tabs) && tabs.length > 0) {
         // Find the main tab or use the first tab
         const mainTab = tabs.find(tab => tab.isMainTab) || tabs[0];
-        
+
         if (mainTab && mainTab.fileName && mainTab.args && mainTab.args.P && mainTab.args.R) {
           return {
             fileName: mainTab.fileName,
@@ -42,12 +43,14 @@ export default function CSIController({
   fileName,
   P,
   R,
+  mock = false, 
 }: CSIControllerProps) {
   const instanceId = useId();
   const [configuredProps, setConfiguredProps] = useState<{
     fileName: string;
     P: string;
     R: string;
+
   } | null>(null);
 
   const [hasCheckedLocalStorage, setHasCheckedLocalStorage] = useState(false);
@@ -56,12 +59,12 @@ export default function CSIController({
   useEffect(() => {
     if (!hasCheckedLocalStorage) {
       const existingConfig = getConfigFromLocalStorage(instanceId);
-      
+
       // If props are provided and they differ from localStorage, clear localStorage
       if (fileName && P && R && existingConfig) {
-        if (existingConfig.fileName !== fileName || 
-            existingConfig.P !== P || 
-            existingConfig.R !== R) {
+        if (existingConfig.fileName !== fileName ||
+          existingConfig.P !== P ||
+          existingConfig.R !== R) {
           // Clear localStorage when props differ
           try {
             const storageKey = `csi-tabs-${instanceId}`;
@@ -81,7 +84,7 @@ export default function CSIController({
         // No props provided, use localStorage
         setConfiguredProps(existingConfig);
       }
-      
+
       setHasCheckedLocalStorage(true);
     }
   }, [hasCheckedLocalStorage, instanceId, fileName, P, R]);
@@ -109,13 +112,15 @@ export default function CSIController({
 
   // Once we have all props, render the actual controller
   return (
-    <CSIControllerTabs
-      className={className}
-      fileName={finalFileName}
-      oldFileName={fileName} // Pass the original fileName as oldFileName
-      P={finalP}
-      R={finalR}
-      instanceId={instanceId}
-    />
+    <MockProvider mock={mock}>
+      <CSIControllerTabs
+        className={className}
+        fileName={finalFileName}
+        oldFileName={fileName} // Pass the original fileName as oldFileName
+        P={finalP}
+        R={finalR}
+        instanceId={instanceId}
+      />
+    </MockProvider>
   );
 }

@@ -10,6 +10,7 @@ import { parseXMLToEntries } from "./BobParser";
 export interface UseUIDataOptions {
   fileName?: string;
   children?: Entry[];
+  mock: boolean;
   args: { [key: string]: any };
 }
 
@@ -24,6 +25,7 @@ export interface UseUIDataReturn {
 export function useUIData({
   fileName,
   children,
+  mock,
   args,
 }: UseUIDataOptions): UseUIDataReturn {
   const [UIData, setUIData] = useState<Entry[] | null>(null);

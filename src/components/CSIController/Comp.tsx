@@ -3,12 +3,14 @@ import { Entry } from "./types/UIEntry";
 import CSICanvas from "./CSICanvas";
 import { useUIData } from "./utils/useUIData";
 import { pxToEm } from "./utils/units";
+import { useMock } from "./MockContext"; 
 
 export function CompositeDeviceRenderer({ device, index, args }: {
     device: Entry; 
     index: number; 
     args: { [key: string]: any };
 }): JSX.Element {
+    const { mock } = useMock();
     const [canvasStyle, setCanvasStyle] = useState({
         position: "absolute" as const,
         left: pxToEm(device.location.x),
@@ -18,7 +20,8 @@ export function CompositeDeviceRenderer({ device, index, args }: {
     const { UIData, loading, error, devices, onSubmitSettings } = useUIData({
         fileName: device.comp_file,
         children: device.children,
-        args
+        args,
+        mock 
     });
 
     useEffect(() => {
