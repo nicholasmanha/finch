@@ -259,7 +259,7 @@ export default function useOphydSocket(deviceNameList: string[], wsUrl?: string)
             try {
                 const message: MessageResponse | ErrorResponse | ValueUpdateResponse | MetaUpdateResponse = JSON.parse(event.data);
 
-                if ('connected' in message && message.connected) {
+                if (('connected' in message && message.connected) || !('connected' in message)) {
                     sendLogToServer(message, 'INCOMING WEBSOCKET MESSAGE');
                 }
 
