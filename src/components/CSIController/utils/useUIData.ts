@@ -1,5 +1,6 @@
 import { useMemo, useCallback, useState, useEffect } from "react";
 import useOphydSocket from "@/hooks/useOphydSocket";
+import useMockSocket from "@/hooks/useMockSocket"; // Import the mock socket hook
 import { ADLParser } from "./ADLParse";
 import { parseCustomFormat } from "./ADLtoJSON";
 import { createDeviceNameArray } from "./CreateDeviceNameArray";
@@ -89,7 +90,12 @@ export function useUIData({
     return createDeviceNameArray(UIData, args);
   }, [UIData, JSON.stringify(args)]);
 
-  const { devices, handleSetValueRequest } = useOphydSocket(deviceNames);
+  // Conditionally use mock or real socket based on mock flag
+  const ophydSocketResult = useOphydSocket(deviceNames);
+  const mockSocketResult = useMockSocket(deviceNames);
+  
+  const { devices, handleSetValueRequest } = mock ? mockSocketResult : ophydSocketResult;
+  
   const onSubmitSettings = useCallback(handleSetValueRequest, [
     handleSetValueRequest,
   ]);
