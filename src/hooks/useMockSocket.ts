@@ -7,6 +7,81 @@ import {
     MetaUpdateResponse,
 } from 'src/types/ophydSocketTypes';
 
+const deviceMessages = {
+    "timestamp": "2025-07-22T21:31:03.348569",
+    "deviceCount": 77,
+    "13SIM1:cam1:SDKVersion_RBV": [
+        {
+          "timestamp": "2025-07-23T09:49:02.657994",
+          "sessionId": "session_1753289342149_dq5vhwjss",
+          "data": {
+            "pv": "13SIM1:cam1:SDKVersion_RBV",
+            "update": {
+              "connected": true,
+              "read_access": true,
+              "write_access": true,
+              "timestamp": 1753288930.954215,
+              "status": 0,
+              "severity": 0,
+              "precision": null,
+              "setpoint_timestamp": null,
+              "setpoint_status": null,
+              "setpoint_severity": null,
+              "lower_ctrl_limit": null,
+              "upper_ctrl_limit": null,
+              "units": null,
+              "enum_strs": null,
+              "setpoint_precision": null,
+              "sub_type": "meta",
+              "obj": "13SIM1:cam1:SDKVersion_RBV",
+              "pv": "13SIM1:cam1:SDKVersion_RBV",
+              "min": null,
+              "max": null
+            }
+          },
+          "label": "PROCESSING META UPDATE"
+        },
+        {
+          "timestamp": "2025-07-23T09:49:02.679044",
+          "sessionId": "session_1753289342149_dq5vhwjss",
+          "data": {
+            "connected": true,
+            "read_access": true,
+            "write_access": true,
+            "timestamp": 1753288930.954215,
+            "status": 0,
+            "severity": 0,
+            "precision": null,
+            "setpoint_timestamp": null,
+            "setpoint_status": null,
+            "setpoint_severity": null,
+            "lower_ctrl_limit": null,
+            "upper_ctrl_limit": null,
+            "units": null,
+            "enum_strs": null,
+            "setpoint_precision": null,
+            "sub_type": "meta",
+            "obj": "13SIM1:cam1:SDKVersion_RBV",
+            "pv": "13SIM1:cam1:SDKVersion_RBV"
+          },
+          "label": "INCOMING WEBSOCKET MESSAGE"
+        },
+        {
+          "timestamp": "2025-07-23T09:49:02.696255",
+          "sessionId": "session_1753289342149_dq5vhwjss",
+          "data": {
+            "pv": "13SIM1:cam1:SDKVersion_RBV",
+            "value": "2.9.0",
+            "timestamp": 1753288930.954215,
+            "connected": true,
+            "read_access": true,
+            "write_access": true
+          },
+          "label": "INCOMING WEBSOCKET MESSAGE"
+        }
+      ],
+}
+
 export default function useOphydSocket(deviceNameList: string[], wsUrl?: string) {
     const address = window.location.hostname;
     const apiPort: string = (import.meta.env.VITE_OPHYD_WS_PORT || `8000`);
