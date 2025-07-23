@@ -169,7 +169,7 @@ export default function useOphydSocket(deviceNameList: string[], wsUrl?: string)
             };
 
             // Log the outgoing message
-            //sendLogToServer(setValueMessage, 'OUTGOING SET VALUE REQUEST');
+            sendLogToServer(setValueMessage, 'OUTGOING SET VALUE REQUEST');
 
             wsRef.current.send(JSON.stringify(setValueMessage));
         }
@@ -286,7 +286,7 @@ export default function useOphydSocket(deviceNameList: string[], wsUrl?: string)
                     const deviceName = message.pv;
 
                     // Log the value update processing
-                    //sendLogToServer({ pv: deviceName, update: message }, 'PROCESSING VALUE UPDATE');
+                    sendLogToServer({ pv: deviceName, update: message }, 'PROCESSING VALUE UPDATE');
 
                     setDevices((prevDevices) => ({
                         ...prevDevices,
