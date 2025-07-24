@@ -36,8 +36,6 @@ export default function useMockOphydSocket(deviceNameList: string[]) {
 
         // Process each device in the mock data
         Object.keys(deviceMessages).forEach((key) => {
-            if (key === 'timestamp' || key === 'deviceCount') return;
-
             const deviceName = key;
             const messages = deviceMessages[key as keyof typeof deviceMessages] as any[];
 
