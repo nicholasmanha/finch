@@ -29,7 +29,7 @@
   "main": "./dist/finch.umd.js",
   "module": "./dist/finch.es.js",
   "dependencies": {
-    "@blueskyproject/tiled": "^0.0.9",
+    "@blueskyproject/tiled": "^0.0.10",
     "@phosphor-icons/react": "^2.1.7",
     "@storybook/addons": "^7.6.17",
     "@storybook/theming": "^8.6.14",

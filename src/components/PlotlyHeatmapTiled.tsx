@@ -78,6 +78,8 @@ export default function PlotlyHeatmapTiled({ url, className, size='medium' }: Pr
       const msg = err instanceof Error ? err.message : String(err);
       setError(`Failed to load PNG slice: ${msg}`);
       setArray(null);
+      setSliderIndex(0); // Reset slider index on error
+      setShape(null); // Reset shape on error
     }
   };
 
