@@ -278,13 +278,19 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Primary: Story = {
   args: {
+    reverseSort: false,
     enableStartupScreen: false,
     size: 'medium',
     tiledBaseUrl: 'https://tiled-demo.blueskyproject.io/api/v1',
-    reverseSort: false,
     onSelectCallback: (links) => console.log('Selected Tiled link:', links.self),
     isButtonMode: false,
     isPopup: false,
+    singleColumnMode: false,
+    isFullWidth: false,
+    buttonModeText: undefined,
+    apiKey: undefined,
+    bearerToken: undefined,
+    closeOnSelect: false,
   },
 };
 
