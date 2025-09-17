@@ -30,3 +30,7 @@ dist-ssr
 storybook-static
 
 src/app/pages/About.tsx
+
+# certs for local https
+*.crt
+*.key
