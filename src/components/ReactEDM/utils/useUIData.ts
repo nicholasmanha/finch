@@ -91,10 +91,9 @@ export function useUIData({
   }, [UIData, JSON.stringify(args)]);
 
   // Conditionally use mock or real socket based on mock flag
-  const ophydSocketResult = useOphydSocket(deviceNames);
-  const mockSocketResult = useMockSocket(deviceNames);
-  
-  const { devices, handleSetValueRequest } = mock ? mockSocketResult : ophydSocketResult;
+  const { devices, handleSetValueRequest } = mock 
+  ? useMockSocket(deviceNames)
+  : useOphydSocket(deviceNames);
   
   const onSubmitSettings = useCallback(handleSetValueRequest, [
     handleSetValueRequest,
